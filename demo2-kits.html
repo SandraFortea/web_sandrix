@@ -1093,11 +1093,13 @@
       <!-- TAB 1: KITS -->
       <div class="panel active" id="panel-kits">
         <div class="panel-title">📦 Gestión de kits</div>
-        <div class="panel-sub">Crea kits como coordinador o recoge uno como voluntario.</div>
+        <div class="panel-sub">
+          Selecciona tu rol: <strong>Coordinador</strong> para preparar y registrar kits de ayuda con su contenido y código de trazabilidad, o <strong>Voluntario</strong> para ver los kits disponibles, recoger el tuyo y generar el QR de confirmación.
+        </div>
 
         <div class="mode-toggle">
           <button class="mode-btn active" id="modeCoord" onclick="switchMode('coord')">🦺 Coordinador</button>
-          <button class="mode-btn" id="modeVol" onclick="switchMode('vol')">🤝 Voluntario</button>
+          <button class="mode-btn" id="modeVol" onclick="switchMode('vol')">🤝 Donante/Voluntario</button>
         </div>
 
         <!-- Vista Coordinador -->
@@ -1197,11 +1199,13 @@
               style="width:100%;padding:12px;border:none;border-radius:var(--radius);background:var(--teal);color:#fff;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',sans-serif;">📲
               Generar QR del kit</button>
             <div id="volQrBox" style="display:none;" class="qr-box">
+              <div id="volEmbalajeAviso" style="display:none;border:1.5px solid;border-radius:12px;padding:14px;margin-bottom:12px;"></div>
               <div id="volQrCanvas"></div> <!-- ✅ div, no canvas -->
               <div class="qr-code-txt" id="volQrCode">KIT-XXXX</div>
               <div style="font-size:11px;color:var(--muted);">
                 Muestra este código en el punto de recogida
               </div>
+              
 
               <div class="btn-nav">
                 <div class="btn-prev">
@@ -1446,6 +1450,8 @@
         document.getElementById('volStep1').style.display = 'block';
         document.getElementById('volStep2').style.display = 'none';
         document.getElementById('volQrBox').style.display = 'none';
+        var aviso = document.getElementById('volEmbalajeAviso');
+        if (aviso) aviso.style.display = 'none';
         renderVolKits();
       }
 
@@ -1475,6 +1481,42 @@
         });
 
         document.getElementById('volQrBox').style.display = 'block';
+        // --- AVISO DE EMBALAJE ---
+        const colorNames = {
+          '#C0392B': { nombre: 'ROJO',     hex: '#C0392B', bg: '#FDF3F2', border: '#f5b7b1' },
+          '#3A7BD5': { nombre: 'AZUL',     hex: '#3A7BD5', bg: '#EEF4FC', border: '#aac4ef' },
+          '#7B5EA7': { nombre: 'MORADO',   hex: '#7B5EA7', bg: '#F5F0FB', border: '#c9b8e8' },
+          '#EF9F27': { nombre: 'NARANJA',  hex: '#EF9F27', bg: '#FEF5EC', border: '#fad79a' },
+        };
+        var c = colorNames[selectedKit.color] || { nombre: 'EL COLOR ASIGNADO', hex: '#888', bg: '#f5f5f5', border: '#ccc' };
+
+        var avisoEl = document.getElementById('volEmbalajeAviso');
+        if (avisoEl) {
+          avisoEl.style.display = 'block';
+          avisoEl.style.background = c.bg;
+          avisoEl.style.borderColor = c.border;
+          avisoEl.innerHTML = `
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div style="font-size:24px;flex-shrink:0;">📦</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:6px;">
+                  ¿Cómo preparar la caja antes de entregar el kit?
+                </div>
+                <ol style="font-size:12px;color:#374151;line-height:1.8;padding-left:16px;margin:0;">
+                  <li>Coloca todos los elementos del kit dentro de una <strong>caja de cartón cerrada</strong>.</li>
+                  <li>Identifica la caja con el color <strong style="color:${c.hex};">■ ${c.nombre}</strong> — este es el color asignado a este tipo de kit.</li>
+                  <li>Puedes marcar el color usando: <strong>cinta adhesiva de color</strong>, <strong>rotulador permanente</strong>, <strong>pintura en spray</strong> o <strong>pegatinas de color</strong>.</li>
+                  <li>Escribe en la caja con rotulador el <strong>código del kit: ${code}</strong>.</li>
+                  <li>Cierra bien la caja con precinto y llévala al punto de recogida.</li>
+                </ol>
+                <div style="margin-top:8px;padding:8px 10px;background:rgba(0,0,0,0.05);border-radius:8px;font-size:11px;color:#555;">
+                  💡 <em>La identificación por color permite a los coordinadores clasificar y distribuir los kits rápidamente en situaciones de emergencia.</em>
+                </div>
+              </div>
+            </div>`;
+        }
+        // --- FIN AVISO ---
+
         addTrazaItem(code, selectedKit.title, selectedKit.color, 0);
       }
 
