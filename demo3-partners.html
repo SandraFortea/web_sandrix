@@ -82,7 +82,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min
 .confirm-code{font-family:monospace;font-size:24px;font-weight:700;color:var(--teal);letter-spacing:4px;margin:6px 0;}
 
 /* QR */
-.qr-mini{display:block;margin:6px auto;}
+.qr-mini{display:block;margin:10px auto;border:3px solid var(--teal);border-radius:var(--radius-sm);padding:6px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.10);}
+.qr-info-box{background:#fff;border:1.5px solid #9FE1CB;border-radius:var(--radius-sm);padding:10px 12px;margin-top:8px;display:flex;align-items:flex-start;gap:8px;}
+.qr-info-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.qr-info-text{font-size:11px;color:var(--teal-dark);line-height:1.5;}
 
 /* PANEL COORDINADOR - CARDS */
 .don-filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
@@ -109,17 +112,32 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min
 
 .assign-row{display:flex;gap:6px;margin-top:8px;}
 .btn-assign{padding:7px 12px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.btn-assign:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;opacity:0.6;}
 .btn-advance{padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;}
 
 /* MIS DONACIONES */
-.mia-item{border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.mia-item{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;}
+.mia-item-header{padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.15s;}
+.mia-item-header:hover{background:var(--bg);}
 .mia-code{font-family:monospace;font-size:13px;font-weight:700;color:var(--blue-dark);min-width:80px;}
 .mia-info{flex:1;}
 .mia-name{font-size:12px;font-weight:600;color:var(--dark);}
 .mia-meta{font-size:11px;color:var(--muted);}
+.mia-chevron{font-size:12px;color:var(--muted);transition:transform 0.2s;}
+.mia-chevron.open{transform:rotate(180deg);}
+.mia-expand{display:none;padding:10px 14px 12px;background:var(--bg);border-top:1px solid var(--border);}
+.mia-expand.show{display:block;}
+.mia-expand-title{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;}
+.mia-art-table{width:100%;border-collapse:collapse;font-size:11px;}
+.mia-art-table th{background:rgba(0,0,0,0.04);padding:4px 8px;text-align:left;font-weight:700;color:var(--muted);border-bottom:1px solid var(--border);}
+.mia-art-table td{padding:5px 8px;border-bottom:1px solid var(--border);color:var(--dark);}
+.mia-art-table tr:last-child td{border-bottom:none;}
+.mia-detail-row{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+.mia-detail-field{font-size:11px;color:var(--muted);}
+.mia-detail-field span{display:block;font-size:12px;color:var(--dark);font-weight:500;}
 
 /* TRAZABILIDAD */
-.traza-header{background:var(--dark);color:#fff;border-radius:var(--radius) var(--radius) 0 0;padding:14px 16px;}
+.traza-header{background: linear-gradient(135deg, #163570, #1d269e);;color:#fff;border-radius:var(--radius) var(--radius) 0 0;padding:14px 16px;}
 .traza-header-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
 .traza-count-badge{background:var(--blue);color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:20px;margin-left:6px;}
 .traza-filter-btn{padding:4px 10px;border:1px solid rgba(255,255,255,0.2);border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;background:transparent;color:rgba(255,255,255,0.6);font-family:'DM Sans',sans-serif;transition:all 0.18s;}
@@ -292,8 +310,12 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark);min
           <div style="font-weight:700;font-size:13px;color:var(--teal-dark);margin-bottom:4px;">✅ Donación registrada</div>
           <div style="font-size:11px;color:var(--muted);">Código asignado:</div>
           <div class="confirm-code" id="donCodigo">—</div>
-          <canvas id="donQrCanvas" class="qr-mini" width="80" height="80"></canvas>
-          <div style="font-size:11px;color:var(--muted);">El coordinador recibirá la solicitud y asignará un punto de recogida.</div>
+          <canvas id="donQrCanvas" class="qr-mini" width="160" height="160"></canvas>
+          <div class="qr-info-box">
+            <span class="qr-info-icon">📲</span>
+            <span class="qr-info-text"><strong>Importante:</strong> Deberás presentar este código QR en el momento de la entrega. El coordinador lo escaneará para confirmar la recepción. Puedes hacer una captura de pantalla o guardar el código de referencia.</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;">El coordinador recibirá la solicitud y asignará un punto de entrega.</div>
         </div>
       </div>
 
@@ -432,9 +454,26 @@ function drawQR(canvasId,code,color) {
   ctx.fillStyle='#fff';ctx.fillRect(0,0,w,w);
   ctx.fillStyle=color||'#1A56DB';
   const pat=code.split('').map(c=>c.charCodeAt(0));
-  const sz=Math.floor(w/10);
-  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
-    if((pat[(r*8+c)%pat.length]+r+c)%2===0)ctx.fillRect(sz/2+c*sz,sz/2+r*sz,sz-1,sz-1);
+  const cols=14; // more cells for a denser, more QR-like look
+  const sz=Math.floor(w/cols);
+  const off=Math.floor((w-cols*sz)/2);
+  // Corner squares (finder patterns)
+  const drawFinder=(rx,ry)=>{
+    ctx.fillStyle='#fff';ctx.fillRect(off+rx*sz,off+ry*sz,7*sz,7*sz);
+    ctx.fillStyle=color||'#1A56DB';
+    ctx.fillRect(off+rx*sz,off+ry*sz,7*sz,7*sz);
+    ctx.fillStyle='#fff';ctx.fillRect(off+rx*sz+sz,off+ry*sz+sz,5*sz,5*sz);
+    ctx.fillStyle=color||'#1A56DB';
+    ctx.fillRect(off+rx*sz+sz*2,off+ry*sz+sz*2,3*sz,3*sz);
+  };
+  drawFinder(0,0);drawFinder(cols-7,0);drawFinder(0,cols-7);
+  // Data cells
+  for(let r=0;r<cols;r++)for(let c=0;c<cols;c++){
+    const inFinder=(r<8&&c<8)||(r<8&&c>=cols-7)||(r>=cols-7&&c<8);
+    if(!inFinder&&(pat[(r*cols+c)%pat.length]+r*3+c*7)%3!==0){
+      ctx.fillStyle=color||'#1A56DB';
+      ctx.fillRect(off+c*sz+1,off+r*sz+1,sz-2,sz-2);
+    }
   }
 }
 
@@ -465,8 +504,8 @@ function renderPanel(filter) {
           ${d.items.map(it=>`<span>• ${it.desc} · ${it.cant} ${it.uni} ${it.cat}</span>`).join('')}
         </div>
         <div class="assign-row">
-          <input class="d-input" id="puntoInput${i}" placeholder="Asignar punto de recogida..." style="flex:1;font-size:12px;padding:7px 10px;">
-          <button class="btn-assign" onclick="asignarPunto(${i})">Asignar</button>
+          <input class="d-input" id="puntoInput${i}" placeholder="Asignar punto de entrega..." style="flex:1;font-size:12px;padding:7px 10px;" ${d.estado==='asignada'||d.estado==='transito'||d.estado==='recibida'?'disabled':''}>
+          <button class="btn-assign" onclick="asignarPunto(${i})" ${d.estado==='asignada'||d.estado==='transito'||d.estado==='recibida'?'disabled title="No se puede reasignar en este estado"':''}>Asignar</button>
           ${d.estado!=='recibida'?`<button class="btn-advance" onclick="avanzarEstado(${i})">Avanzar →</button>`:''}
         </div>
       </div>
@@ -500,15 +539,38 @@ function renderMias(){
   if(!donaciones.length){list.innerHTML='<div id="donMiasEmpty" style="padding:24px;text-align:center;color:var(--muted);font-size:13px;">Todavía no has registrado ninguna donación</div>';return;}
   const stLabel={pendiente:'⏳ Pendiente',asignada:'📍 Asignada',transito:'🚛 En tránsito',recibida:'✅ Recibida'};
   const stCls={pendiente:'st-pend',asignada:'st-asig',transito:'st-transit',recibida:'st-recib'};
-  list.innerHTML=donaciones.map(d=>`
+  list.innerHTML=donaciones.map((d,i)=>`
     <div class="mia-item">
-      <span class="mia-code">${d.codigo}</span>
-      <div class="mia-info">
-        <div class="mia-name">${d.empresa}</div>
-        <div class="mia-meta">${d.items.length} artículo(s) · Registrada ${d.ts}${d.punto&&d.punto!=='—'?' · Punto: '+d.punto:''}</div>
+      <div class="mia-item-header" onclick="toggleMiaExpand('miaExp${i}',this)">
+        <span class="mia-code">${d.codigo}</span>
+        <div class="mia-info">
+          <div class="mia-name">${d.empresa}</div>
+          <div class="mia-meta">${d.items.length} artículo(s) · Registrada ${d.ts}${d.punto&&d.punto!=='—'?' · Punto: '+d.punto:''}</div>
+        </div>
+        <span class="don-card-status ${stCls[d.estado]||'st-pend'}">${stLabel[d.estado]||'⏳ Pendiente'}</span>
+        <span class="mia-chevron">▼</span>
       </div>
-      <span class="don-card-status ${stCls[d.estado]||'st-pend'}">${stLabel[d.estado]||'⏳ Pendiente'}</span>
+      <div class="mia-expand" id="miaExp${i}">
+        <div class="mia-detail-row">
+          <div class="mia-detail-field">Transporte<span>${d.transporte==='camion'?'🚛 Camión propio':d.transporte==='furgoneta'?'🚐 Furgoneta':'📍 Recogida en almacén'}</span></div>
+          <div class="mia-detail-field">Disponibilidad<span>${d.fecha||'—'}</span></div>
+          <div class="mia-detail-field">Origen<span>${d.origen||'—'}</span></div>
+          ${d.punto&&d.punto!=='—'?`<div class="mia-detail-field">Punto asignado<span>${d.punto}</span></div>`:''}
+        </div>
+        <div class="mia-expand-title" style="margin-top:10px;">Artículos donados</div>
+        <table class="mia-art-table">
+          <thead><tr><th>Artículo</th><th>Cant.</th><th>Unidad</th><th>Cat.</th></tr></thead>
+          <tbody>${d.items.map(it=>`<tr><td>${it.desc}</td><td>${it.cant}</td><td>${it.uni}</td><td>${it.cat}</td></tr>`).join('')}</tbody>
+        </table>
+      </div>
     </div>`).join('');
+}
+function toggleMiaExpand(id, header){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.classList.toggle('show');
+  const ch=header.querySelector('.mia-chevron');
+  if(ch)ch.classList.toggle('open');
 }
 
 // TRAZABILIDAD
