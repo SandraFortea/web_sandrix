@@ -1019,40 +1019,220 @@
     }
 
     /* ✅ En móvil el item se parte en dos filas */
-    @media (max-width: 500px) {
-      .traza-item {
-        flex-wrap: wrap;
-      }
+  @media (max-width: 500px) {
+    .traza-item {
+      flex-wrap: wrap;
+    }
 
-      .traza-item-actions {
-    width: 100%;
-    border-top: 1px solid var(--border);
-    padding-top: 8px;
-    margin-top: 4px;
+        .traza-item-actions {
+      width: 100%;
+      border-top: 1px solid var(--border);
+      padding-top: 8px;
+      margin-top: 4px;
+    }
+
+      /* ✅ status ocupa todo el espacio sobrante */
+    .traza-item-actions .traza-status {
+      flex: 1; /* ✅ ocupa el espacio sobrante */
+      text-align: center;
+      white-space: nowrap;
+    }
+
+      /* ✅ botón tamaño fijo, no crece */
+    .traza-advance-btn {
+      flex-shrink: 0; /* ✅ tamaño fijo, no encoge */
+      white-space: nowrap;
+      padding: 5px 10px;
+      border: 1.5px solid var(--teal);
+      border-radius: var(--radius-sm);
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
   }
 
-  /* ✅ status ocupa todo el espacio sobrante */
- .traza-item-actions .traza-status {
-  flex: 1; /* ✅ ocupa el espacio sobrante */
-  text-align: center;
-  white-space: nowrap;
-}
+  /* PUNTOS DE NECESIDAD */
+  .puntos-section {
+    margin-top: 18px;
+    border: 2px solid var(--teal);
+    border-radius: var(--radius);
+    padding: 14px;
+    background: var(--teal-light);
+  }
 
-  /* ✅ botón tamaño fijo, no crece */
- .traza-advance-btn {
-  flex-shrink: 0; /* ✅ tamaño fijo, no encoge */
-  white-space: nowrap;
-  padding: 5px 10px;
-  border: 1.5px solid var(--teal);
-  border-radius: var(--radius-sm);
-  background: var(--teal-light);
-  color: var(--teal-dark);
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-}
+  .puntos-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--teal-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+
+  .punto-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    background: var(--white);
+    position: relative;
+  }
+
+  .punto-color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .punto-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .punto-nombre {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .punto-dir {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .punto-kit-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .punto-del-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #f5c0c0;
+    background: #fde8e8;
+    color: #c0392b;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .punto-del-btn:hover {
+    background: #c0392b;
+    color: #fff;
+  }
+
+  .puntos-add-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .puntos-add-row .d-input {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .puntos-add-row select {
+    padding: 9px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--dark);
+    background: var(--white);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .puntos-add-row select:focus {
+    border-color: var(--teal);
+  }
+
+  .btn-add-punto {
+    padding: 9px 14px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--teal);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .punto-empty {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    padding: 14px 0;
+  }
+
+  .vol-punto-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    border: 1.5px solid var(--border);
+    background: var(--white);
+  }
+
+  .vol-punto-urgente {
+    border-color: #fddfa0;
+    background: var(--orange-light);
+  }
+
+  @media (max-width: 600px) {
+
+    /* El formulario de añadir punto pasa a columna */
+    .puntos-add-row {
+      flex-direction: column;
+      gap: 8px;
     }
+
+    .puntos-add-row .d-input,
+    .puntos-add-row select,
+    .btn-add-punto {
+      width: 100%;
+      min-width: unset;
+    }
+
+    /* La tarjeta de punto en coordinador oculta el badge
+      y lo baja bajo el nombre/dirección */
+    .punto-card {
+      flex-wrap: wrap;
+    }
+
+    .punto-kit-badge {
+      order: 3;
+      margin-left: 22px; /* alineado con el texto, después del dot */
+      margin-top: 4px;
+    }
+
+    .punto-del-btn {
+      order: 2;
+      margin-left: auto;
+    }
+  }
+  
   </style>
 </head>
 
@@ -1164,17 +1344,42 @@
           </div>
 
           <div id="kitCreatedList"></div>
+          <!-- PUNTOS DE NECESIDAD - COORDINADOR -->
+          <div class="puntos-section">
+            <div class="puntos-section-title">📍 Puntos donde se necesitan kits</div>
+            <div id="puntosCoordList">
+              <div class="punto-empty" id="puntosEmpty">Aún no has añadido ningún punto de entrega.</div>
+            </div>
+            <div class="puntos-add-row">
+              <input class="d-input" id="puntoNombre" placeholder="Nombre del punto (ej: Polideportivo Norte)">
+              <input class="d-input" id="puntoDireccion" placeholder="Dirección">
+              <select id="puntoKitTipo">
+                <option value="" disabled selected>— Selecciona un kit creado —</option>
+              </select>
+              <button class="btn-add-punto" id="btnAddPunto" onclick="addPunto()" disabled 
+                  style="opacity:0.4;cursor:not-allowed;">
+                  + Añadir punto
+            </button>
+            </div>
+          </div>
         </div>
 
         <!-- Vista Voluntario -->
         <div id="viewVol" style="display:none;">
+          <!-- Puntos de recogida: SIEMPRE visible, fuera de los steps -->
+          <div class="puntos-section" style="margin-bottom:14px;">
+            <div class="puntos-section-title">📍 Puntos de recogida · Ordenados por proximidad</div>
+            <div id="volPuntosRecogida"></div>
+          </div>
+
           <div id="volStep1">
-            <div
-              style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;">
-              Kits activos disponibles</div>
+            <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:8px;">
+              Kits activos disponibles
+            </div>
             <div id="volKitList"></div>
-            <div id="volKitEmpty" style="padding:24px;text-align:center;color:var(--muted);font-size:13px;">El
-              coordinador aún no ha creado kits. Espera o cambia a vista coordinador.</div>
+            <div id="volKitEmpty" style="padding:24px;text-align:center;color:var(--muted);font-size:13px;">
+              El coordinador aún no ha creado kits. Espera o cambia a vista coordinador.
+            </div>
           </div>
           <div id="volStep2" style="display:none;">
             <div
@@ -1185,16 +1390,7 @@
             <div id="volInstructions"
               style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:10px;">
             </div>
-            <div
-              style="background:var(--orange-light);border:1px solid #FDDFA0;border-radius:var(--radius);padding:12px 14px;display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;">
-              <div style="font-size:20px;">📍</div>
-              <div>
-                <div style="font-weight:700;font-size:13px;color:#7D5200;margin-bottom:2px;">Punto de recogida más
-                  cercano</div>
-                <div id="volPickup" style="font-size:12px;color:#6B4F10;">Polideportivo Russafa · Av. de la Plata, 52 ·
-                  Abierto 8:00–20:00</div>
-              </div>
-            </div>
+            
             <button onclick="generarQR()"
               style="width:100%;padding:12px;border:none;border-radius:var(--radius);background:var(--teal);color:#fff;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:'DM Sans',sans-serif;">📲
               Generar QR del kit</button>
@@ -1270,7 +1466,10 @@
         document.getElementById('modeVol').className = m === 'vol' ? 'mode-btn active' : 'mode-btn';
         document.getElementById('viewCoord').style.display = m === 'coord' ? 'block' : 'none';
         document.getElementById('viewVol').style.display = m === 'vol' ? 'block' : 'none';
-        if (m === 'vol') renderVolKits();
+        if (m === 'vol') {
+          renderVolKits();
+          renderPuntosVol(); // añade esta línea
+        }
       }
 
       // -------- KIT TYPES --------
@@ -1331,6 +1530,113 @@
       }
 
       const createdKits = [];
+      const puntosNecesidad = [];
+
+      const kitColorMap = {
+        food:    { color: '#C0392B', icon: '🍱', nombre: 'Alimenticio' },
+        med:     { color: '#3A7BD5', icon: '💊', nombre: 'Sanitario'   },
+        clothes: { color: '#7B5EA7', icon: '🧥', nombre: 'Ropa'        },
+        tools:   { color: '#EF9F27', icon: '🔧', nombre: 'Herramientas'}
+      };
+
+      function addPunto() {
+        var nombre = document.getElementById('puntoNombre').value.trim();
+        var dir    = document.getElementById('puntoDireccion').value.trim();
+        var sel    = document.getElementById('puntoKitTipo');
+        var opt    = sel.options[sel.selectedIndex];
+
+        if (!nombre || !dir || !sel.value) { 
+          alert('Completa todos los campos y selecciona un kit.'); 
+          return; 
+        }
+
+        puntosNecesidad.push({ 
+          nombre, 
+          dir, 
+          tipo:  opt.dataset.tipo, 
+          color: opt.dataset.color,
+          kitLabel: opt.textContent
+        });
+
+        document.getElementById('puntoNombre').value    = '';
+        document.getElementById('puntoDireccion').value = '';
+
+        renderPuntosCoord();
+        renderPuntosVol();
+      }
+
+      function delPunto(i) {
+        puntosNecesidad.splice(i, 1);
+        renderPuntosCoord();
+        renderPuntosVol();
+      }
+
+      function renderPuntosCoord() {
+        var list  = document.getElementById('puntosCoordList');
+        var empty = document.getElementById('puntosEmpty');
+        if (!puntosNecesidad.length) {
+          list.innerHTML = '<div class="punto-empty" id="puntosEmpty">Aún no has añadido ningún punto de necesidad.</div>';
+          return;
+        }
+        list.innerHTML = puntosNecesidad.map(function(p, i) {
+          var k = { color: p.color, icon: p.kitLabel.split(' ')[0], nombre: p.kitLabel };
+          return `
+            <div class="punto-card">
+              <div class="punto-color-dot" style="background:${k.color};"></div>
+              <div class="punto-info">
+                <div class="punto-nombre">${p.nombre}</div>
+                <div class="punto-dir">${p.dir}</div>
+              </div>
+              <span class="punto-kit-badge" style="background:${k.color}22;color:${k.color};border:1px solid ${k.color}55;">
+                ${k.icon} ${k.nombre}
+              </span>
+              <button class="punto-del-btn" onclick="delPunto(${i})">✕</button>
+            </div>`;
+        }).join('');
+      }
+
+      const puntosRecogidaFijos = [
+        { nombre: 'Polideportivo Municipal Norte',  dir: 'Av. de la Constitución, 14' },
+        { nombre: 'Centre Cívic Russafa',           dir: 'C/ Dénia, 67'              },
+        { nombre: 'Pavelló Esportiu Sant Pau',      dir: 'Pg. de Sant Joan, 2'       }
+      ];
+
+      function renderPuntosVol() {
+        var list = document.getElementById('volPuntosRecogida');
+        if (!list) return;
+
+        // Distancia simulada estable: basada en índice + decimal fijo
+        var conDistancia = puntosRecogidaFijos.map(function(p, i) {
+          var distancia = (0.4 + i * 0.6 + (i % 3) * 0.15).toFixed(1);
+          return Object.assign({}, p, { distancia: parseFloat(distancia) });
+        });
+
+        conDistancia.sort(function(a, b) { return a.distancia - b.distancia; });
+
+        list.innerHTML = conDistancia.map(function(p, i) {
+          var esMasCercano = i === 0;
+          return `
+            <div style="
+              display:flex;align-items:flex-start;gap:10px;
+              padding:10px 12px;margin-bottom:6px;
+              border-radius:var(--radius-sm);
+              border:1.5px solid ${esMasCercano ? '#9FE1CB' : 'var(--border)'};
+              background:${esMasCercano ? 'var(--teal-light)' : 'var(--white)'};
+            ">
+              <div style="font-size:20px;">📍</div>
+              <div style="flex:1;">
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                  <span style="font-size:12px;font-weight:700;color:var(--dark);">${p.nombre}</span>
+                  ${esMasCercano ? '<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;background:var(--teal);color:#fff;">Más cercano</span>' : ''}
+                </div>
+                <div style="font-size:11px;color:var(--muted);margin-top:1px;">${p.dir}</div>
+              </div>
+              <div style="font-size:12px;font-weight:700;color:var(--teal-dark);white-space:nowrap;">
+                ${p.distancia} km
+              </div>
+            </div>`;
+        }).join('');
+      }
 
 
       function crearKit() {
@@ -1348,18 +1654,35 @@
         div.className = 'kit-created-item';
         div.id = 'kitCreated-' + code;
         div.innerHTML = `
-    <div style="flex:1;min-width:0;">
-      <div style="font-size:12px;font-weight:600;color:var(--teal-dark);">${title}</div>
-      <div style="font-size:11px;color:var(--muted);">${total} elementos · Listo para asignar</div>
-    </div>
-    <span class="kit-created-code">${code}</span>
-    <span class="kit-created-badge">✓ Creado</span>
-    <button class="kit-created-cancel-btn" onclick="cancelarKit(${idx}, this)">✕</button>
-  `;
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:12px;font-weight:600;color:var(--teal-dark);">${title}</div>
+            <div style="font-size:11px;color:var(--muted);">${total} elementos · Listo para asignar</div>
+          </div>
+          <span class="kit-created-code">${code}</span>
+          <span class="kit-created-badge">✓ Creado</span>
+          <button class="kit-created-cancel-btn" onclick="cancelarKit(${idx}, this)">✕</button>
+        `;
         list.prepend(div);
 
         //addTrazaItem(code, title, currentColor, 0);
         renderVolKits();
+       // Habilitar botón de añadir punto
+        document.getElementById('btnAddPunto').disabled = false;
+        document.getElementById('btnAddPunto').style.opacity = '1';
+        document.getElementById('btnAddPunto').style.cursor = 'pointer';
+
+        // Añadir kit al select de puntos
+        var sel = document.getElementById('puntoKitTipo');
+        var yaExiste = Array.from(sel.options).some(function(o) { return o.value === code; });
+        if (!yaExiste) {
+          var opt = document.createElement('option');
+          opt.value             = code;
+          opt.dataset.color     = currentColor;
+          opt.dataset.tipo      = currentKitType;
+          opt.textContent       = title + ' · ' + code;
+          sel.appendChild(opt);
+        }
+
       }
 
       // -------- VOL KITS --------
