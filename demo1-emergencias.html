@@ -22,6 +22,7 @@
 
     gtag('config', 'G-0CGM2ND1FB');
   </script>
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kit2Help · Emergencias</title>
@@ -924,6 +925,61 @@
         transition: background 0.18s, border-color 0.18s;
         box-sizing: border-box;
       }
+
+      .val-expand-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      /* ── Triaje móvil ── */
+      .val-filters {
+        gap: 5px;
+      }
+      .val-filter-btn {
+        font-size: 11px;
+        padding: 5px 10px;
+      }
+      .val-prio-filter {
+        gap: 4px;
+        padding: 6px 8px;
+      }
+      .val-prio-filter-label {
+        width: 100%;
+        margin-bottom: 2px;
+      }
+      .val-prio-btn {
+        font-size: 10px;
+        padding: 3px 8px;
+      }
+      .val-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 10px 12px;
+      }
+      .val-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+      }
+      .val-btn {
+        font-size: 11px;
+        padding: 7px 6px;
+        text-align: center;
+        justify-content: center;
+      }
+      .val-btn-more {
+        grid-column: 1 / -1;
+      }
+      .val-expand-grid {
+        grid-template-columns: 1fr;
+      }
+      .vol-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-tab span {
+        font-size: 10px;
+      }
     }
 
     /* RESPONSIVE */
@@ -1183,6 +1239,124 @@
       font-weight: 600;
       color: #222;
     }
+
+    /* Triaje: badge necesidad/oferta */
+    .val-badge-need {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 10px; font-weight: 700; padding: 2px 7px;
+      border-radius: 20px; background: var(--red-light);
+      color: var(--red-dark); border: 1px solid rgba(226,75,74,0.3);
+      margin-left: 6px; vertical-align: middle;
+    }
+    .val-badge-offer {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 10px; font-weight: 700; padding: 2px 7px;
+      border-radius: 20px; background: var(--teal-light);
+      color: #0E4D38; border: 1px solid rgba(29,158,117,0.3);
+      margin-left: 6px; vertical-align: middle;
+    }
+    .val-prio-filter {
+      display: none; gap: 5px; flex-wrap: wrap;
+      margin-bottom: 10px; padding: 8px 10px;
+      background: var(--bg); border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+    .val-prio-filter.show { display: flex; }
+    .val-prio-filter-label {
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      align-self: center; margin-right: 4px;
+    }
+    .val-prio-btn {
+      padding: 4px 10px; border-radius: 20px; font-size: 11px;
+      font-weight: 600; cursor: pointer; border: 1.5px solid var(--border);
+      background: var(--white); color: var(--muted);
+      font-family: 'DM Sans', sans-serif; transition: all 0.18s;
+    }
+    .val-prio-btn.active-all  { background: var(--dark); border-color: var(--dark); color: #fff; }
+    .val-prio-btn.active-high { background: var(--red-light); border-color: var(--red); color: var(--red-dark); }
+    .val-prio-btn.active-mid  { background: var(--orange-light); border-color: var(--orange); color: #7D5200; }
+    .val-prio-btn.active-low  { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+    .val-btn-covered {
+      background: #EAF3DE; border-color: #639922; color: #3B6D11;
+    }
+    .val-btn-covered:hover { background: #639922; color: #fff; }
+
+    /* Kit multiselect */
+    .kit-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .kit-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      background: var(--white);
+      transition: all 0.18s;
+      user-select: none;
+    }
+
+    .kit-item:hover {
+      border-color: var(--teal);
+      background: var(--teal-light);
+    }
+
+    .kit-item.sel {
+      border-color: var(--teal);
+      background: var(--teal-light);
+    }
+
+    .kit-item input[type="checkbox"] {
+      accent-color: var(--teal);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .kit-item-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .kit-item-code {
+      font-size: 10px;
+      color: var(--muted);
+      margin-left: auto;
+      font-family: monospace;
+      background: var(--bg);
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    /* Distance range */
+    .range-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .range-wrapper input[type="range"] {
+      flex: 1;
+      accent-color: var(--purple);
+      cursor: pointer;
+    }
+
+    .range-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--purple);
+      min-width: 44px;
+      text-align: right;
+    }
   </style>
 </head>
 
@@ -1311,8 +1485,58 @@
           <div class="sub-row" id="subShel">
             <div class="sub-label">Tipo de solicitud</div>
             <div class="chips">
-              <div class="chip chip-shelter sel" onclick="selShelTipo(this)">Solicitar plaza</div>
-              <div class="chip chip-shelter" onclick="selShelTipo(this)">Ofrecer espacio</div>
+              <div class="chip chip-shelter sel" onclick="selShelTipo(this,'solicitar')">Solicitar plaza</div>
+              <div class="chip chip-shelter" onclick="selShelTipo(this,'ofrecer')">Ofrecer espacio</div>
+            </div>
+          </div>
+
+          <!-- Sub: Kits (solo visible en Recogida de kits) -->
+          <div class="sub-row" id="subKits">
+            <div class="sub-label">Kits disponibles — selecciona uno o varios</div>
+            <div class="kit-list">
+              <label class="kit-item">
+                <input type="checkbox" onchange="toggleKit(this)">
+                <span class="kit-item-label">🧺 Kit básico de higiene</span>
+                <span class="kit-item-code">KIT-HIG-01</span>
+              </label>
+              <label class="kit-item">
+                <input type="checkbox" onchange="toggleKit(this)">
+                <span class="kit-item-label">🍱 Kit alimentario familiar</span>
+                <span class="kit-item-code">KIT-ALI-02</span>
+              </label>
+              <label class="kit-item">
+                <input type="checkbox" onchange="toggleKit(this)">
+                <span class="kit-item-label">🛏️ Kit ropa y mantas</span>
+                <span class="kit-item-code">KIT-ROB-03</span>
+              </label>
+              <label class="kit-item">
+                <input type="checkbox" onchange="toggleKit(this)">
+                <span class="kit-item-label">🩺 Kit primeros auxilios</span>
+                <span class="kit-item-code">KIT-MED-04</span>
+              </label>
+              <label class="kit-item">
+                <input type="checkbox" onchange="toggleKit(this)">
+                <span class="kit-item-label">👶 Kit bebé / infantil</span>
+                <span class="kit-item-code">KIT-INF-05</span>
+              </label>
+              <label class="kit-item">
+                <input type="checkbox" onchange="toggleKit(this)">
+                <span class="kit-item-label">🔦 Kit emergencia básica</span>
+                <span class="kit-item-code">KIT-EME-06</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Sub: Rango de desplazamiento (solo visible en Ofrecer voluntarios) -->
+          <div class="sub-row" id="subRango">
+            <div class="sub-label">Radio de desplazamiento disponible</div>
+            <div class="range-wrapper">
+              <input type="range" id="volRango" min="1" max="50" value="10"
+                oninput="document.getElementById('volRangoVal').textContent = this.value + ' km'">
+              <span class="range-value" id="volRangoVal">10 km</span>
+            </div>
+            <div style="font-size:10px;color:var(--muted);margin-top:4px;">
+              Indica hasta qué distancia puedes desplazarte para colaborar
             </div>
           </div>
         </div>
@@ -1326,15 +1550,15 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Personas afectadas</label>
+        <div class="form-group" id="personasGroup">
+          <label id="personasLabel">Personas afectadas</label>
           <input class="d-input" id="necPersonas" type="number" value="6" min="1">
         </div>
 
         <div class="form-group">
           <label>Descripción</label>
           <textarea class="d-textarea" id="necDesc"
-            rows="2">Familia con 2 menores y un anciano. Sin víveres desde hace 2 días.</textarea>
+            rows="2" placeholder="Describe la situación de emergencia..."></textarea>
         </div>
 
         <button class="btn-primary" id="necBtn" onclick="enviarNec()">Enviar necesidad</button>
@@ -1393,6 +1617,24 @@
           <button class="val-filter-btn" onclick="filtrarVal('pendiente',this)">Pendientes</button>
           <button class="val-filter-btn" onclick="filtrarVal('validada',this)">Validadas</button>
           <button class="val-filter-btn" onclick="filtrarVal('cerrada',this)">Cerradas</button>
+          <button class="val-filter-btn" onclick="filtrarVal('rechazada',this)">Rechazadas</button>
+        </div>
+
+        <!-- Sub-filtro prioridad: solo visible en Pendientes -->
+        <div class="val-prio-filter" id="valPrioFilter">
+          <span class="val-prio-filter-label">Prioridad:</span>
+          <button class="val-prio-btn active-all" onclick="filtrarPrio('todas',this)">Todas</button>
+          <button class="val-prio-btn" onclick="filtrarPrio('alta',this)" style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">🔴 Alta</button>
+          <button class="val-prio-btn" onclick="filtrarPrio('media',this)" style="background:var(--orange-light);border-color:var(--orange);color:#7D5200;">🟡 Media</button>
+          <button class="val-prio-btn" onclick="filtrarPrio('baja',this)" style="background:var(--blue-light);border-color:var(--blue);color:var(--blue);">🔵 Baja</button>
+        </div>
+
+        <!-- Sub-filtro Necesidad/Oferta: visible en todos los estados -->
+        <div class="val-prio-filter show" id="valFlowFilter" style="margin-bottom:12px;">
+          <span class="val-prio-filter-label">Tipo:</span>
+          <button class="val-prio-btn active-all" onclick="filtrarFlow('todas',this)">Todos</button>
+          <button class="val-prio-btn" onclick="filtrarFlow('necesidad',this)" style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">↓ Necesidad</button>
+          <button class="val-prio-btn" onclick="filtrarFlow('oferta',this)" style="background:var(--teal-light);border-color:var(--teal);color:#0E4D38;">↑ Oferta</button>
         </div>
 
         <div id="valList">
@@ -1701,29 +1943,117 @@
 
       // Cat chips
       let catActual = 'emergency';
+      let volAccionActual = 'requerir';
+      let shelTipoActual = 'solicitar';
+
+      // Helpers para mostrar/ocultar grupos
+      function _showPrio(show) {
+        var g = document.getElementById('prioGroup');
+        if (g) g.style.display = show ? '' : 'none';
+      }
+      function _showPersonas(show, label) {
+        var g = document.getElementById('personasGroup');
+        var l = document.getElementById('personasLabel');
+        if (g) g.style.display = show ? '' : 'none';
+        if (l && label) l.textContent = label;
+      }
+
       function selCat(el, tipo) {
         document.querySelectorAll('#necCats .chip').forEach(c => {
           c.className = c.className.replace(/\s*sel/g, '');
         });
         el.classList.add('sel');
         catActual = tipo;
+
+        // Aviso emergencia
         document.getElementById('emergNotice').style.display = tipo === 'emergency' ? 'flex' : 'none';
+
+        // Sub-rows
         document.getElementById('subVol').classList.toggle('show', tipo === 'volunteer');
         document.getElementById('subCheck').classList.toggle('show', tipo === 'checkpoint');
         document.getElementById('subShel').classList.toggle('show', tipo === 'shelter');
-        const prioGroup = document.getElementById('prioGroup');
+        document.getElementById('subKits').classList.toggle('show', tipo === 'storage');
+        // Rango solo se muestra si estamos en volunteer+ofrecer, se resetea aquí
+        document.getElementById('subRango').classList.remove('show');
+
+        // Placeholder descripción
+        var desc = document.getElementById('necDesc');
+        var descPlaceholders = {
+          emergency: 'Describe la situación de emergencia...',
+          checkpoint: 'Indica el tipo de punto, horario de apertura/cierre, servicios disponibles...',
+          storage: 'Propón horario de apertura y cierre del punto de recogida, condiciones de acceso...',
+          volunteer: 'Describe el perfil o tarea necesaria...',
+          shelter: 'Describe las condiciones del espacio, servicios incluidos...'
+        };
+        if (desc) {
+          desc.placeholder = descPlaceholders[tipo] || '';
+          // Solo limpiar si es un placeholder anterior de otra categoría
+        }
+
+        // Prioridad y personas según categoría
         if (tipo === 'emergency') {
           document.querySelectorAll('.prio-btn').forEach(b => b.classList.remove('sel'));
           document.querySelector('.prio-btn.high').classList.add('sel');
-          prioGroup.style.opacity = '0.5'; prioGroup.style.pointerEvents = 'none';
+          var pg = document.getElementById('prioGroup');
+          pg.style.opacity = '0.5'; pg.style.pointerEvents = 'none'; pg.style.display = '';
+          _showPersonas(true, 'Personas afectadas');
+
+        } else if (tipo === 'checkpoint') {
+          _showPrio(false);
+          _showPersonas(false, 'Personas afectadas');
+
+        } else if (tipo === 'storage') {
+          _showPrio(false);
+          _showPersonas(false, 'Personas afectadas');
+
+        } else if (tipo === 'volunteer') {
+          var pg2 = document.getElementById('prioGroup');
+          pg2.style.opacity = '1'; pg2.style.pointerEvents = 'auto';
+          // El estado de prioridad/personas depende de la sub-acción de voluntarios
+          _actualizarCamposVoluntario(volAccionActual);
+
+        } else if (tipo === 'shelter') {
+          // Depende del sub-tipo de refugio
+          _actualizarCamposRefugio(shelTipoActual);
+
         } else {
-          prioGroup.style.opacity = '1'; prioGroup.style.pointerEvents = 'auto';
+          var pg3 = document.getElementById('prioGroup');
+          pg3.style.opacity = '1'; pg3.style.pointerEvents = 'auto'; pg3.style.display = '';
+          _showPersonas(true, 'Personas afectadas');
+        }
+      }
+
+      function _actualizarCamposVoluntario(accion) {
+        var pg = document.getElementById('prioGroup');
+        document.getElementById('subRango').classList.remove('show');
+        if (accion === 'requerir') {
+          pg.style.display = ''; pg.style.opacity = '1'; pg.style.pointerEvents = 'auto';
+          _showPersonas(true, 'Personas necesarias');
+        } else {
+          // ofrecer
+          pg.style.display = 'none';
+          _showPersonas(true, 'Personas disponibles');
+          document.getElementById('subRango').classList.add('show');
+        }
+      }
+
+      function _actualizarCamposRefugio(subtipo) {
+        var pg = document.getElementById('prioGroup');
+        if (subtipo === 'solicitar') {
+          pg.style.display = ''; pg.style.opacity = '1'; pg.style.pointerEvents = 'auto';
+          _showPersonas(true, 'Personas afectadas');
+        } else {
+          // ofrecer espacio
+          pg.style.display = 'none';
+          _showPersonas(true, 'Capacidad (personas)');
         }
       }
 
       function selVolAccion(tipo) {
+        volAccionActual = tipo;
         document.getElementById('volReq').className = tipo === 'requerir' ? 'chip chip-volunteer sel' : 'chip chip-volunteer';
         document.getElementById('volOfe').className = tipo === 'ofrecer' ? 'chip chip-volunteer sel' : 'chip chip-volunteer';
+        _actualizarCamposVoluntario(tipo);
       }
 
       function selVolTipo(el) {
@@ -1736,12 +2066,32 @@
         el.classList.add('sel');
       }
 
-      function selShelTipo(el) {
+      function selShelTipo(el, subtipo) {
+        shelTipoActual = subtipo;
         document.querySelectorAll('#subShel .chip').forEach(c => c.classList.remove('sel'));
         el.classList.add('sel');
+        _actualizarCamposRefugio(subtipo);
       }
 
+      function toggleKit(cb) {
+        var label = cb.closest('.kit-item');
+        if (label) label.classList.toggle('sel', cb.checked);
+      }
 
+      // Obtener kits seleccionados para el resumen
+      function _getKitsSeleccionados() {
+        var items = document.querySelectorAll('#subKits .kit-item input:checked');
+        var names = [];
+        items.forEach(function(cb) {
+          var label = cb.closest('.kit-item');
+          var nameEl = label ? label.querySelector('.kit-item-label') : null;
+          var codeEl = label ? label.querySelector('.kit-item-code') : null;
+          var name = nameEl ? nameEl.textContent.trim() : '';
+          var code = codeEl ? codeEl.textContent.trim() : '';
+          if (code) names.push(code + (name ? ' ' + name : ''));
+        });
+        return names;
+      }
       function selPrio(el, nivel) {
         document.querySelectorAll('.prio-btn').forEach(b => b.classList.remove('sel'));
         el.classList.add('sel');
@@ -1749,14 +2099,17 @@
 
 
 
-      function enviarNec() {
-        const ubic = document.getElementById('necUbic').value || 'C/ Sueca, 22';
-        const personas = document.getElementById('necPersonas').value || '6';
-        const desc = document.getElementById('necDesc').value;
-        const prioEl = document.querySelector('.prio-btn.active-high, .prio-btn.active-mid, .prio-btn.active-low');
-        const prioTxt = prioEl ? prioEl.textContent.trim() : 'Media';
 
-        // ✅ Config por categoría
+      function enviarNec() {
+        const ubic = document.getElementById('necUbic').value || 'Ubicación sin especificar';
+        const personasVal = document.getElementById('necPersonas').value || '1';
+        const personasLabel = document.getElementById('personasLabel') ? document.getElementById('personasLabel').textContent : 'Personas';
+        const desc = document.getElementById('necDesc').value || '—';
+        const prioEl = document.querySelector('.prio-btn.sel');
+        const prioTxt = prioEl ? prioEl.textContent.trim() : 'Media';
+        const prioColor = prioTxt === 'Alta' ? 'var(--red)' : prioTxt === 'Media' ? 'var(--orange)' : 'var(--blue)';
+        const prioKey = prioTxt === 'Alta' ? 'alta' : prioTxt === 'Media' ? 'media' : 'baja';
+
         const catConfig = {
           emergency: { color: 'var(--red)', bg: 'var(--red-light)', icon: '🚨', label: 'Emergencia', prioColor: 'var(--red)', tipo: 'Emergencia crítica' },
           checkpoint: { color: 'var(--orange)', bg: 'var(--orange-light)', icon: '📍', label: 'Punto de encuentro', prioColor: 'var(--orange)', tipo: 'Punto de encuentro' },
@@ -1767,7 +2120,83 @@
 
         const cfg = catConfig[catActual] || catConfig.emergency;
 
-        // ✅ IDs únicos para la nueva card
+        // Determinar si es NECESIDAD u OFERTA
+        let esOferta = false;
+        if (catActual === 'volunteer' && volAccionActual === 'ofrecer') esOferta = true;
+        if (catActual === 'shelter' && shelTipoActual === 'ofrecer') esOferta = true;
+        if (catActual === 'storage') esOferta = true;
+        if (catActual === 'checkpoint') esOferta = true;
+        const flowBadge = esOferta
+          ? '<span class="val-badge-offer">↑ Oferta</span>'
+          : '<span class="val-badge-need">↓ Necesidad</span>';
+
+        // Datos extra según categoría
+        const kitsSeleccionados = _getKitsSeleccionados();
+        const rangoVal = document.getElementById('volRangoVal') ? document.getElementById('volRangoVal').textContent : '';
+
+        // Construir meta línea corta
+        let metaExtra = '';
+        if (catActual === 'emergency') {
+          metaExtra = `· <span style="color:${prioColor};font-weight:600;">${prioTxt} prioridad</span> · ${personasVal} ${personasLabel}`;
+        } else if (catActual === 'checkpoint') {
+          const checkTipo = document.querySelector('#subCheck .chip.sel');
+          metaExtra = checkTipo ? `· ${checkTipo.textContent.trim()}` : '';
+        } else if (catActual === 'storage') {
+          metaExtra = kitsSeleccionados.length ? `· ${kitsSeleccionados.length} kit(s) seleccionado(s)` : '';
+        } else if (catActual === 'volunteer') {
+          const accionLabel = volAccionActual === 'requerir' ? 'Requerir' : 'Ofrecer';
+          const volTipoEl = document.querySelector('.vol-card.sel .vol-name');
+          const volTipo = volTipoEl ? volTipoEl.textContent : '';
+          metaExtra = `· ${accionLabel} · ${volTipo} · ${personasVal} ${personasLabel}`;
+          if (volAccionActual === 'requerir') metaExtra += ` · <span style="color:${prioColor};font-weight:600;">${prioTxt} prioridad</span>`;
+          if (volAccionActual === 'ofrecer' && rangoVal) metaExtra += ` · Radio: ${rangoVal}`;
+        } else if (catActual === 'shelter') {
+          const shelLabel = shelTipoActual === 'ofrecer' ? 'Ofrecer espacio' : 'Solicitar plaza';
+          metaExtra = `· ${shelLabel} · ${personasVal} ${personasLabel}`;
+          if (shelTipoActual === 'solicitar') metaExtra += ` · <span style="color:${prioColor};font-weight:600;">${prioTxt} prioridad</span>`;
+        }
+
+        // Construir campos de detalle expandido
+        let detalleFields = '';
+        if (catActual === 'emergency') {
+          detalleFields = `
+            <div class="val-field">Tipo<span>${cfg.icon} ${cfg.tipo}</span></div>
+            <div class="val-field">Prioridad<span style="color:${prioColor};">${prioTxt}</span></div>
+            <div class="val-field">${personasLabel}<span>${personasVal}</span></div>
+            <div class="val-field">Recibida<span>Hace 1 min</span></div>
+            <div class="val-field" style="grid-column:1/-1;">Descripción<span>${desc.substring(0,200)}</span></div>`;
+        } else if (catActual === 'checkpoint') {
+          const checkTipo = document.querySelector('#subCheck .chip.sel');
+          detalleFields = `
+            <div class="val-field">Subtipo<span>${checkTipo ? checkTipo.textContent.trim() : '—'}</span></div>
+            <div class="val-field">Recibida<span>Hace 1 min</span></div>
+            <div class="val-field" style="grid-column:1/-1;">Horario / Info<span>${desc.substring(0,200)}</span></div>`;
+        } else if (catActual === 'storage') {
+          detalleFields = `
+            <div class="val-field">Kits<span>${kitsSeleccionados.length ? kitsSeleccionados.join(', ') : '— Ninguno seleccionado'}</span></div>
+            <div class="val-field">Recibida<span>Hace 1 min</span></div>
+            <div class="val-field" style="grid-column:1/-1;">Horario / Info<span>${desc.substring(0,200)}</span></div>`;
+        } else if (catActual === 'volunteer') {
+          const volTipoEl = document.querySelector('.vol-card.sel .vol-name');
+          const volDescEl = document.querySelector('.vol-card.sel .vol-desc');
+          detalleFields = `
+            <div class="val-field">Acción<span>${volAccionActual === 'requerir' ? 'Requerir voluntarios' : 'Ofrecer voluntarios'}</span></div>
+            <div class="val-field">Perfil<span>${volTipoEl ? volTipoEl.textContent : '—'}${volDescEl ? ' · ' + volDescEl.textContent : ''}</span></div>
+            <div class="val-field">${personasLabel}<span>${personasVal}</span></div>
+            ${volAccionActual === 'requerir' ? `<div class="val-field">Prioridad<span style="color:${prioColor};">${prioTxt}</span></div>` : ''}
+            ${volAccionActual === 'ofrecer' && rangoVal ? `<div class="val-field">Radio desplazamiento<span>${rangoVal}</span></div>` : ''}
+            <div class="val-field">Recibida<span>Hace 1 min</span></div>
+            <div class="val-field" style="grid-column:1/-1;">Descripción<span>${desc.substring(0,200)}</span></div>`;
+        } else if (catActual === 'shelter') {
+          detalleFields = `
+            <div class="val-field">Solicitud<span>${shelTipoActual === 'ofrecer' ? 'Ofrecer espacio' : 'Solicitar plaza'}</span></div>
+            <div class="val-field">${personasLabel}<span>${personasVal}</span></div>
+            ${shelTipoActual === 'solicitar' ? `<div class="val-field">Prioridad<span style="color:${prioColor};">${prioTxt}</span></div>` : ''}
+            <div class="val-field">Recibida<span>Hace 1 min</span></div>
+            <div class="val-field" style="grid-column:1/-1;">Descripción<span>${desc.substring(0,200)}</span></div>`;
+        }
+
+        // IDs únicos
         const uid = 'vc_' + Date.now();
         const eid = 've_' + Date.now();
         const did = 'vd_' + Date.now();
@@ -1779,35 +2208,37 @@
         card.id = uid;
         card.dataset.estado = 'pendiente';
         card.dataset.tipo = catActual;
+        card.dataset.prio = prioKey;
+        card.dataset.flow = esOferta ? 'oferta' : 'necesidad';
         card.style.borderLeft = `3px solid ${cfg.color}`;
+
+        // Botón cubierta solo para NECESIDADES, no para ofertas
+        const btnCubierta = !esOferta
+          ? `<button class="val-btn val-btn-covered" onclick="cubrirCard('${uid}','${did}')">✓ Cubierta</button>`
+          : '';
 
         card.innerHTML = `
     <div class="val-header">
-      <div style="display:flex;align-items:center;gap:10px;flex:1;">
-        <div class="val-icon" style="background:${cfg.bg};">${cfg.icon}</div>
-        <div class="val-info">
-          <div class="val-title-txt">${cfg.label} · ${ubic}</div>
-          <div class="val-meta">📍 ${ubic.split('—')[1]?.trim() || ubic} · 
-            <span style="color:${cfg.prioColor};font-weight:600;">${prioTxt} prioridad</span> 
-            · ${personas} personas
-          </div>
+      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+        <div class="val-icon" style="background:${cfg.bg};flex-shrink:0;">${cfg.icon}</div>
+        <div class="val-info" style="min-width:0;">
+          <div class="val-title-txt">${cfg.label} · ${ubic}${flowBadge}</div>
+          <div class="val-meta">📍 ${ubic} ${metaExtra}</div>
         </div>
       </div>
       <div class="val-actions">
         <button class="val-btn val-btn-ok"  onclick="validarCard('${uid}','${did}',true)">✓ Validar</button>
         <button class="val-btn val-btn-rej" onclick="validarCard('${uid}','${did}',false)">✕ Rechazar</button>
+        ${btnCubierta}
         <button class="val-btn val-btn-more" onclick="toggleExpand('${eid}')">Detalles</button>
       </div>
     </div>
     <div class="val-expand" id="${eid}">
       <div class="val-expand-grid">
-        <div class="val-field">Tipo<span>${cfg.icon} ${cfg.tipo}</span></div>
-        <div class="val-field">Prioridad<span style="color:${cfg.prioColor};">${prioTxt}</span></div>
-        <div class="val-field">Descripción<span>${desc.substring(0, 120)}</span></div>
-        <div class="val-field">Recibida<span>Hace 1 min</span></div>
+        ${detalleFields}
       </div>
       <div style="display:flex;gap:6px;margin-top:8px;">
-        <input class="d-input" id="${rid}" placeholder="Nombre del coordinador..." 
+        <input class="d-input" id="${rid}" placeholder="Nombre del coordinador..."
           style="font-size:12px;padding:7px 10px;">
         <button onclick="asignarResp('${rid}','${rai}')"
           style="padding:7px 12px;background:var(--teal);color:#fff;border:none;
@@ -1820,30 +2251,29 @@
       <div class="val-done" id="${did}"></div>
     </div>`;
 
-        // ✅ Insertar al principio del listado
         const valList = document.getElementById('valList');
         valList.insertBefore(card, valList.firstChild);
 
-        // ✅ Confirm card y botón
+        // Confirm card
         const summary = document.getElementById('necSummary');
-        summary.innerHTML = `<strong>Categoría:</strong> ${cfg.icon} ${cfg.label} · 
-    <strong>Ubicación:</strong> ${ubic} · 
-    <strong>Personas:</strong> ${personas}<br>
-    <em style="color:var(--muted)">${desc.substring(0, 80)}…</em>`;
+        let extraInfo = '';
+        if (catActual === 'storage' && kitsSeleccionados.length) {
+          extraInfo = '<br><strong>Kits:</strong> ' + kitsSeleccionados.join(', ');
+        }
+        if (catActual === 'volunteer' && volAccionActual === 'ofrecer' && rangoVal) {
+          extraInfo = '<br><strong>Radio:</strong> ' + rangoVal;
+        }
+        summary.innerHTML = `<strong>Categoría:</strong> ${cfg.icon} ${cfg.label} ·
+    <strong>Ubicación:</strong> ${ubic} ·
+    <strong>${personasLabel}:</strong> ${personasVal}${extraInfo}<br>
+    <em style="color:var(--muted)">${desc.substring(0, 80)}${desc.length > 80 ? '…' : ''}</em>`;
         document.getElementById('necConfirm').classList.add('show');
 
         const btn = document.getElementById('necBtn');
         btn.textContent = '✓ Enviada'; btn.style.background = '#27AE60'; btn.disabled = true;
-
-        // Estado enviando
-        btn.textContent = '✓ Enviada';
-        btn.style.background = '#27AE60';
-        btn.disabled = true;
-
-        // ✅ Reactiva el botón tras 3 segundos
         setTimeout(function () {
           btn.textContent = 'Enviar necesidad';
-          btn.style.background = '';   // ✅ restaura el color original de .btn-primary
+          btn.style.background = '';
           btn.disabled = false;
         }, 3000);
       }
@@ -1854,63 +2284,55 @@
         el.classList.toggle('show');
       }
 
-
       function validarCard(cardId, doneId, ok) {
         var card = document.getElementById(cardId);
         var done = document.getElementById(doneId);
         if (!card || !done) return;
 
-        var estado = ok ? 'validada' : 'cerrada';
+        var estado = ok ? 'validada' : 'rechazada';
         card.dataset.estado = estado;
 
-        // ✅ 1 — Solo deshabilita el botón pulsado, no el de rechazar
-        var btnOk = card.querySelector('.val-btn-ok');
+        var btnOk  = card.querySelector('.val-btn-ok');
         var btnRej = card.querySelector('.val-btn-rej');
+        var btnCov = card.querySelector('.val-btn-covered');
 
         if (ok) {
-          if (btnOk) { btnOk.disabled = true; btnOk.style.opacity = '0.5'; }
-          if (btnRej) { btnRej.disabled = false; btnRej.style.opacity = '1'; } // ✅ mantiene rechazar activo
+          if (btnOk)  { btnOk.disabled = true;  btnOk.style.opacity = '0.5'; }
+          if (btnRej) { btnRej.disabled = false; btnRej.style.opacity = '1'; }
+          if (btnCov) { btnCov.disabled = true;  btnCov.style.opacity = '0.5'; }
         } else {
-          if (btnRej) { btnRej.disabled = true; btnRej.style.opacity = '0.5'; }
-          if (btnOk) { btnOk.disabled = false; btnOk.style.opacity = '1'; } // ✅ mantiene validar activo
+          if (btnRej) { btnRej.disabled = true;  btnRej.style.opacity = '0.5'; }
+          if (btnOk)  { btnOk.disabled = false;  btnOk.style.opacity = '1'; }
+          if (btnCov) { btnCov.disabled = true;  btnCov.style.opacity = '0.5'; }
         }
 
-        // Muestra mensaje en val-done
         done.textContent = ok
-          ? '✓ Necesidad validada y publicada en el muro.'
-          : '✕ Necesidad rechazada.';
+          ? '✓ Validada y publicada en el muro.'
+          : '✕ Rechazada.';
         done.className = 'val-done show ' + (ok ? 'ok' : 'rej');
 
-
         if (ok) {
-          // ✅ 2 — Crea nueva card en el muro con los datos de la card validada
           var titulo = card.querySelector('.val-title-txt') ? card.querySelector('.val-title-txt').textContent : 'Necesidad';
-          var meta = card.querySelector('.val-meta') ? card.querySelector('.val-meta').textContent : '';
-          var desc = card.querySelector('.val-field span') ? card.querySelector('.val-field span').textContent : '';
-          var tipo = card.dataset.tipo || 'default';
-          var icono = card.querySelector('.val-icon') ? card.querySelector('.val-icon').textContent : '📋';
-          var color = card.style.borderLeftColor || 'var(--teal)';
-
-          console.log(`Card ${cardId} titulo como ${titulo}.`);
-
-
+          var meta   = card.querySelector('.val-meta') ? card.querySelector('.val-meta').textContent : '';
+          var tipo   = card.dataset.tipo || 'default';
+          var icono  = card.querySelector('.val-icon') ? card.querySelector('.val-icon').textContent : '📋';
+          var color  = card.style.borderLeftColor || 'var(--teal)';
 
           var muro = document.getElementById('muroFeed');
-
           if (muro) {
-
-            // ✅ Config dinámica según tipo
             var tipoConfig = {
-              'Emergencia': { color: 'var(--red)', colorLight: 'var(--red-light)', tag: '🚨 Emergencia', btn: 'Atender', textColor: 'var(--red-dark)' },
-              'Necesidad': { color: 'var(--teal)', colorLight: 'var(--teal-light)', tag: '📋 Necesidad', btn: 'Atender', textColor: 'var(--teal-dark)' },
-              'Refugio': { color: 'var(--blue)', colorLight: 'var(--blue-light)', tag: '🏠 Refugio', btn: 'Derivar persona', textColor: '#1C3F7A' },
-              'Voluntario': { color: 'var(--purple)', colorLight: 'var(--purple-light)', tag: '🤝 Voluntario', btn: 'Asignar', textColor: 'var(--purple-dark)' },
-              'Alimentacion': { color: 'var(--orange)', colorLight: 'var(--orange-light)', tag: '🍱 Alimentación', btn: 'Gestionar', textColor: 'var(--orange-dark)' },
-              'default': { color: 'var(--teal)', colorLight: 'var(--teal-light)', tag: '📋 Necesidad', btn: 'Atender', textColor: 'var(--teal-dark)' }
+              'emergency': { color: 'var(--red)',    colorLight: 'var(--red-light)',    tag: '🚨 Emergencia',        btn: 'Atender',        textColor: 'var(--red-dark)' },
+              'checkpoint':{ color: 'var(--orange)', colorLight: 'var(--orange-light)', tag: '📍 Punto de encuentro',btn: 'Registrarse',    textColor: '#7D5200' },
+              'storage':   { color: 'var(--teal)',   colorLight: 'var(--teal-light)',   tag: '📦 Recogida de kits',  btn: 'Llevar kits',    textColor: '#0E4D38' },
+              'volunteer': { color: 'var(--purple)', colorLight: 'var(--purple-light)', tag: '🤝 Voluntarios',       btn: 'Coordinar',      textColor: '#4A2D7A' },
+              'shelter':   { color: 'var(--blue)',   colorLight: 'var(--blue-light)',   tag: '🏠 Refugio',           btn: 'Derivar persona',textColor: '#1C3F7A' },
+              'default':   { color: 'var(--teal)',   colorLight: 'var(--teal-light)',   tag: '📋 Necesidad',         btn: 'Atender',        textColor: '#0E4D38' }
             };
-
-            console.log('tipo', tipo);
             var cfg = tipoConfig[tipo] || tipoConfig['default'];
+            var isFlow = card.dataset.flow === 'oferta';
+            var flowTag = isFlow
+              ? `<span style="font-size:10px;background:var(--teal-light);color:#0E4D38;border:1px solid rgba(29,158,117,0.3);border-radius:20px;padding:1px 6px;margin-left:4px;">↑ Oferta</span>`
+              : `<span style="font-size:10px;background:var(--red-light);color:var(--red-dark);border:1px solid rgba(226,75,74,0.3);border-radius:20px;padding:1px 6px;margin-left:4px;">↓ Necesidad</span>`;
 
             var nuevaCard = document.createElement('div');
             nuevaCard.className = 'muro-item';
@@ -1920,80 +2342,94 @@
             nuevaCard.innerHTML = `
     <div class="muro-dot-side" style="background:${cfg.color};"></div>
     <div style="flex:1;">
-      <div style="font-size:13px;font-weight:600;color:${cfg.textColor};">${icono} ${titulo}</div>
+      <div style="font-size:13px;font-weight:600;color:${cfg.textColor};">${icono} ${titulo}${flowTag}</div>
       <div class="muro-body-txt" style="color:${cfg.textColor};opacity:0.85;">${meta}</div>
       <div class="muro-footer">
         <span class="muro-time" style="color:${cfg.color};">Recién validada ·</span>
         <span class="muro-tag" style="background:${cfg.colorLight};color:${cfg.textColor};">${cfg.tag}</span>
-        <button class="muro-claim-btn" onclick="claimMuro(this)"
-          style="background:${cfg.color};color:#fff;">${cfg.btn}</button>
+        <button class="muro-claim-btn" onclick="claimMuro(this)" style="background:${cfg.color};color:#fff;">${cfg.btn}</button>
       </div>
     </div>`;
 
-            // ✅ Inserta en #muroFeed
             var feed = document.getElementById('muroFeed');
-            if (feed) {
-              feed.prepend(nuevaCard);
-            } else {
-              muro.prepend(nuevaCard);
-            }
-
-            // ✅ Animación de entrada
+            feed.prepend(nuevaCard);
             requestAnimationFrame(function () {
-              requestAnimationFrame(function () {
-                nuevaCard.style.opacity = '1';
-              });
+              requestAnimationFrame(function () { nuevaCard.style.opacity = '1'; });
             });
           }
 
-          // ✅ 3 — Genera pin en el mapa
-          var ubicacion = document.getElementById('necUbic')
-            ? document.getElementById('necUbic').value
-            : '';
-
-
-
           if (typeof _necAddPinValidado === 'function') {
-            console.log('tipo para pin:', tipo, 'ubicación para pin:', ubicacion);
+            var ubicacion = document.getElementById('necUbic') ? document.getElementById('necUbic').value : '';
             _necAddPinValidado(tipo, ubicacion);
-          } else {
-            console.warn('_necAddPinValidado no está disponible aún');
           }
 
-          // ✅ 4 — Actualiza confirm-card con estado validado
           var confirm = document.getElementById('necConfirm');
           if (confirm) {
             var badge = confirm.querySelector('.confirm-badge');
             var title = confirm.querySelector('.confirm-title');
-            var info = confirm.querySelector('div[style*="margin-top:10px"]');
-
-            if (badge) {
-              badge.textContent = '● Validada';
-              badge.style.cssText = 'background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;';
-            }
-            if (title) {
-              title.textContent = '✅ Necesidad validada y publicada';
-            }
-            if (info) {
-              info.innerHTML = '📢 Tu necesidad está activa en el muro. Un voluntario la atenderá pronto.';
-            }
+            var info  = confirm.querySelector('div[style*="margin-top:10px"]');
+            if (badge) { badge.textContent = '● Validada'; badge.style.cssText = 'background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;'; }
+            if (title) title.textContent = '✅ Necesidad validada y publicada';
+            if (info)  info.innerHTML = '📢 Tu necesidad está activa en el muro. Un voluntario la atenderá pronto.';
           }
         }
       }
 
+      function cubrirCard(cardId, doneId) {
+        var card = document.getElementById(cardId);
+        var done = document.getElementById(doneId);
+        if (!card || !done) return;
+        card.dataset.estado = 'cerrada';
+        var btns = card.querySelectorAll('.val-btn');
+        btns.forEach(function(b) { b.disabled = true; b.style.opacity = '0.4'; });
+        done.textContent = '✓ Necesidad cubierta. Caso cerrado.';
+        done.className = 'val-done show ok';
+      }
 
+      let _filtroEstado = 'todas';
+      let _filtroPrio   = 'todas';
+      let _filtroFlow   = 'todas';
 
-      function asignarResp(inputId, spanId) {
-        const val = document.getElementById(inputId).value.trim();
-        if (val) { document.getElementById(spanId).textContent = val; document.getElementById(inputId).value = ''; }
+      function _aplicarFiltros() {
+        document.querySelectorAll('#valList .val-card').forEach(function(card) {
+          var okEstado = _filtroEstado === 'todas' || card.dataset.estado === _filtroEstado;
+          var okPrio   = _filtroPrio  === 'todas' || card.dataset.prio  === _filtroPrio;
+          var okFlow   = _filtroFlow  === 'todas' || card.dataset.flow  === _filtroFlow;
+          card.style.display = (okEstado && okPrio && okFlow) ? 'block' : 'none';
+        });
       }
 
       function filtrarVal(tipo, btn) {
         document.querySelectorAll('.val-filter-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        document.querySelectorAll('#valList .val-card').forEach(card => {
-          card.style.display = (tipo === 'todas' || card.dataset.estado === tipo) ? 'block' : 'none';
-        });
+        _filtroEstado = tipo;
+        var pf = document.getElementById('valPrioFilter');
+        if (pf) pf.classList.toggle('show', tipo === 'pendiente');
+        if (tipo !== 'pendiente') { _filtroPrio = 'todas'; document.querySelectorAll('.val-prio-btn').forEach(b => { b.className = 'val-prio-btn'; }); if (document.querySelector('.val-prio-btn')) document.querySelector('#valPrioFilter .val-prio-btn').classList.add('active-all'); }
+        _aplicarFiltros();
+      }
+
+      function filtrarPrio(nivel, btn) {
+        document.querySelectorAll('#valPrioFilter .val-prio-btn').forEach(b => b.className = 'val-prio-btn');
+        btn.classList.add('active-' + (nivel === 'todas' ? 'all' : nivel));
+        _filtroPrio = nivel;
+        _aplicarFiltros();
+      }
+
+      function filtrarFlow(flow, btn) {
+        document.querySelectorAll('#valFlowFilter .val-prio-btn').forEach(b => b.className = 'val-prio-btn');
+        btn.classList.add('active-all');
+        btn.style.fontWeight = '700';
+        // Aplicar color activo según tipo
+        if (flow === 'necesidad') { btn.style.background='var(--red-light)'; btn.style.borderColor='var(--red)'; btn.style.color='var(--red-dark)'; }
+        else if (flow === 'oferta') { btn.style.background='var(--teal-light)'; btn.style.borderColor='var(--teal)'; btn.style.color='#0E4D38'; }
+        _filtroFlow = flow;
+        _aplicarFiltros();
+      }
+
+      function asignarResp(inputId, spanId) {
+        const val = document.getElementById(inputId).value.trim();
+        if (val) { document.getElementById(spanId).textContent = val; document.getElementById(inputId).value = ''; }
       }
 
       // Muro
