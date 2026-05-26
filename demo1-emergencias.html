@@ -737,7 +737,7 @@
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
-      margin-bottom: 14px;
+      margin-bottom: 8px;
     }
 
     .muro-filter-btn {
@@ -767,6 +767,100 @@
       height: 6px;
       border-radius: 50%;
       flex-shrink: 0;
+    }
+
+    /* Muro sub-filtros (prioridad y tipo) */
+    .muro-subfilters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      padding: 8px 10px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .muro-subfilter-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .muro-subfilter-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-right: 2px;
+    }
+
+    .muro-subfilter-sep {
+      width: 1px;
+      height: 20px;
+      background: var(--border);
+      margin: 0 4px;
+    }
+
+    .muro-prio-btn {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.18s;
+    }
+
+    .muro-prio-btn.active-all  { background: var(--dark); border-color: var(--dark); color: #fff; }
+    .muro-prio-btn.active-high { background: var(--red-light); border-color: var(--red); color: var(--red-dark); }
+    .muro-prio-btn.active-mid  { background: var(--orange-light); border-color: var(--orange); color: #7D5200; }
+    .muro-prio-btn.active-low  { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+    .muro-prio-btn.active-need { background: var(--red-light); border-color: var(--red); color: var(--red-dark); }
+    .muro-prio-btn.active-offer{ background: var(--teal-light); border-color: var(--teal); color: #0E4D38; }
+
+    /* Muro select móvil */
+    .muro-cat-select { display: none; margin-bottom: 10px; }
+
+    /* Muro item expand */
+    .muro-expand {
+      display: none;
+      padding: 10px 12px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    .muro-expand.show { display: block; }
+
+    /* Muro map link button */
+    .muro-map-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border: 1.5px solid rgba(29,158,117,0.4);
+      border-radius: var(--radius-sm);
+      background: var(--teal-light);
+      color: #0E4D38;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.18s;
+      text-decoration: none;
+      margin-bottom: 14px;
+    }
+    .muro-map-link:hover {
+      background: var(--teal);
+      color: #fff;
+      border-color: var(--teal);
     }
 
     .muro-item {
@@ -928,6 +1022,27 @@
 
       .val-expand-grid {
         grid-template-columns: 1fr 1fr;
+      }
+
+      /* ── Muro móvil ── */
+      #muroCatChips { display: none; }
+      .muro-cat-select { display: block; }
+      .muro-map-link {
+        font-size: 11px;
+        padding: 6px 12px;
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 10px;
+      }
+      /* footer normal en móvil: flex wrap */
+      .muro-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        align-items: center;
+      }
+      .muro-footer .val-btn.val-btn-more {
+        margin-left: auto;
       }
 
       /* ── Triaje móvil ── */
@@ -1674,152 +1789,6 @@
             </div>
           </div>-->
 
-          <!-- Card 2: Voluntarios técnico 
-          <div class="val-card" id="vc2" data-estado="pendiente" data-tipo="Necesidad" style="border-left:3px solid var(--purple);">
-            <div class="val-header">
-              <div style="display:flex;align-items:center;gap:10px;flex:1;">
-                <div class="val-icon" style="background:var(--purple-light);">🛠️</div>
-                <div class="val-info">
-                  <div class="val-title-txt">Voluntarios · Zona Ruzafa <span
-                      style="font-size:10px;border:1px solid #E67E22;color:#E67E22;border-radius:20px;padding:1px 6px;margin-left:4px;">🛠️
-                      Técnico</span></div>
-                  <div class="val-meta">📍 Ruzafa · Media prioridad</div>
-                </div>
-              </div>
-              <div class="val-actions">
-                <button class="val-btn val-btn-ok" onclick="validarCard('vc2','vd2',true)">✓ Validar</button>
-                <button class="val-btn val-btn-rej" onclick="validarCard('vc2','vd2',false)">✕ Rechazar</button>
-                <button class="val-btn val-btn-more" onclick="toggleExpand('ve2')">Detalles</button>
-              </div>
-            </div>
-            <div class="val-expand" id="ve2">
-              <div class="val-expand-grid">
-                <div class="val-field">Tipo<span>🛠️ Voluntario Técnico</span></div>
-                <div class="val-field">Prioridad<span style="color:var(--orange);">Media</span></div>
-                <div class="val-field">Descripción<span>Se necesita voluntario técnico para labores de
-                    electricidad.</span></div>
-                <div class="val-field">Recibida<span>Hace 5 min</span></div>
-              </div>
-              <div style="display:flex;gap:6px;margin-top:8px;">
-                <input class="d-input" id="ri2" placeholder="Nombre del coordinador..."
-                  style="font-size:12px;padding:7px 10px;">
-                <button onclick="asignarResp('ri2','ra2')"
-                  style="padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;">Asignar</button>
-              </div>
-              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Responsable: <strong id="ra2">— Sin
-                  asignar</strong></div>
-              <div class="val-done" id="vd2"></div>
-            </div>
-          </div>-->
-
-          <!-- Card 3: Voluntarios operativo 
-          <div class="val-card" id="vc3" data-estado="pendiente" data-tipo="Necesidad" style="border-left:3px solid var(--purple);">
-            <div class="val-header">
-              <div style="display:flex;align-items:center;gap:10px;flex:1;">
-                <div class="val-icon" style="background:var(--purple-light);">🦺</div>
-                <div class="val-info">
-                  <div class="val-title-txt">Voluntarios · Campus Blasco Ibáñez <span
-                      style="font-size:10px;border:1px solid #27AE60;color:#27AE60;border-radius:20px;padding:1px 6px;margin-left:4px;">🦺
-                      Operativo</span></div>
-                  <div class="val-meta">📍 Benimaclet · Media prioridad</div>
-                </div>
-              </div>
-              <div class="val-actions">
-                <button class="val-btn val-btn-ok" onclick="validarCard('vc3','vd3',true)">✓ Validar</button>
-                <button class="val-btn val-btn-rej" onclick="validarCard('vc3','vd3',false)">✕ Rechazar</button>
-                <button class="val-btn val-btn-more" onclick="toggleExpand('ve3')">Detalles</button>
-              </div>
-            </div>
-            <div class="val-expand" id="ve3">
-              <div class="val-expand-grid">
-                <div class="val-field">Tipo<span>🦺 Voluntario Operativo</span></div>
-                <div class="val-field">Prioridad<span style="color:var(--orange);">Media</span></div>
-                <div class="val-field">Descripción<span>Se necesita voluntario operativo para distribuir comida.</span>
-                </div>
-                <div class="val-field">Recibida<span>Hace 8 min</span></div>
-              </div>
-              <div style="display:flex;gap:6px;margin-top:8px;">
-                <input class="d-input" id="ri3" placeholder="Nombre del coordinador..."
-                  style="font-size:12px;padding:7px 10px;">
-                <button onclick="asignarResp('ri3','ra3')"
-                  style="padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;">Asignar</button>
-              </div>
-              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Responsable: <strong id="ra3">— Sin
-                  asignar</strong></div>
-              <div class="val-done" id="vd3"></div>
-            </div>
-          </div>-->
-
-          <!-- Card 4: Punto de encuentro 
-          <div class="val-card" id="vc4" data-estado="pendiente" data-tipo="Sanitaria" style="border-left:3px solid var(--orange);">
-            <div class="val-header">
-              <div style="display:flex;align-items:center;gap:10px;flex:1;">
-                <div class="val-icon" style="background:var(--orange-light);">📍</div>
-                <div class="val-info">
-                  <div class="val-title-txt">Punto de encuentro · Plaza del Ayuntamiento</div>
-                  <div class="val-meta">📍 Centro · 🏥 Médico · Baja prioridad</div>
-                </div>
-              </div>
-              <div class="val-actions">
-                <button class="val-btn val-btn-ok" onclick="validarCard('vc4','vd4',true)">✓ Validar</button>
-                <button class="val-btn val-btn-rej" onclick="validarCard('vc4','vd4',false)">✕ Rechazar</button>
-                <button class="val-btn val-btn-more" onclick="toggleExpand('ve4')">Detalles</button>
-              </div>
-            </div>
-            <div class="val-expand" id="ve4">
-              <div class="val-expand-grid">
-                <div class="val-field">Subtipo<span>🏥 Punto médico de atención primaria</span></div>
-                <div class="val-field">Capacidad<span>150 personas</span></div>
-                <div class="val-field">Descripción<span>Punto sanitario en Plaza del Ayuntamiento.</span></div>
-                <div class="val-field">Recibida<span>Hace 10 min</span></div>
-              </div>
-              <div style="display:flex;gap:6px;margin-top:8px;">
-                <input class="d-input" id="ri4" placeholder="Nombre del responsable..."
-                  style="font-size:12px;padding:7px 10px;">
-                <button onclick="asignarResp('ri4','ra4')"
-                  style="padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;">Asignar</button>
-              </div>
-              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Responsable: <strong id="ra4">— Sin
-                  asignar</strong></div>
-              <div class="val-done" id="vd4"></div>
-            </div>
-          </div>-->
-
-          <!-- Card 5: Refugio 
-          <div class="val-card" id="vc5" data-estado="pendiente" data-tipo="Refugio"
-            style="border-left:3px solid var(--blue);">
-            <div class="val-header">
-              <div style="display:flex;align-items:center;gap:10px;flex:1;">
-                <div class="val-icon" style="background:var(--blue-light);">🏠</div>
-                <div class="val-info">
-                  <div class="val-title-txt">Refugio / Hospedaje · C/ Colón, 40</div>
-                  <div class="val-meta">📍 Eixample · Baja prioridad</div>
-                </div>
-              </div>
-              <div class="val-actions">
-                <button class="val-btn val-btn-ok" onclick="validarCard('vc5','vd5',true)">✓ Validar</button>
-                <button class="val-btn val-btn-rej" onclick="validarCard('vc5','vd5',false)">✕ Rechazar</button>
-                <button class="val-btn val-btn-more" onclick="toggleExpand('ve5')">Detalles</button>
-              </div>
-            </div>
-            <div class="val-expand" id="ve5">
-              <div class="val-expand-grid">
-                <div class="val-field">Tipo<span>Oferta de espacio · Acceso inmediato</span></div>
-                <div class="val-field">Prioridad<span style="color:var(--teal);">Baja</span></div>
-                <div class="val-field">Descripción<span>Hostal con capacidad de 40 personas.</span></div>
-                <div class="val-field">Recibida<span>Hace 20 min</span></div>
-              </div>
-              <div style="display:flex;gap:6px;margin-top:8px;">
-                <input class="d-input" id="ri5" placeholder="Nombre del responsable..."
-                  style="font-size:12px;padding:7px 10px;">
-                <button onclick="asignarResp('ri5','ra5')"
-                  style="padding:7px 12px;background:var(--teal);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;">Asignar</button>
-              </div>
-              <div style="font-size:11px;color:var(--muted);margin-top:4px;">Responsable: <strong id="ra5">— Sin
-                  asignar</strong></div>
-              <div class="val-done" id="vd5"></div>
-            </div>
-          </div>-->
         </div>
 
         <div class="btn-next"><button onclick="switchTab('muro', document.querySelectorAll('.nav-tab')[2])">Ver en panel
@@ -1831,17 +1800,44 @@
         <div class="panel-title">📢 Panel Global</div>
         <div class="panel-sub">Información validada, priorizada y lista para actuar. Sin ruido.</div>
 
-        <div class="muro-filters">
-          <button class="muro-filter-btn" onclick="filtrarMuro('todas',this)"><span class="mf-dot"
-              style="background:var(--teal);"></span>Todas</button>
-          <button class="muro-filter-btn" onclick="filtrarMuro('urgente',this)"><span class="mf-dot"
-              style="background:var(--red);"></span>Urgentes</button>
-          <button class="muro-filter-btn" onclick="filtrarMuro('recurso',this)"><span class="mf-dot"
-              style="background:var(--teal);"></span>Recursos</button>
-          <button class="muro-filter-btn" onclick="filtrarMuro('info',this)"><span class="mf-dot"
-              style="background:var(--orange);"></span>Avisos</button>
-          <button class="muro-filter-btn" onclick="filtrarMuro('voluntario',this)"><span class="mf-dot"
-              style="background:var(--purple);"></span>Voluntarios</button>
+        <!-- Botón mapa en vivo -->
+        <button class="muro-map-link" onclick="abrirMapaMuro()">
+          🗺️ Ver mapa en vivo <span style="font-size:10px;opacity:0.7;">↗</span>
+        </button>
+
+        <!-- Filtro por categoría — chips desktop, select en móvil -->
+        <div class="muro-filters" id="muroCatChips">
+          <button class="muro-filter-btn active" onclick="filtrarMuro('todas',this)"><span class="mf-dot" style="background:var(--dark);"></span>Todas</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('emergency',this)"><span class="mf-dot" style="background:var(--red);"></span>Emergencia</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('checkpoint',this)"><span class="mf-dot" style="background:var(--orange);"></span>Punto encuentro</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('storage',this)"><span class="mf-dot" style="background:var(--teal);"></span>Recogida kits</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('volunteer',this)"><span class="mf-dot" style="background:var(--purple);"></span>Voluntarios</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('shelter',this)"><span class="mf-dot" style="background:var(--blue);"></span>Refugio</button>
+        </div>
+        <select class="muro-cat-select d-select" onchange="filtrarMuroSelect(this)">
+          <option value="todas">📋 Todas las categorías</option>
+          <option value="emergency">🚨 Emergencia</option>
+          <option value="checkpoint">📍 Punto de encuentro</option>
+          <option value="storage">📦 Recogida de kits</option>
+          <option value="volunteer">🤝 Voluntarios</option>
+          <option value="shelter">🏠 Refugio</option>
+        </select>
+
+        <!-- Sub-filtro prioridad — mismo estilo que triaje -->
+        <div class="val-prio-filter show" id="muroPrioFilter" style="margin-bottom:8px;">
+          <span class="val-prio-filter-label">Prioridad:</span>
+          <button class="val-prio-btn active-all" onclick="filtrarMuroPrio('todas',this)">Todas</button>
+          <button class="val-prio-btn" onclick="filtrarMuroPrio('alta',this)" style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">🔴 Alta</button>
+          <button class="val-prio-btn" onclick="filtrarMuroPrio('media',this)" style="background:var(--orange-light);border-color:var(--orange);color:#7D5200;">🟡 Media</button>
+          <button class="val-prio-btn" onclick="filtrarMuroPrio('baja',this)" style="background:var(--blue-light);border-color:var(--blue);color:var(--blue);">🔵 Baja</button>
+        </div>
+
+        <!-- Sub-filtro necesidad/oferta — mismo estilo que triaje -->
+        <div class="val-prio-filter show" id="muroFlowFilter" style="margin-bottom:14px;">
+          <span class="val-prio-filter-label">Tipo:</span>
+          <button class="val-prio-btn active-all" onclick="filtrarMuroFlow('todas',this)">Todos</button>
+          <button class="val-prio-btn" onclick="filtrarMuroFlow('necesidad',this)" style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">↓ Necesidad</button>
+          <button class="val-prio-btn" onclick="filtrarMuroFlow('oferta',this)" style="background:var(--teal-light);border-color:var(--teal);color:#0E4D38;">↑ Oferta</button>
         </div>
 
         <div id="muroFeed">
@@ -2100,6 +2096,7 @@
 
 
 
+
       function enviarNec() {
         const ubic = document.getElementById('necUbic').value || 'Ubicación sin especificar';
         const personasVal = document.getElementById('necPersonas').value || '1';
@@ -2210,11 +2207,19 @@
         card.dataset.tipo = catActual;
         card.dataset.prio = prioKey;
         card.dataset.flow = esOferta ? 'oferta' : 'necesidad';
+         // Guardar coordenadas del marcador en el momento del envío
+        if (_necMarker) {
+          var ll = _necMarker.getLatLng();
+          card.dataset.lat = ll.lat;
+          card.dataset.lng = ll.lng;
+        }
+
+        card.dataset.eid = eid;
         card.style.borderLeft = `3px solid ${cfg.color}`;
 
         // Botón cubierta solo para NECESIDADES, no para ofertas
         const btnCubierta = !esOferta
-          ? `<button class="val-btn val-btn-covered" onclick="cubrirCard('${uid}','${did}')">✓ Cubierta</button>`
+          ? `<button class="val-btn val-btn-covered" onclick="cubrirCard('${uid}','${did}')" disabled style="opacity:0.4;">✓ Cubierta</button>`
           : '';
 
         card.innerHTML = `
@@ -2299,11 +2304,11 @@
         if (ok) {
           if (btnOk)  { btnOk.disabled = true;  btnOk.style.opacity = '0.5'; }
           if (btnRej) { btnRej.disabled = false; btnRej.style.opacity = '1'; }
-          if (btnCov) { btnCov.disabled = true;  btnCov.style.opacity = '0.5'; }
+          if (btnCov) { btnCov.disabled = false; btnCov.style.opacity = '1'; }
         } else {
           if (btnRej) { btnRej.disabled = true;  btnRej.style.opacity = '0.5'; }
           if (btnOk)  { btnOk.disabled = false;  btnOk.style.opacity = '1'; }
-          if (btnCov) { btnCov.disabled = true;  btnCov.style.opacity = '0.5'; }
+          if (btnCov) { btnCov.disabled = true;  btnCov.style.opacity = '0.4'; }
         }
 
         done.textContent = ok
@@ -2337,18 +2342,38 @@
             var nuevaCard = document.createElement('div');
             nuevaCard.className = 'muro-item';
             nuevaCard.dataset.tipo = tipo;
-            nuevaCard.style.cssText = 'border:1.5px solid ' + cfg.color + ';background:' + cfg.colorLight + ';opacity:0;transition:opacity 0.4s ease;';
+            nuevaCard.dataset.prio = card.dataset.prio || 'media';
+            nuevaCard.dataset.flow = card.dataset.flow || 'necesidad';
+            nuevaCard.style.cssText = 'border:1.5px solid ' + cfg.color + ';background:' + cfg.colorLight + ';opacity:0;transition:opacity 0.4s ease;flex-direction:column;padding:0;';
+
+            var muroExpandId = 'me_' + Date.now() + '_' + Math.random().toString(36).substr(2,4);
+            // Reutilizar los campos de detalle del triaje
+            var expandContent = '';
+            var triageEid = card.dataset.eid || '';
+            var expandEl = triageEid ? document.getElementById(triageEid) : null;
+            if (expandEl) {
+              var grid = expandEl.querySelector('.val-expand-grid');
+              expandContent = grid ? grid.outerHTML : '';
+            }
+
+            // Limpiar badges HTML del título (evita duplicado ↓ Necesidad)
+            var tituloLimpio = titulo.replace(/<[^>]+>/g, '').trim();
 
             nuevaCard.innerHTML = `
-    <div class="muro-dot-side" style="background:${cfg.color};"></div>
-    <div style="flex:1;">
-      <div style="font-size:13px;font-weight:600;color:${cfg.textColor};">${icono} ${titulo}${flowTag}</div>
-      <div class="muro-body-txt" style="color:${cfg.textColor};opacity:0.85;">${meta}</div>
-      <div class="muro-footer">
-        <span class="muro-time" style="color:${cfg.color};">Recién validada ·</span>
-        <span class="muro-tag" style="background:${cfg.colorLight};color:${cfg.textColor};">${cfg.tag}</span>
-        <button class="muro-claim-btn" onclick="claimMuro(this)" style="background:${cfg.color};color:#fff;">${cfg.btn}</button>
+    <div style="display:flex;gap:10px;padding:12px;align-items:flex-start;">
+      <div class="muro-dot-side" style="background:${cfg.color};margin-top:4px;"></div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;color:${cfg.textColor};">${icono} ${tituloLimpio}${flowTag}</div>
+        <div class="muro-body-txt" style="color:${cfg.textColor};opacity:0.85;">${meta}</div>
+        <div class="muro-footer">
+          <span class="muro-time" style="color:${cfg.color};">Recién validada ·</span>
+          <span class="muro-tag" style="background:${cfg.colorLight};color:${cfg.textColor};">${cfg.tag}</span>
+          <button class="val-btn val-btn-more" style="margin-left:auto;" onclick="toggleMuroExpand('${muroExpandId}',this)">Detalles</button>
+        </div>
       </div>
+    </div>
+    <div class="muro-expand" id="${muroExpandId}">
+      ${expandContent}
     </div>`;
 
             var feed = document.getElementById('muroFeed');
@@ -2360,7 +2385,14 @@
 
           if (typeof _necAddPinValidado === 'function') {
             var ubicacion = document.getElementById('necUbic') ? document.getElementById('necUbic').value : '';
-            _necAddPinValidado(tipo, ubicacion);
+            var pinLat = parseFloat(card.dataset.lat);
+            var pinLng = parseFloat(card.dataset.lng);
+            var meta = {
+              flow:     card.dataset.flow || 'necesidad',
+              metaTxt:  card.querySelector('.val-meta') ? card.querySelector('.val-meta').textContent.trim() : '',
+              desc:     card.querySelector('.val-field:last-child span') ? card.querySelector('.val-field:last-child span').textContent.trim() : ''
+            };
+            _necAddPinValidado(tipo, ubicacion, isNaN(pinLat) ? null : { lat: pinLat, lng: pinLng }, meta);
           }
 
           var confirm = document.getElementById('necConfirm');
@@ -2432,23 +2464,81 @@
         if (val) { document.getElementById(spanId).textContent = val; document.getElementById(inputId).value = ''; }
       }
 
-      // Muro
+      // Muro — filtros combinados
+      var _muroFiltroTipo = 'todas';
+      var _muroFiltroPrio = 'todas';
+      var _muroFiltroFlow = 'todas';
+
+      function _aplicarFiltrosMuro() {
+        document.querySelectorAll('#muroFeed .muro-item').forEach(function(item) {
+          var okTipo = _muroFiltroTipo === 'todas' || item.dataset.tipo === _muroFiltroTipo;
+          var okPrio = _muroFiltroPrio === 'todas' || item.dataset.prio  === _muroFiltroPrio;
+          var okFlow = _muroFiltroFlow === 'todas' || item.dataset.flow  === _muroFiltroFlow;
+          item.style.display = (okTipo && okPrio && okFlow) ? '' : 'none';
+        });
+      }
+
+      function _actualizarVisibilidadPrioMuro() {
+        // Sin prioridad: storage, checkpoint, o cualquier oferta
+        var sinPrio = _muroFiltroTipo === 'storage' || _muroFiltroTipo === 'checkpoint'
+          || _muroFiltroFlow === 'oferta';
+        var pf = document.getElementById('muroPrioFilter');
+        if (pf) {
+          pf.classList.toggle('show', !sinPrio);
+          if (sinPrio) {
+            // Resetear prioridad al ocultar
+            _muroFiltroPrio = 'todas';
+            document.querySelectorAll('#muroPrioFilter .val-prio-btn').forEach(b => b.className = 'val-prio-btn');
+            var first = document.querySelector('#muroPrioFilter .val-prio-btn');
+            if (first) first.classList.add('active-all');
+          }
+        }
+      }
+
       function filtrarMuro(tipo, btn) {
         document.querySelectorAll('.muro-filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.querySelectorAll('#muroFeed .muro-item').forEach(item => {
-          if (tipo === 'todas' || item.dataset.tipo === tipo) {
-            item.style.display = ''; // ✅ elimina el inline, deja que mande el CSS
-          } else {
-            item.style.display = 'none';
-          }
-        });
+        if (btn) btn.classList.add('active');
+        _muroFiltroTipo = tipo;
+        _actualizarVisibilidadPrioMuro();
+        _aplicarFiltrosMuro();
+      }
+
+      function filtrarMuroSelect(sel) {
+        _muroFiltroTipo = sel.value;
+        _actualizarVisibilidadPrioMuro();
+        _aplicarFiltrosMuro();
+      }
+
+      function filtrarMuroPrio(nivel, btn) {
+        document.querySelectorAll('#muroPrioFilter .val-prio-btn').forEach(b => b.className = 'val-prio-btn');
+        btn.classList.add('active-' + (nivel === 'todas' ? 'all' : nivel));
+        _muroFiltroPrio = nivel;
+        _aplicarFiltrosMuro();
+      }
+
+      function filtrarMuroFlow(flow, btn) {
+        document.querySelectorAll('#muroFlowFilter .val-prio-btn').forEach(b => b.className = 'val-prio-btn');
+        btn.classList.add('active-' + (flow === 'todas' ? 'all' : (flow === 'necesidad' ? 'need' : 'offer')));
+        _muroFiltroFlow = flow;
+        _actualizarVisibilidadPrioMuro();
+        _aplicarFiltrosMuro();
+      }
+
+      function toggleMuroExpand(id, btn) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        var isOpen = el.classList.toggle('show');
+        btn.textContent = isOpen ? '− Ocultar detalle' : '+ Ver detalle';
       }
 
       function claimMuro(btn) {
         btn.textContent = '✓ Asignado';
         btn.style.background = '#27AE60';
         btn.disabled = true;
+      }
+
+      function abrirMapaMuro() {
+        _necFullscreen();
       }
 
       // ══ MAPA DE NECESIDAD ══
@@ -2459,47 +2549,76 @@
 
 
       //Función para añadir el pin al mapa:
-      function _necAddPinValidado(tipo, ubicacion) {
-
-        if (!_necMap || !_necMarker) return;
-
+      function _necAddPinValidado(tipo, ubicacion, coords, meta) {
         // ✅ Mismo sistema que ctx — letra + color + _necMakeIcon()
         var tipoConfig = {
-          // alimentacion: { color: '#C0392B', icon: 'A', label: '🍱 Alimentación' },
-          // sanitaria: { color: '#3A7BD5', icon: 'S', label: '💊 Sanitaria' },
-          //  ropa: { color: '#7B5EA7', icon: 'R', label: '🧥 Ropa' },
-          //  herramientas: { color: '#EF9F27', icon: 'H', label: '🔧 Herramientas' },
-          shelter: { color: '#3A7BD5', icon: 'R', label: '🏠Refugio / Hospedaje' },
-          storage: { color: '#1D9E75', icon: 'K', label: '📦 Recogida kits' },
-          volunteer: { color: '#7B5EA7', icon: 'V', label: '🤝 Voluntarios' },
+          shelter:    { color: '#3A7BD5', icon: 'R', label: '🏠 Refugio / Hospedaje' },
+          storage:    { color: '#1D9E75', icon: 'K', label: '📦 Recogida kits' },
+          volunteer:  { color: '#7B5EA7', icon: 'V', label: '🤝 Voluntarios' },
           checkpoint: { color: '#EF9F27', icon: 'P', label: '📍 Punto encuentro' },
-          default: { color: '#E24B4A', icon: 'N', label: '🚨 Emergencia Activa' }
+          default:    { color: '#E24B4A', icon: 'N', label: '🚨 Emergencia Activa' }
         };
 
         var cfg = tipoConfig[tipo] || tipoConfig['default'];
-        var latlng = _necMarker.getLatLng();
 
+        // Coordenadas: del marker si existe, si no usar Valencia centro
+        var latlng = coords
+          || (_necMarker ? _necMarker.getLatLng() : { lat: 39.4617, lng: -0.3854 });
 
-        var pin = L.marker([latlng.lat, latlng.lng], {
-          icon: _necMakeIcon(cfg.color, cfg.icon, 26), // ✅ mismo que ctx
-          zIndexOffset: 900
-        })
-          .bindPopup(
-            '<b>' + cfg.label + '</b><br>' +
-            '<span style="font-size:11px;color:#555;">' + (ubicacion || '') + '</span><br>' +
-            '<span style="font-size:10px;color:#1D9E75;font-weight:600;">✓ Validada</span>',
-            { className: 'k2-popup', maxWidth: 200 }
-          )
-          .addTo(_necMap);
+        // ✅ Siempre guardar en _necPinsData (funciona aunque el mapa no esté init)
+        var flowBadge = (meta && meta.flow === 'oferta')
+          ? '<span style="font-size:10px;background:#CCFBEF;color:#0E4D38;border:1px solid #6EE7B7;border-radius:10px;padding:1px 6px;margin-left:4px;">↑ Oferta</span>'
+          : '<span style="font-size:10px;background:#FEE2E2;color:#991B1B;border:1px solid #FCA5A5;border-radius:10px;padding:1px 6px;margin-left:4px;">↓ Necesidad</span>';
 
+        // Quitar la dirección del inicio de metaTxt (ya se muestra en la línea de ubicación)
+        var metaClean = (meta && meta.metaTxt)
+          ? meta.metaTxt.replace(/^📍\s*[^·]+·?\s*/, '').trim()
+          : '';
+        var metaLine = metaClean
+          ? '<div style="font-size:10px;color:#555;margin-top:3px;line-height:1.4;">' + metaClean + '</div>'
+          : '';
 
-        pin.openPopup();
-        // ✅ Guarda icon y color en el marker ANTES del push
-        pin._necIcon = cfg.icon;
-        pin._necColor = cfg.color;
-        _necPinsValidados.push(pin);
+        var descLine = (meta && meta.desc && meta.desc.length > 2)
+          ? '<div style="font-size:10px;color:#777;margin-top:4px;border-top:1px solid #eee;padding-top:4px;line-height:1.4;">' + meta.desc.substring(0, 100) + (meta.desc.length > 100 ? '…' : '') + '</div>'
+          : '';
 
-        _necMap.setView([latlng.lat, latlng.lng], 16, { animate: true });
+        var popupHtml =
+          '<div style="min-width:160px;">' +
+            '<b style="font-size:12px;">' + cfg.label + '</b>' + flowBadge + '<br>' +
+            '<span style="font-size:11px;color:#555;">📍 ' + (ubicacion || '') + '</span>' +
+            metaLine +
+            descLine +
+            '<div style="margin-top:5px;font-size:10px;color:#1D9E75;font-weight:600;">✓ Validada</div>' +
+          '</div>';
+
+        _necPinsData.push({
+          lat: latlng.lat, lng: latlng.lng,
+          icon: cfg.icon, color: cfg.color,
+          popup: popupHtml, ubicacion: ubicacion, tipo: tipo
+        });
+
+        // Actualizar sessionStorage para que _necFullscreen tenga datos frescos
+        sessionStorage.setItem('necPinsData', JSON.stringify(_necPinsData));
+
+        // ✅ Si el mapa está vivo, añadir el marker también visualmente
+        if (_necMap) {
+          var pinIcon = (tipo === 'emergency')
+            ? _necPulseIcon(cfg.color)
+            : _necMakeIcon(cfg.color, cfg.icon, 26);
+          var pin = L.marker([latlng.lat, latlng.lng], {
+            icon: pinIcon,
+            zIndexOffset: 900
+          })
+            .bindPopup(popupHtml, { className: 'k2-popup', maxWidth: 200 })
+            .addTo(_necMap);
+
+          pin.openPopup();
+          pin._necIcon  = cfg.icon;
+          pin._necColor = cfg.color;
+          pin._necTipo  = tipo;
+          _necPinsValidados.push(pin);
+          _necMap.setView([latlng.lat, latlng.lng], 16, { animate: true });
+        }
       }
 
       // ── Iconos ──
@@ -2766,48 +2885,52 @@
 
       var _necMapModal = null; // mapa del modal
 
+      // ── Pins validados serializados (independiente del mapa) ──
+      // Se llena en _necAddPinValidado aunque el mapa no esté inicializado
+      var _necPinsData = []; // [{lat,lng,icon,color,popup,ubicacion,tipo}]
+
       function _necFullscreen() {
-  if (!_necMap) return;
+        // Centro y zoom: usar mapa si está vivo, si no, centrar en el primer pin o Valencia
+        var lat  = 39.4617, lng = -0.3854, zoom = 15;
+        if (_necMap) {
+          var ll = _necMap.getCenter();
+          lat = ll.lat; lng = ll.lng;
+          zoom = _necMap.getZoom();
+        } else if (_necPinsData.length) {
+          lat = _necPinsData[0].lat;
+          lng = _necPinsData[0].lng;
+        }
 
-  var ll   = _necMap.getCenter();
-  var zoom = _necMap.getZoom();
-  var pin  = _necMarker ? _necMarker.getLatLng() : null;
+        var mapData = {
+          lat: lat, lng: lng, zoom: zoom,
+          pinLat: lat, pinLng: lng,
+          // Pins validados: preferir los del mapa (tienen getLatLng real), fallback a _necPinsData
+          pins: _necPinsValidados.length
+            ? _necPinsValidados.map(function(p) {
+                var latlng = p.getLatLng();
+                return {
+                  lat:   latlng.lat,
+                  lng:   latlng.lng,
+                  icon:  p._necIcon   || 'N',
+                  color: p._necColor  || '#E24B4A',
+                  tipo:  p._necTipo   || 'default',
+                  popup: p.getPopup() ? p.getPopup().getContent() : ''
+                };
+              })
+            : _necPinsData.map(function(d) {
+                return { lat: d.lat, lng: d.lng, icon: d.icon, color: d.color, tipo: d.tipo, popup: d.popup };
+              }),
+          ctx: [
+            { lat: 39.4641, lng: -0.3879, color: '#1D9E75', icon: 'K', tip: '<b>📦 Recogida de kits</b><br>Polideportivo Russafa' },
+            { lat: 39.4598, lng: -0.3831, color: '#7B5EA7', icon: 'V', tip: '<b>🤝 Voluntarios</b><br>12 activos' },
+            { lat: 39.4633, lng: -0.3808, color: '#EF9F27', icon: 'P', tip: '<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento' },
+            { lat: 39.4589, lng: -0.3869, color: '#3A7BD5', icon: 'R', tip: '<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas' }
+          ]
+        };
 
-  // ✅ Datos del mapa
-  var mapData = {
-    lat:    ll.lat,
-    lng:    ll.lng,
-    zoom:   zoom,
-    pinLat: pin ? pin.lat : ll.lat,
-    pinLng: pin ? pin.lng : ll.lng,
-
-    // ✅ Pins validados como array simple
-    pins: _necPinsValidados.map(function(p) {
-      var latlng = p.getLatLng();
-      return {
-        lat:   latlng.lat,
-        lng:   latlng.lng,
-        icon:  p._necIcon  || 'N',
-        color: p._necColor || '#E24B4A',
-        popup: p.getPopup() ? p.getPopup().getContent() : ''
-      };
-    }),
-
-    // ✅ Pins contexto fijos
-    ctx: [
-      { lat: 39.4641, lng: -0.3879, color: '#1D9E75', icon: 'K', tip: '<b>📦 Recogida de kits</b><br>Polideportivo Russafa' },
-      { lat: 39.4598, lng: -0.3831, color: '#7B5EA7', icon: 'V', tip: '<b>🤝 Voluntarios</b><br>12 activos' },
-      { lat: 39.4633, lng: -0.3808, color: '#EF9F27', icon: 'P', tip: '<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento' },
-      { lat: 39.4589, lng: -0.3869, color: '#3A7BD5', icon: 'R', tip: '<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas' }
-    ]
-  };
-
-  // ✅ Guarda en sessionStorage
-  sessionStorage.setItem('necMapData', JSON.stringify(mapData));
-
-  // ✅ Abre sin parámetros en URL
-  window.open('nec-mapa-fullscreen.html', '_blank');
-}
+        sessionStorage.setItem('necMapData', JSON.stringify(mapData));
+        window.open('nec-mapa-fullscreen.html', '_blank');
+      }
 
       // ── Overrides externos ──
       var _origSwitchDemoNec = window.switchDemo;
@@ -2824,7 +2947,11 @@
           setTimeout(function () {
             var btnTodas = document.querySelector('#tab-muro .muro-filter-btn');
             if (btnTodas) filtrarMuro('todas', btnTodas);
-          }, 50); // pequeño delay para que el panel ya esté visible
+            else {
+              var allBtn = document.querySelector('#panel-muro .muro-filter-btn');
+              if (allBtn) filtrarMuro('todas', allBtn);
+            }
+          }, 50);
         }
       };
 
