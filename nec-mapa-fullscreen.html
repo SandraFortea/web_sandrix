@@ -1,24 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-   <!-- Google Tag Manager -->
+  <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+      w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
     })(window, document, 'script', 'dataLayer', 'GTM-PWJN89WB');</script>
   <!-- End Google Tag Manager -->
-  <!-- Google tag (gtag.js) -->
-  
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-0CGM2ND1FB"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-
     gtag('config', 'G-0CGM2ND1FB');
   </script>
   <meta charset="UTF-8">
@@ -27,211 +23,406 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body, #map { width: 100%; height: 100%; }
- 
+   :root {
+      --c-emergencia: #E24B4A;
+      --c-encuentro:  #EF9F27;
+      --c-kits:       #1D9E75;
+      --c-voluntarios:#7B5EA7;
+      --c-refugio:    #3A7BD5;
+      --glass: rgba(255,255,255,0.96);
+      --shadow: 0 2px 12px rgba(0,0,0,0.13);
+      --radius: 12px;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body, #map { width:100%; height:100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+    /* ── Botón cerrar ── */
     .map-close {
-      position: fixed;
-      top: 14px;
-      right: 14px;
-      z-index: 1000;
-      background: rgba(255,255,255,0.95);
-      border: 1.5px solid rgba(29,158,117,0.3);
-      border-radius: 10px;
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #1D9E75;
-      cursor: pointer;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.12);
+      position:fixed; top:12px; right:12px; z-index:1000;
+      background:var(--glass); border:1px solid rgba(0,0,0,0.08);
+      border-radius:8px; padding:7px 13px; font-size:12px; font-weight:600;
+      color:#444; cursor:pointer; box-shadow:var(--shadow); line-height:1;
     }
- 
-    .map-close:hover {
-      background: #1D9E75;
-      color: #fff;
+    .map-close:hover { background:#f5f5f5; color:#222; }
+
+    /* ── Barra de búsqueda ── */
+    .map-search {
+      position:fixed; top:12px; left:50%; transform:translateX(-50%);
+      z-index:1000; width:min(400px, calc(100vw - 110px));
     }
- 
-    /* Leyenda */
+    .map-search-inner {
+      position:relative; display:flex; align-items:center;
+      background:var(--glass); border:1px solid rgba(0,0,0,0.10);
+      border-radius:var(--radius); box-shadow:var(--shadow); overflow:visible;
+    }
+    .map-search-inner:focus-within {
+      border-color: var(--c-kits);
+      box-shadow: 0 0 0 3px rgba(29,158,117,0.12), var(--shadow);
+    }
+    .map-search-icon {
+      position:absolute; left:12px; color:#aaa; font-size:14px; pointer-events:none;
+    }
+    .map-search-inner input {
+      flex:1; padding:10px 44px 10px 34px; border:none; background:transparent;
+      font-size:13px; color:#222; outline:none; border-radius:var(--radius);
+      min-width:0;
+    }
+    .map-search-inner input::placeholder { color:#bbb; }
+    .map-search-btn {
+      position:absolute; right:6px; top:50%; transform:translateY(-50%);
+      width:30px; height:30px; border-radius:8px; border:none;
+      background:var(--c-kits); color:#fff; font-size:13px;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      transition:background 0.15s; flex-shrink:0;
+    }
+    .map-search-btn:hover { background:#a6b5ba8a; }
+    .map-search-results {
+      position:absolute; top:calc(100% + 6px); left:0; right:0;
+      background:#fff; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.14);
+      border:1px solid rgba(0,0,0,0.07); overflow:hidden; display:none; z-index:10;
+    }
+    .map-search-results.visible { display:block; }
+    .map-search-result-item {
+      padding:9px 14px; font-size:12px; color:#333; cursor:pointer;
+      border-bottom:1px solid rgba(0,0,0,0.05); line-height:1.4;
+    }
+    .map-search-result-item:last-child { border-bottom:none; }
+    .map-search-result-item:hover { background:#f4fbf8; color:var(--c-kits); }
+
+    /* ── Filtros por tipo ── */
+    .map-filters {
+      position: fixed; top: 58px; left: 50%; transform: translateX(-50%);
+      z-index: 1000; display: flex; gap: 5px; flex-wrap: wrap; justify-content: center;
+      max-width: calc(100vw - 40px);
+    }
+    .map-filter-btn {
+      padding: 5px 11px; border-radius: 20px; font-size: 11px; font-weight: 700;
+      border: 2px solid transparent; cursor: pointer; transition: all 0.18s;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.13); display: flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.97); color: #555;
+    }
+    .map-filter-btn .dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .map-filter-btn.active { color: #fff; }
+    .map-filter-btn[data-tipo="emergencia"].active  { background: #e24b4a75; border-color: #E24B4A; }
+    .map-filter-btn[data-tipo="encuentro"].active   { background: #ef9f2769; border-color: #EF9F27; }
+    .map-filter-btn[data-tipo="kits"].active        { background: #1d9e757a; border-color: #1D9E75; }
+    .map-filter-btn[data-tipo="voluntarios"].active { background: #7b5ea78a; border-color: #7B5EA7; }
+    .map-filter-btn[data-tipo="refugio"].active     { background: #3a7bd582; border-color: #3A7BD5; }
+
+    /* ── Leyenda con barras ── */
     .map-legend {
-      position: fixed;
-      bottom: 24px;
-      left: 14px;
-      z-index: 1000;
-      background: rgba(255,255,255,0.95);
-      border: 1.5px solid rgba(29,158,117,0.2);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 11px;
-      font-family: sans-serif;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.10);
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      min-width: 160px;
+      position:fixed; bottom:20px; left:12px; z-index:1000;
+      background:var(--glass); border:1px solid rgba(0,0,0,0.08);
+      border-radius:var(--radius); padding:12px 14px;
+      box-shadow:var(--shadow); min-width:190px; max-width:210px;
     }
- 
     .map-legend-title {
-      font-size: 10px;
-      font-weight: 700;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 2px;
+      font-size:9px; font-weight:700; color:#aaa;
+      text-transform:uppercase; letter-spacing:0.8px; margin-bottom:9px;
     }
- 
-    .map-legend-item {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      color: #333;
+    .map-legend-row {
+      display:flex; flex-direction:column; gap:2px; margin-bottom:8px;
     }
- 
+    .map-legend-row:last-child { margin-bottom:0; }
+    .map-legend-label-row {
+      display:flex; align-items:center; justify-content:space-between; gap:6px;
+    }
+    .map-legend-left { display:flex; align-items:center; gap:6px; }
     .map-legend-dot {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 8px;
-      font-weight: 700;
-      color: #fff;
+      width:12px; height:12px; border-radius:50%; flex-shrink:0;
+      display:flex; align-items:center; justify-content:center;
+      font-size:7px; font-weight:700; color:#fff;
+    }
+    .map-legend-name { font-size:11px; color:#333; font-weight:500; }
+    .map-legend-count { font-size:10px; color:#999; font-weight:600; }
+    .map-legend-bar-track {
+      height:4px; border-radius:2px; background:rgba(0,0,0,0.07); overflow:hidden;
+    }
+    .map-legend-bar-fill {
+      height:100%; border-radius:2px; transition:width 0.4s ease;
+    }
+    .map-legend-sep {
+      height:1px; background:rgba(0,0,0,0.06); margin:6px 0;
+    }
+    .map-legend-pin-row {
+      display:flex; align-items:center; gap:6px; font-size:11px; color:#666;
+    }
+
+    /* ── Icono emergencia con ondas ── */
+    @keyframes ripple {
+      0%   { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(3.2); opacity: 0; }
+    }
+    .emergency-icon-wrapper {
+      position: relative; width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .emergency-ripple {
+      position: absolute; border-radius: 50%;
+      border: 2px solid #E24B4A; opacity: 0;
+      animation: ripple 1.8s ease-out infinite;
+    }
+    .emergency-ripple:nth-child(1) { width: 36px; height: 36px; animation-delay: 0s; }
+    .emergency-ripple:nth-child(2) { width: 36px; height: 36px; animation-delay: 0.6s; }
+    .emergency-ripple:nth-child(3) { width: 36px; height: 36px; animation-delay: 1.2s; }
+    .emergency-core {
+      width: 26px; height: 26px; border-radius: 50%; background: #E24B4A;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff;
+      box-shadow: 0 3px 10px rgba(226,75,74,0.5); border: 2px solid rgba(255,255,255,0.4);
+      position: relative; z-index: 1;
+    }
+	
+	/* ── Mobile tweaks ── */
+    @media (max-width: 480px) {
+      .map-close { top:10px; right:10px; padding:6px 10px; font-size:11px; }
+      .map-search { top:10px; width:calc(100vw - 100px); }
+      .map-search-inner input { font-size:13px; padding:9px 40px 9px 32px; }
+      .map-filters { top:52px; gap:3px; }
+      .map-filter-btn { font-size:10px; padding:4px 8px; }
+      .map-legend { bottom:16px; left:8px; min-width:170px; max-width:185px; padding:10px 11px; }
+      .map-legend-name { font-size:10px; }
     }
   </style>
 </head>
+
 <body>
- 
+
   <button class="map-close" onclick="window.close()">✕ Cerrar</button>
- 
-  <!-- Leyenda -->
-  <div class="map-legend">
-    <div class="map-legend-title">Leyenda</div>
-    <div class="map-legend-item">
-      <div class="map-legend-dot" style="background:#1D9E75;">K</div> Recogida de kits
-    </div>
-    <div class="map-legend-item">
-      <div class="map-legend-dot" style="background:#7B5EA7;">V</div> Voluntarios
-    </div>
-    <div class="map-legend-item">
-      <div class="map-legend-dot" style="background:#EF9F27;">P</div> Punto de encuentro
-    </div>
-    <div class="map-legend-item">
-      <div class="map-legend-dot" style="background:#3A7BD5;">R</div> Refugio
-    </div>
-    <div class="map-legend-item" id="legendValidados" style="display:none;">
-      <div class="map-legend-dot" style="background:#E24B4A;">N</div> Necesidades validadas
-    </div>
-    <div class="map-legend-item">
-      <div style="width:14px;height:14px;flex-shrink:0;">📍</div> Ubicación seleccionada
+
+  <!-- Búsqueda -->
+  <div class="map-search" id="searchBar">
+    <div class="map-search-inner">
+      <span class="map-search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar dirección…" autocomplete="off"
+        onkeydown="if(event.key==='Enter') doSearch()" oninput="onSearchInput()"/>
+      <button class="map-search-btn" onclick="doSearch()" title="Buscar">›</button>
+      <div class="map-search-results" id="searchResults"></div>
     </div>
   </div>
- 
+
+  <!-- Filtros -->
+  <div class="map-filters" id="mapFilters">
+    <button class="map-filter-btn active" data-tipo="emergencia" onclick="toggleFilter(this)">
+      <span class="dot" style="background:#E24B4A;"></span> Emergencia
+    </button>
+    <button class="map-filter-btn active" data-tipo="encuentro" onclick="toggleFilter(this)">
+      <span class="dot" style="background:#EF9F27;"></span> Punto encuentro
+    </button>
+    <button class="map-filter-btn active" data-tipo="kits" onclick="toggleFilter(this)">
+      <span class="dot" style="background:#1D9E75;"></span> Recogida kits
+    </button>
+    <button class="map-filter-btn active" data-tipo="voluntarios" onclick="toggleFilter(this)">
+      <span class="dot" style="background:#7B5EA7;"></span> Voluntarios
+    </button>
+    <button class="map-filter-btn active" data-tipo="refugio" onclick="toggleFilter(this)">
+      <span class="dot" style="background:#3A7BD5;"></span> Refugio
+    </button>
+  </div>
+
+   <!-- Leyenda -->
+  <div class="map-legend" id="mapLegend">
+    <div class="map-legend-title">Leyenda</div>
+    <!-- filas generadas por JS -->
+  </div>
+
   <div id="map"></div>
- 
+
   <script>
-    // ── Leer parámetros de la URL ──
-    var params = new URLSearchParams(window.location.search);
-    var lat    = parseFloat(params.get('lat'))    || 39.4617;
-    var lng    = parseFloat(params.get('lng'))    || -0.3854;
-    var zoom   = parseInt(params.get('zoom'))     || 16;
-    var pinLat = parseFloat(params.get('pinLat')) || lat;
-    var pinLng = parseFloat(params.get('pinLng')) || lng;
- 
-    // ✅ Pins validados dinámicos
-    var pinsValidados = [];
-    try { pinsValidados = JSON.parse(params.get('pins') || '[]'); } catch(e) {}
- 
-    // ✅ Pins contexto fijos (desde URL o fallback hardcoded)
-    var ctxPins = [];
-    try { ctxPins = JSON.parse(params.get('ctx') || '[]'); } catch(e) {}
- 
-    // Fallback si no vienen por URL
+    // ── Datos ──
+    var mapData = {};
+    try { mapData = JSON.parse(sessionStorage.getItem('necMapData') || '{}'); } catch(e){}
+
+    var lat    = mapData.lat    || 39.4617;
+    var lng    = mapData.lng    || -0.3854;
+    var zoom   = mapData.zoom   || 16;
+    var pinLat = mapData.pinLat || lat;
+    var pinLng = mapData.pinLng || lng;
+    var pinsValidados = mapData.pins || [];
+    var ctxPins       = mapData.ctx  || [];
+
+    var TIPOS = [
+      { tipo:'emergencia',  label:'Emergencia',       color:'#E24B4A', icon:'⚡' },
+      { tipo:'encuentro',   label:'Punto encuentro',  color:'#EF9F27', icon:'P'  },
+      { tipo:'kits',        label:'Recogida kits',    color:'#1D9E75', icon:'K'  },
+      { tipo:'voluntarios', label:'Voluntarios',      color:'#7B5EA7', icon:'V'  },
+      { tipo:'refugio',     label:'Refugio',          color:'#3A7BD5', icon:'R'  }
+    ];
+
     if (!ctxPins.length) {
       ctxPins = [
-        { lat: 39.4641, lng: -0.3879, color: '#1D9E75', icon: 'K', tip: '<b>📦 Recogida de kits</b><br>Polideportivo Russafa' },
-        { lat: 39.4598, lng: -0.3831, color: '#7B5EA7', icon: 'V', tip: '<b>🤝 Voluntarios</b><br>12 activos' },
-        { lat: 39.4633, lng: -0.3808, color: '#EF9F27', icon: 'P', tip: '<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento' },
-        { lat: 39.4589, lng: -0.3869, color: '#3A7BD5', icon: 'R', tip: '<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas' }
+        { lat:39.4641, lng:-0.3879, tipo:'kits',        color:'#1D9E75', icon:'K', tip:'<b>📦 Recogida de kits</b><br>Polideportivo Russafa' },
+        { lat:39.4598, lng:-0.3831, tipo:'voluntarios', color:'#7B5EA7', icon:'V', tip:'<b>🤝 Voluntarios</b><br>12 activos' },
+        { lat:39.4633, lng:-0.3808, tipo:'encuentro',   color:'#EF9F27', icon:'P', tip:'<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento' },
+        { lat:39.4589, lng:-0.3869, tipo:'refugio',     color:'#3A7BD5', icon:'R', tip:'<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas' },
+        { lat:39.4610, lng:-0.3850, tipo:'emergencia',  color:'#E24B4A', icon:'⚡',tip:'<b>🚨 Emergencia</b><br>Avda. del Puerto 12' },
+        { lat:39.4625, lng:-0.3862, tipo:'kits',        color:'#1D9E75', icon:'K', tip:'<b>📦 Recogida de kits</b><br>C/ Xàtiva 8' },
+        { lat:39.4605, lng:-0.3840, tipo:'refugio',     color:'#3A7BD5', icon:'R', tip:'<b>🏠 Refugio</b><br>Pl. del Mercat · 20 plazas' },
+        { lat:39.4618, lng:-0.3870, tipo:'voluntarios', color:'#7B5EA7', icon:'V', tip:'<b>🤝 Voluntarios</b><br>8 activos' }
       ];
     }
- 
-    // ── Inicializar mapa ──
-    var map = L.map('map', {
-      zoomControl: true,
-      scrollWheelZoom: true,
-      attributionControl: true
-    }).setView([lat, lng], zoom);
- 
+
+    // ── Mapa ──
+    var map = L.map('map', { zoomControl:true, scrollWheelZoom:true }).setView([lat, lng], zoom);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      subdomains: ['a', 'b', 'c'],
-      attribution: '© OpenStreetMap'
+      maxZoom:19, subdomains:['a','b','c'], attribution:'© OpenStreetMap'
     }).addTo(map);
- 
-    // ── Función icono circular (igual que _necMakeIcon) ──
+
+    // ── Iconos ──
     function makeIcon(color, icon, size) {
       var fs = Math.round(size * 0.42);
       return L.divIcon({
-        className: '',
-        html:
-          '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + color + ';' +
-          'display:flex;align-items:center;justify-content:center;font-size:' + fs + 'px;font-weight:700;' +
-          'color:#fff;box-shadow:0 3px 10px rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.35);">' + icon + '</div>',
-        iconSize: [size, size],
-        iconAnchor: [size / 2, size / 2],
-        popupAnchor: [0, -(size / 2 + 8)]
+        className:'',
+        html:'<div style="width:'+size+'px;height:'+size+'px;border-radius:50%;background:'+color+';display:flex;align-items:center;justify-content:center;font-size:'+fs+'px;font-weight:700;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.35);">'+icon+'</div>',
+        iconSize:[size,size], iconAnchor:[size/2,size/2], popupAnchor:[0,-(size/2+8)]
       });
     }
- 
-    // ── Función icono pin (igual que _necPinIcon) ──
+    function makeEmergencyIcon(size) {
+      size = size || 36;
+      return L.divIcon({
+        className:'',
+        html:'<div class="emergency-icon-wrapper" style="width:'+size+'px;height:'+size+'px;">'+
+             '<div class="emergency-ripple"></div><div class="emergency-ripple"></div><div class="emergency-ripple"></div>'+
+             '<div class="emergency-core" style="width:'+(size-10)+'px;height:'+(size-10)+'px;font-size:'+Math.round(size*0.3)+'px;">⚡</div>'+
+             '</div>',
+        iconSize:[size,size], iconAnchor:[size/2,size/2], popupAnchor:[0,-(size/2+8)]
+      });
+    }
     function pinIcon(color) {
       return L.divIcon({
-        className: '',
-        html:
-          '<div style="position:relative;width:28px;height:36px;">' +
-          '<div style="width:28px;height:28px;border-radius:50% 50% 50% 0;background:' + color + ';' +
-          'transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.4);"></div>' +
-          '<div style="position:absolute;top:6px;left:6px;width:16px;height:16px;border-radius:50%;' +
-          'background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;font-size:9px;">📍</div>' +
-          '</div>',
-        iconSize: [28, 36],
-        iconAnchor: [14, 36],
-        popupAnchor: [0, -38]
+        className:'',
+        html:'<div style="position:relative;width:28px;height:36px;"><div style="width:28px;height:28px;border-radius:50% 50% 50% 0;background:'+color+';transform:rotate(-45deg);box-shadow:0 3px 10px rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.4);"></div><div style="position:absolute;top:6px;left:6px;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;font-size:9px;">📍</div></div>',
+        iconSize:[28,36], iconAnchor:[14,36], popupAnchor:[0,-38]
       });
     }
- 
-    // ✅ Pins contexto fijos
-    ctxPins.forEach(function (m) {
-      L.marker([m.lat, m.lng], { icon: makeIcon(m.color, m.icon, 26) })
-        .bindPopup(m.tip || '', { maxWidth: 200 })
+
+    // ── Markers ──
+    var markersByTipo = {};
+    TIPOS.forEach(function(t){ markersByTipo[t.tipo] = []; });
+    var activeFilters = {};
+    TIPOS.forEach(function(t){ activeFilters[t.tipo] = true; });
+
+    function addMarker(m) {
+      var tipo = m.tipo || 'kits';
+      var icon = (tipo === 'emergencia') ? makeEmergencyIcon(36) : makeIcon(m.color, m.icon, 26);
+      var marker = L.marker([m.lat, m.lng], { icon:icon, zIndexOffset: tipo==='emergencia'?1000:500 })
+        .bindPopup(m.tip || m.popup || '', { maxWidth:200 })
         .addTo(map);
-    });
- 
-    // ✅ Pins validados dinámicos
-    if (pinsValidados.length) {
-      document.getElementById('legendValidados').style.display = 'flex';
-      pinsValidados.forEach(function (p) {
-        L.marker([p.lat, p.lng], {
-          icon: makeIcon(p.color, p.icon, 26),
-          zIndexOffset: 900
-        })
-          .bindPopup(p.popup || '', { maxWidth: 200 })
-          .addTo(map);
+      if (!markersByTipo[tipo]) markersByTipo[tipo] = [];
+      markersByTipo[tipo].push(marker);
+    }
+
+    ctxPins.forEach(addMarker);
+    pinsValidados.forEach(addMarker);
+
+    if (mapData.pinLat) {
+      L.marker([pinLat,pinLng], { icon:pinIcon('#E24B4A'), zIndexOffset:2000 })
+        .bindPopup('<b>📍 Ubicación seleccionada</b>', { maxWidth:220 })
+        .addTo(map).openPopup();
+    }
+
+    // ── Leyenda con barras ──
+    function buildLegend() {
+      var total = 0;
+      var counts = {};
+      TIPOS.forEach(function(t){
+        counts[t.tipo] = (markersByTipo[t.tipo] || []).length;
+        total += counts[t.tipo];
+      });
+
+      var legend = document.getElementById('mapLegend');
+      legend.innerHTML = '<div class="map-legend-title">Leyenda</div>';
+
+      TIPOS.forEach(function(t) {
+        var n   = counts[t.tipo] || 0;
+        var pct = total > 0 ? Math.round((n / total) * 100) : 0;
+        var row = document.createElement('div');
+        row.className = 'map-legend-row';
+        row.innerHTML =
+          '<div class="map-legend-label-row">' +
+            '<div class="map-legend-left">' +
+              '<div class="map-legend-dot" style="background:'+t.color+';">'+t.icon+'</div>' +
+              '<span class="map-legend-name">'+t.label+'</span>' +
+            '</div>' +
+            '<span class="map-legend-count">'+n+' <span style="color:#ccc;font-weight:400;">('+pct+'%)</span></span>' +
+          '</div>' +
+          '<div class="map-legend-bar-track">' +
+            '<div class="map-legend-bar-fill" style="width:'+pct+'%;background:'+t.color+';opacity:0.7;"></div>' +
+          '</div>';
+        legend.appendChild(row);
+      });
+
+      var sep = document.createElement('div'); sep.className = 'map-legend-sep';
+      legend.appendChild(sep);
+      var pinRow = document.createElement('div');
+      pinRow.className = 'map-legend-pin-row';
+      pinRow.innerHTML = '<span style="font-size:13px;">📍</span> Ubicación seleccionada';
+      legend.appendChild(pinRow);
+    }
+    buildLegend();
+
+    // ── Filtros ──
+    function toggleFilter(btn) {
+      var tipo = btn.dataset.tipo;
+      activeFilters[tipo] = !activeFilters[tipo];
+      btn.classList.toggle('active', activeFilters[tipo]);
+      (markersByTipo[tipo] || []).forEach(function(m) {
+        if (activeFilters[tipo]) { m.addTo(map); } else { map.removeLayer(m); }
       });
     }
- 
-    // ✅ Pin ubicación seleccionada
-    if (params.get('pinLat')) {
-      L.marker([pinLat, pinLng], {
-        icon: pinIcon('#E24B4A'),
-        zIndexOffset: 1000
-      })
-        .bindPopup('<b>📍 Ubicación seleccionada</b>', { maxWidth: 220 })
-        .addTo(map)
-        .openPopup();
+
+    // ── Búsqueda ──
+    var searchTimeout = null;
+    function onSearchInput() {
+      var val = document.getElementById('searchInput').value.trim();
+      clearTimeout(searchTimeout);
+      if (val.length < 3) { hideResults(); return; }
+      searchTimeout = setTimeout(function(){ fetchSuggestions(val); }, 380);
     }
+    function fetchSuggestions(q) {
+      fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&q='+encodeURIComponent(q),
+        { headers:{'Accept-Language':'es'} })
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+          var box = document.getElementById('searchResults');
+          box.innerHTML = '';
+          if (!data.length) { hideResults(); return; }
+          data.forEach(function(item) {
+            var div = document.createElement('div');
+            div.className = 'map-search-result-item';
+            div.textContent = item.display_name;
+            div.onclick = function() {
+              map.setView([parseFloat(item.lat), parseFloat(item.lon)], 16);
+              document.getElementById('searchInput').value = item.display_name;
+              hideResults();
+            };
+            box.appendChild(div);
+          });
+          box.classList.add('visible');
+        })
+        .catch(function(){ hideResults(); });
+    }
+    function doSearch() {
+      var q = document.getElementById('searchInput').value.trim();
+      if (!q) return;
+      fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(q),
+        { headers:{'Accept-Language':'es'} })
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+          hideResults();
+          if (data && data[0]) map.setView([parseFloat(data[0].lat), parseFloat(data[0].lon)], 16);
+        })
+        .catch(function(){ hideResults(); });
+    }
+    function hideResults() {
+      document.getElementById('searchResults').classList.remove('visible');
+    }
+    document.addEventListener('click', function(e) {
+      if (!document.getElementById('searchBar').contains(e.target)) hideResults();
+    });
   </script>
- 
+
 </body>
 </html>
