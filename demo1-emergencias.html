@@ -2920,12 +2920,25 @@
             : _necPinsData.map(function(d) {
                 return { lat: d.lat, lng: d.lng, icon: d.icon, color: d.color, tipo: d.tipo, popup: d.popup };
               }),
-          ctx: [
-            { lat: 39.4641, lng: -0.3879, color: '#1D9E75', icon: 'K', tip: '<b>📦 Recogida de kits</b><br>Polideportivo Russafa' },
-            { lat: 39.4598, lng: -0.3831, color: '#7B5EA7', icon: 'V', tip: '<b>🤝 Voluntarios</b><br>12 activos' },
-            { lat: 39.4633, lng: -0.3808, color: '#EF9F27', icon: 'P', tip: '<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento' },
-            { lat: 39.4589, lng: -0.3869, color: '#3A7BD5', icon: 'R', tip: '<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas' }
-          ]
+         
+            ctx: [
+              { lat:39.4641, lng:-0.3879, color:'#1D9E75', icon:'K', tipo:'kits',
+                direccion:'Polideportivo Russafa', detalle:'Kits de emergencia · 200 unidades disponibles', nota:'Horario: 9h–20h',
+                tip:'<b>📦 Recogida de kits</b><br>Polideportivo Russafa' },
+              { lat:39.4598, lng:-0.3831, color:'#7B5EA7', icon:'V', tipo:'voluntarios',
+                direccion:'C/ Cuba, 5 — Russafa', detalle:'12 voluntarios disponibles', nota:'Coordinador: Luis M.',
+                tip:'<b>🤝 Voluntarios</b><br>12 activos' },
+              { lat:39.4633, lng:-0.3808, color:'#EF9F27', icon:'P', tipo:'encuentro',
+                direccion:'Pl. Ayuntamiento', detalle:'Punto de concentración principal', nota:'Capacidad: sin límite',
+                tip:'<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento' },
+              { lat:39.4589, lng:-0.3869, color:'#3A7BD5', icon:'R', tipo:'refugio',
+                direccion:'C/ Colón, 40', detalle:'Ofrecer espacio · 30 plazas disponibles', nota:'Acceso adaptado, planta baja',
+                tip:'<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas' },
+              { lat:39.4610, lng:-0.3850, color:'#E24B4A', icon:'🚨', tipo:'emergencia',
+                direccion:'Avda. del Puerto, 12', detalle:'Zona de intervención activa', nota:'Coordinado con Bomberos',
+                tip:'<b>🚨 Emergencia</b><br>Avda. del Puerto 12' }
+              ]
+
         };
 
         sessionStorage.setItem('necMapData', JSON.stringify(mapData));
