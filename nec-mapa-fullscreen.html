@@ -141,8 +141,12 @@
       height:4px; border-radius:2px; background:rgba(0,0,0,0.07); overflow:hidden;
     }
     .map-legend-bar-fill {
-      height:100%; border-radius:2px; transition:width 0.4s ease;
+      height:100%; border-radius:2px; transition:width 0.4s ease;      
     }
+    .map-legend-bar-fill.alto   { background: #2ecc71 !important; }
+    .map-legend-bar-fill.medio  { background: #EF9F27 !important; }
+    .map-legend-bar-fill.bajo   { background: #E24B4A !important; }
+
     .map-legend-sep {
       height:1px; background:rgba(0,0,0,0.06); margin:6px 0;
     }
@@ -244,24 +248,63 @@
     var ctxPins       = mapData.ctx  || [];
 
     var TIPOS = [
-      { tipo:'emergencia',  label:'Emergencia',       color:'#E24B4A', icon:'⚡' },
+      { tipo:'emergencia',  label:'Emergencia',       color:'#E24B4A', icon:'🚨' },
       { tipo:'encuentro',   label:'Punto encuentro',  color:'#EF9F27', icon:'P'  },
       { tipo:'kits',        label:'Recogida kits',    color:'#1D9E75', icon:'K'  },
       { tipo:'voluntarios', label:'Voluntarios',      color:'#7B5EA7', icon:'V'  },
       { tipo:'refugio',     label:'Refugio',          color:'#3A7BD5', icon:'R'  }
     ];
 
-    if (!ctxPins.length) {
-      ctxPins = [
-        { lat:39.4641, lng:-0.3879, tipo:'kits',        color:'#1D9E75', icon:'K', tip:'<b>📦 Recogida de kits</b><br>Polideportivo Russafa' },
-        { lat:39.4598, lng:-0.3831, tipo:'voluntarios', color:'#7B5EA7', icon:'V', tip:'<b>🤝 Voluntarios</b><br>12 activos' },
-        { lat:39.4633, lng:-0.3808, tipo:'encuentro',   color:'#EF9F27', icon:'P', tip:'<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento' },
-        { lat:39.4589, lng:-0.3869, tipo:'refugio',     color:'#3A7BD5', icon:'R', tip:'<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas' },
-        { lat:39.4610, lng:-0.3850, tipo:'emergencia',  color:'#E24B4A', icon:'⚡',tip:'<b>🚨 Emergencia</b><br>Avda. del Puerto 12' },
-        { lat:39.4625, lng:-0.3862, tipo:'kits',        color:'#1D9E75', icon:'K', tip:'<b>📦 Recogida de kits</b><br>C/ Xàtiva 8' },
-        { lat:39.4605, lng:-0.3840, tipo:'refugio',     color:'#3A7BD5', icon:'R', tip:'<b>🏠 Refugio</b><br>Pl. del Mercat · 20 plazas' },
-        { lat:39.4618, lng:-0.3870, tipo:'voluntarios', color:'#7B5EA7', icon:'V', tip:'<b>🤝 Voluntarios</b><br>8 activos' }
+   if (!ctxPins.length) {
+       ctxPins = [
+        { lat:39.4571, lng:-0.3901, tipo:'kits',        color:'#1D9E75', icon:'K',
+          direccion:'Polideportivo Russafa', detalle:'Kits de emergencia · 200 unidades disponibles', nota:'Horario: 9h–20h' },
+        { lat:39.4648, lng:-0.3823, tipo:'voluntarios', color:'#7B5EA7', icon:'V',
+          direccion:'C/ Cuba, 5 — Russafa', detalle:'12 voluntarios disponibles', nota:'Coordinador: Luis M.' },
+        { lat:39.4582, lng:-0.3858, tipo:'encuentro',   color:'#EF9F27', icon:'P',
+          direccion:'Pl. Ayuntamiento', detalle:'Punto de concentración principal', nota:'Capacidad: sin límite' },
+        { lat:39.4655, lng:-0.3875, tipo:'refugio',     color:'#3A7BD5', icon:'R',
+          direccion:'C/ Colón, 40', detalle:'Ofrecer espacio · 30 plazas disponibles', nota:'Acceso adaptado, planta baja' },
+        { lat:39.4594, lng:-0.3812, tipo:'emergencia',  color:'#E24B4A', icon:'🚨',
+          direccion:'Avda. del Puerto, 12', detalle:'Zona de intervención activa', nota:'Coordinado con Bomberos' },
+        { lat:39.4637, lng:-0.3844, tipo:'kits',        color:'#1D9E75', icon:'K',
+          direccion:'C/ Xàtiva, 8', detalle:'Kits de emergencia · 80 unidades', nota:'Turno tarde activo' },
+        { lat:39.4609, lng:-0.3891, tipo:'refugio',     color:'#3A7BD5', icon:'R',
+          direccion:'Pl. del Mercat', detalle:'Ofrecer espacio · 20 plazas disponibles', nota:'Solo adultos' },
+        { lat:39.4662, lng:-0.3856, tipo:'voluntarios', color:'#7B5EA7', icon:'V',
+          direccion:'Zona Sur — C/ Sueca', detalle:'8 voluntarios disponibles', nota:'Especialidad: primeros auxilios' }
       ];
+
+      if (!pinsValidados.length) {
+      pinsValidados = [
+        { lat:39.4578, lng:-0.3867, tipo:'kits',        color:'#1D9E75', icon:'K', estado:'resuelta',
+          direccion:'C/ Literato Azorín, 3', detalle:'Kit entregado · Familia Martínez', nota:'2 adultos, 1 menor' },
+        { lat:39.4643, lng:-0.3810, tipo:'voluntarios', color:'#7B5EA7', icon:'V', estado:'resuelta',
+          direccion:'Zona Norte — C/ Russafa', detalle:'Voluntario asignado', nota:'Acompañamiento persona mayor' },
+        { lat:39.4617, lng:-0.3893, tipo:'encuentro',   color:'#EF9F27', icon:'P', estado:'pendiente',
+          direccion:'Pl. España', detalle:'Grupo de 5 personas esperando', nota:'Llegada estimada: 15 min' },
+        { lat:39.4660, lng:-0.3831, tipo:'refugio',     color:'#3A7BD5', icon:'R', estado:'pendiente',
+          direccion:'C/ Mayor, 5', detalle:'Solicita alojamiento · 3 personas', nota:'Familia con mascota' },
+        { lat:39.4585, lng:-0.3848, tipo:'emergencia',  color:'#E24B4A', icon:'🚨',estado:'pendiente',
+          direccion:'Avda. del Puerto, 18', detalle:'Herido leve · unidad SAMU en camino', nota:'Prioridad media' },
+        { lat:39.4630, lng:-0.3878, tipo:'kits',        color:'#1D9E75', icon:'K', estado:'resuelta',
+          direccion:'C/ Ruzafa, 3', detalle:'Solicita kit básico · 1 persona', nota:'Sin desplazamiento' },
+        { lat:39.4598, lng:-0.3820, tipo:'refugio',     color:'#3A7BD5', icon:'R', estado:'pendiente',
+          direccion:'Albergue Central', detalle:'Plaza asignada · cubierto', nota:'Check-in completado' },
+        { lat:39.4651, lng:-0.3863, tipo:'voluntarios', color:'#7B5EA7', icon:'V', estado:'resuelta',
+          direccion:'Zona Sur', detalle:'Solicita apoyo · carga y transporte', nota:'Urgencia baja' },
+        { lat:39.4574, lng:-0.3835, tipo:'emergencia',  color:'#E24B4A', icon:'🚨',estado:'resuelta',
+          direccion:'C/ del Mar, 7', detalle:'Atendido por SAMU', nota:'Alta en sitio' },
+        { lat:39.4623, lng:-0.3807, tipo:'encuentro',   color:'#EF9F27', icon:'P', estado:'resuelta',
+          direccion:'Av. Blasco Ibáñez', detalle:'2 personas sin localizar grupo', nota:'Comunicación pendiente' },
+        { lat:39.4566, lng:-0.3844, tipo:'kits',        color:'#1D9E75', icon:'K', estado:'pendiente',
+          direccion:'C/ Denia, 11', detalle:'Solicita kit · persona sola', nota:'Movilidad reducida' },
+        { lat:39.4672, lng:-0.3819, tipo:'refugio',     color:'#3A7BD5', icon:'R', estado:'resuelta',
+          direccion:'C/ Cirilo Amorós, 4', detalle:'Plaza confirmada', nota:'2 noches estimadas' },
+        { lat:39.4589, lng:-0.3802, tipo:'voluntarios', color:'#7B5EA7', icon:'V', estado:'pendiente',
+          direccion:'Av. Reino de Valencia', detalle:'Solicita voluntario · mudanza urgente', nota:'Requiere vehículo' }
+      ];
+      }
     }
 
     // ── Mapa ──
@@ -285,7 +328,7 @@
         className:'',
         html:'<div class="emergency-icon-wrapper" style="width:'+size+'px;height:'+size+'px;">'+
              '<div class="emergency-ripple"></div><div class="emergency-ripple"></div><div class="emergency-ripple"></div>'+
-             '<div class="emergency-core" style="width:'+(size-10)+'px;height:'+(size-10)+'px;font-size:'+Math.round(size*0.3)+'px;">⚡</div>'+
+             '<div class="emergency-core" style="width:'+(size-10)+'px;height:'+(size-10)+'px;font-size:'+Math.round(size*0.3)+'px;">🚨</div>'+
              '</div>',
         iconSize:[size,size], iconAnchor:[size/2,size/2], popupAnchor:[0,-(size/2+8)]
       });
@@ -298,6 +341,45 @@
       });
     }
 
+
+    // ── Popup estilizado ──
+    var ESTADO_CFG = {
+      resuelta:    { bg:'#CCFBEF', color:'#0E4D38', border:'#6EE7B7', txt:'✓ Validada'    },
+      en_atencion: { bg:'#FEF3C7', color:'#78350F', border:'#FCD34D', txt:'⏳ En atención' },
+      pendiente:   { bg:'#FEE2E2', color:'#7F1D1D', border:'#FCA5A5', txt:'⚠ Pendiente'   }
+    };
+    var TIPO_CFG = {
+      kits:        { emoji:'📦', label:'Recogida de kits'   },
+      voluntarios: { emoji:'🤝', label:'Voluntarios'        },
+      encuentro:   { emoji:'📍', label:'Punto de encuentro' },
+      refugio:     { emoji:'🏠', label:'Refugio / Hospedaje'},
+      emergencia:  { emoji:'🚨', label:'Emergencia'         }
+    };
+
+    function makePopup(m) {
+      var tc    = TIPO_CFG[m.tipo]  || { emoji:'📌', label: m.tipo || 'Punto' };
+      var badge = '';
+      // Badge oferta (pins de contexto, sin estado)
+      if (!m.estado) {
+        badge = '<span style="font-size:10px;background:#DBEAFE;color:#1E3A5F;border:1px solid #93C5FD;border-radius:10px;padding:1px 6px;margin-left:4px;">↑ Oferta</span>';
+      }
+      // Badge demanda con estado
+      var estadoHtml = '';
+      if (m.estado) {
+        var ec = ESTADO_CFG[m.estado] || ESTADO_CFG['pendiente'];
+        estadoHtml = '<div style="margin-top:5px;font-size:10px;font-weight:600;color:'+ec.color+';background:'+ec.bg+';border:1px solid '+ec.border+';border-radius:8px;padding:2px 7px;display:inline-block;">'+ec.txt+'</div>';
+        badge = '<span style="font-size:10px;background:#FEE2E2;color:#7F1D1D;border:1px solid #FCA5A5;border-radius:10px;padding:1px 6px;margin-left:4px;">↓ Necesidad</span>';
+      }
+      var direccion = m.direccion ? '<br><span style="font-size:11px;color:#555;">📍 '+m.direccion+'</span>' : '';
+      var detalle   = m.detalle   ? '<div style="font-size:10px;color:#555;margin-top:3px;line-height:1.4;">'+m.detalle+'</div>' : '';
+      var nota      = m.nota      ? '<div style="font-size:10px;color:#777;margin-top:4px;border-top:1px solid #eee;padding-top:4px;line-height:1.4;">'+m.nota+'</div>' : '';
+
+      return '<div style="min-width:170px;">' +
+        '<b style="font-size:12px;">'+tc.emoji+' '+tc.label+'</b>'+badge +
+        direccion + detalle + nota + estadoHtml +
+      '</div>';
+    }
+
     // ── Markers ──
     var markersByTipo = {};
     TIPOS.forEach(function(t){ markersByTipo[t.tipo] = []; });
@@ -308,7 +390,7 @@
       var tipo = m.tipo || 'kits';
       var icon = (tipo === 'emergencia') ? makeEmergencyIcon(36) : makeIcon(m.color, m.icon, 26);
       var marker = L.marker([m.lat, m.lng], { icon:icon, zIndexOffset: tipo==='emergencia'?1000:500 })
-        .bindPopup(m.tip || m.popup || '', { maxWidth:200 })
+        .bindPopup(makePopup(m), { maxWidth:220 })
         .addTo(map);
       if (!markersByTipo[tipo]) markersByTipo[tipo] = [];
       markersByTipo[tipo].push(marker);
@@ -323,21 +405,24 @@
         .addTo(map).openPopup();
     }
 
-    // ── Leyenda con barras ──
+   
+   // ── Leyenda con barras de cobertura ──
+ 
     function buildLegend() {
-      var total = 0;
-      var counts = {};
-      TIPOS.forEach(function(t){
-        counts[t.tipo] = (markersByTipo[t.tipo] || []).length;
-        total += counts[t.tipo];
-      });
-
       var legend = document.getElementById('mapLegend');
-      legend.innerHTML = '<div class="map-legend-title">Leyenda</div>';
+      legend.innerHTML = '<div class="map-legend-title">Cobertura de necesidades</div>';
 
       TIPOS.forEach(function(t) {
-        var n   = counts[t.tipo] || 0;
-        var pct = total > 0 ? Math.round((n / total) * 100) : 0;
+        var delTipo   = pinsValidados.filter(function(p){ return p.tipo === t.tipo; });
+        var total     = delTipo.length;
+        var resueltas = delTipo.filter(function(p){ return p.estado === 'resuelta'; }).length;
+        var pct       = total > 0 ? Math.round((resueltas / total) * 100) : 0;
+
+        var barColor  = pct >= 66 ? '#2ecc71' : pct >= 33 ? '#EF9F27' : '#E24B4A';
+        var estadoTxt = total === 0
+          ? '<span style="color:#ccc;font-size:9px;">sin datos</span>'
+          : '<span style="font-weight:600;">'+pct+'%</span><span style="color:#bbb;font-size:9px;margin-left:3px;">('+resueltas+'/'+total+')</span>';
+
         var row = document.createElement('div');
         row.className = 'map-legend-row';
         row.innerHTML =
@@ -346,10 +431,10 @@
               '<div class="map-legend-dot" style="background:'+t.color+';">'+t.icon+'</div>' +
               '<span class="map-legend-name">'+t.label+'</span>' +
             '</div>' +
-            '<span class="map-legend-count">'+n+' <span style="color:#ccc;font-weight:400;">('+pct+'%)</span></span>' +
+            '<span class="map-legend-count">'+estadoTxt+'</span>' +
           '</div>' +
           '<div class="map-legend-bar-track">' +
-            '<div class="map-legend-bar-fill" style="width:'+pct+'%;background:'+t.color+';opacity:0.7;"></div>' +
+            '<div class="map-legend-bar-fill" style="width:'+pct+'%;background:'+barColor+';opacity:0.85;"></div>' +
           '</div>';
         legend.appendChild(row);
       });
@@ -362,6 +447,8 @@
       legend.appendChild(pinRow);
     }
     buildLegend();
+    
+    
 
     // ── Filtros ──
     function toggleFilter(btn) {
