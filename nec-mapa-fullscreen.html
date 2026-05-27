@@ -236,6 +236,15 @@
 
   <script>
     // ── Datos ──
+
+    var TIPOS = [
+      { tipo:'emergencia',  label:'Emergencia',       color:'#E24B4A', icon:'🚨' },
+      { tipo:'encuentro',   label:'Punto encuentro',  color:'#EF9F27', icon:'P'  },
+      { tipo:'kits',        label:'Recogida kits',    color:'#1D9E75', icon:'K'  },
+      { tipo:'voluntarios', label:'Voluntarios',      color:'#7B5EA7', icon:'V'  },
+      { tipo:'refugio',     label:'Refugio',          color:'#3A7BD5', icon:'R'  }
+    ];
+
     var mapData = {};
     try { mapData = JSON.parse(sessionStorage.getItem('necMapData') || '{}'); } catch(e){}
 
@@ -247,35 +256,30 @@
     var pinsValidados = mapData.pins || [];
     var ctxPins       = mapData.ctx  || [];
 
-    var TIPOS = [
-      { tipo:'emergencia',  label:'Emergencia',       color:'#E24B4A', icon:'🚨' },
-      { tipo:'encuentro',   label:'Punto encuentro',  color:'#EF9F27', icon:'P'  },
-      { tipo:'kits',        label:'Recogida kits',    color:'#1D9E75', icon:'K'  },
-      { tipo:'voluntarios', label:'Voluntarios',      color:'#7B5EA7', icon:'V'  },
-      { tipo:'refugio',     label:'Refugio',          color:'#3A7BD5', icon:'R'  }
-    ];
-
-   if (!ctxPins.length) {
-       ctxPins = [
-        { lat:39.4571, lng:-0.3901, tipo:'kits',        color:'#1D9E75', icon:'K',
+    // ── Fallback demo si no hay datos reales ──
+    if (!ctxPins.length) {
+      ctxPins = [
+        { lat:39.4571, lng:-0.3901, color:'#1D9E75', icon:'K', tipo:'kits',
           direccion:'Polideportivo Russafa', detalle:'Kits de emergencia · 200 unidades disponibles', nota:'Horario: 9h–20h' },
-        { lat:39.4648, lng:-0.3823, tipo:'voluntarios', color:'#7B5EA7', icon:'V',
+        { lat:39.4648, lng:-0.3823, color:'#7B5EA7', icon:'V', tipo:'voluntarios',
           direccion:'C/ Cuba, 5 — Russafa', detalle:'12 voluntarios disponibles', nota:'Coordinador: Luis M.' },
-        { lat:39.4582, lng:-0.3858, tipo:'encuentro',   color:'#EF9F27', icon:'P',
+        { lat:39.4582, lng:-0.3858, color:'#EF9F27', icon:'P', tipo:'encuentro',
           direccion:'Pl. Ayuntamiento', detalle:'Punto de concentración principal', nota:'Capacidad: sin límite' },
-        { lat:39.4655, lng:-0.3875, tipo:'refugio',     color:'#3A7BD5', icon:'R',
+        { lat:39.4655, lng:-0.3875, color:'#3A7BD5', icon:'R', tipo:'refugio',
           direccion:'C/ Colón, 40', detalle:'Ofrecer espacio · 30 plazas disponibles', nota:'Acceso adaptado, planta baja' },
-        { lat:39.4594, lng:-0.3812, tipo:'emergencia',  color:'#E24B4A', icon:'🚨',
+        { lat:39.4594, lng:-0.3812, color:'#E24B4A', icon:'🚨', tipo:'emergencia',
           direccion:'Avda. del Puerto, 12', detalle:'Zona de intervención activa', nota:'Coordinado con Bomberos' },
-        { lat:39.4637, lng:-0.3844, tipo:'kits',        color:'#1D9E75', icon:'K',
+        { lat:39.4637, lng:-0.3844, color:'#1D9E75', icon:'K', tipo:'kits',
           direccion:'C/ Xàtiva, 8', detalle:'Kits de emergencia · 80 unidades', nota:'Turno tarde activo' },
-        { lat:39.4609, lng:-0.3891, tipo:'refugio',     color:'#3A7BD5', icon:'R',
+        { lat:39.4609, lng:-0.3891, color:'#3A7BD5', icon:'R', tipo:'refugio',
           direccion:'Pl. del Mercat', detalle:'Ofrecer espacio · 20 plazas disponibles', nota:'Solo adultos' },
-        { lat:39.4662, lng:-0.3856, tipo:'voluntarios', color:'#7B5EA7', icon:'V',
+        { lat:39.4662, lng:-0.3856, color:'#7B5EA7', icon:'V', tipo:'voluntarios',
           direccion:'Zona Sur — C/ Sueca', detalle:'8 voluntarios disponibles', nota:'Especialidad: primeros auxilios' }
       ];
+    }
 
-      if (!pinsValidados.length) {
+    var tieneDatos = pinsValidados.length && pinsValidados.some(function(p){ return p.estado; });
+    if (!tieneDatos) {
       pinsValidados = [
         { lat:39.4578, lng:-0.3867, tipo:'kits',        color:'#1D9E75', icon:'K', estado:'resuelta',
           direccion:'C/ Literato Azorín, 3', detalle:'Kit entregado · Familia Martínez', nota:'2 adultos, 1 menor' },
@@ -285,15 +289,15 @@
           direccion:'Pl. España', detalle:'Grupo de 5 personas esperando', nota:'Llegada estimada: 15 min' },
         { lat:39.4660, lng:-0.3831, tipo:'refugio',     color:'#3A7BD5', icon:'R', estado:'pendiente',
           direccion:'C/ Mayor, 5', detalle:'Solicita alojamiento · 3 personas', nota:'Familia con mascota' },
-        { lat:39.4585, lng:-0.3848, tipo:'emergencia',  color:'#E24B4A', icon:'🚨',estado:'pendiente',
+        { lat:39.4585, lng:-0.3848, tipo:'emergencia',  color:'#E24B4A', icon:'🚨', estado:'pendiente',
           direccion:'Avda. del Puerto, 18', detalle:'Herido leve · unidad SAMU en camino', nota:'Prioridad media' },
-        { lat:39.4630, lng:-0.3878, tipo:'kits',        color:'#1D9E75', icon:'K', estado:'resuelta',
+        { lat:39.4630, lng:-0.3878, tipo:'kits',        color:'#1D9E75', icon:'K', estado:'pendiente',
           direccion:'C/ Ruzafa, 3', detalle:'Solicita kit básico · 1 persona', nota:'Sin desplazamiento' },
         { lat:39.4598, lng:-0.3820, tipo:'refugio',     color:'#3A7BD5', icon:'R', estado:'pendiente',
           direccion:'Albergue Central', detalle:'Plaza asignada · cubierto', nota:'Check-in completado' },
         { lat:39.4651, lng:-0.3863, tipo:'voluntarios', color:'#7B5EA7', icon:'V', estado:'resuelta',
           direccion:'Zona Sur', detalle:'Solicita apoyo · carga y transporte', nota:'Urgencia baja' },
-        { lat:39.4574, lng:-0.3835, tipo:'emergencia',  color:'#E24B4A', icon:'🚨',estado:'resuelta',
+        { lat:39.4574, lng:-0.3835, tipo:'emergencia',  color:'#E24B4A', icon:'🚨', estado:'resuelta',
           direccion:'C/ del Mar, 7', detalle:'Atendido por SAMU', nota:'Alta en sitio' },
         { lat:39.4623, lng:-0.3807, tipo:'encuentro',   color:'#EF9F27', icon:'P', estado:'resuelta',
           direccion:'Av. Blasco Ibáñez', detalle:'2 personas sin localizar grupo', nota:'Comunicación pendiente' },
@@ -304,7 +308,6 @@
         { lat:39.4589, lng:-0.3802, tipo:'voluntarios', color:'#7B5EA7', icon:'V', estado:'pendiente',
           direccion:'Av. Reino de Valencia', detalle:'Solicita voluntario · mudanza urgente', nota:'Requiere vehículo' }
       ];
-      }
     }
 
     // ── Mapa ──
@@ -386,6 +389,13 @@
     var activeFilters = {};
     TIPOS.forEach(function(t){ activeFilters[t.tipo] = true; });
 
+    var ICON_TO_TIPO = { 'K':'kits', 'V':'voluntarios', 'P':'encuentro', 'R':'refugio', '🚨':'emergencia' };
+
+    function normalizarPin(m) {
+      if (!m.tipo && m.icon) m.tipo = ICON_TO_TIPO[m.icon] || 'sin_clasificar';
+      return m;
+    }
+
     function addMarker(m) {
       var tipo = m.tipo || 'kits';
       var icon = (tipo === 'emergencia') ? makeEmergencyIcon(36) : makeIcon(m.color, m.icon, 26);
@@ -396,8 +406,8 @@
       markersByTipo[tipo].push(marker);
     }
 
-    ctxPins.forEach(addMarker);
-    pinsValidados.forEach(addMarker);
+    ctxPins.forEach(function(m){ addMarker(normalizarPin(m)); });
+    pinsValidados.forEach(function(m){ addMarker(normalizarPin(m)); });
 
     if (mapData.pinLat) {
       L.marker([pinLat,pinLng], { icon:pinIcon('#E24B4A'), zIndexOffset:2000 })
