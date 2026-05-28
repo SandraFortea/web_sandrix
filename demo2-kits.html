@@ -43,7 +43,7 @@
       --teal: #1D9E75;
       --teal-light: #E1F5EE;
       --teal-dark: #0E4D38;
-      --orange: #EF9F27;
+      --orange-light: #FEF5EC;
       --orange-light: #FEF5EC;
       --red: #E24B4A;
       --red-light: #FCEBEB;
@@ -552,6 +552,7 @@
     .kit-created-item {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 10px;
       padding: 10px 12px;
       background: var(--teal-light);
@@ -560,7 +561,9 @@
       margin-bottom: 6px;
       width: 100%;
       box-sizing: border-box;
-      /* ✅ evita desbordamiento */
+    }
+    .kit-created-item .kit-detail-panel {
+      flex: 0 0 100%;
     }
 
     .kit-created-code {
@@ -1022,19 +1025,23 @@
     @media (max-width: 768px) {
       .kit-created-item {
         flex-wrap: wrap;
-        /* permite bajar a segunda línea */
         gap: 6px;
       }
 
-      .kit-created-item>div {
+      .kit-created-item > div:first-child {
         flex: 1 1 100%;
-        /* texto ocupa fila completa */
         min-width: 0;
       }
 
       .kit-created-code {
         font-size: 11px;
         letter-spacing: 1px;
+      }
+
+      .kit-created-badge,
+      .kit-detail-btn,
+      .kit-created-cancel-btn {
+        flex-shrink: 0;
       }
     }
 
@@ -1074,7 +1081,197 @@
     }
   }
 
-  /* PUNTOS DE NECESIDAD */
+  /* CUSTOM KIT COLOR PICKER */
+  .custom-color-picker {
+    display: none;
+    margin-bottom: 14px;
+    padding: 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+  }
+  .custom-color-picker.visible { display: block; }
+  .custom-color-picker-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+  .custom-color-picker-label span {
+    color: var(--red);
+  }
+  .color-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .color-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    border: 2px solid transparent;
+    transition: all 0.18s;
+    background: var(--white);
+  }
+  .color-option:hover { border-color: var(--border); }
+  .color-option.selected { border-color: var(--dark); background: var(--white); }
+  .color-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.1);
+  }
+  .color-option-name {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--dark);
+  }
+
+  /* KIT DETAIL BUTTON & PANEL */
+  .kit-detail-btn {
+    padding: 4px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .kit-detail-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: var(--teal-light);
+  }
+  .kit-detail-panel {
+    display: none;
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  .kit-detail-panel.open { display: block; }
+  .kit-detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--dark);
+  }
+  .kit-detail-row:last-child { border-bottom: none; }
+  .kit-detail-row span:last-child { font-weight: 600; }
+
+  /* TRAZA DETAIL PANEL */
+  .traza-detail-btn {
+    padding: 4px 10px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--white);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.18s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .traza-detail-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: var(--teal-light);
+  }
+  .traza-detail-panel {
+    display: none;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  .traza-detail-panel.open { display: block; }
+  .traza-detail-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .traza-detail-item-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--dark);
+  }
+  .traza-detail-item-row:last-child { border-bottom: none; }
+  .traza-detail-item-row span:last-child { font-weight: 600; }
+  .traza-history-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 12px 0 8px;
+  }
+  .traza-history-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border);
+    color: var(--dark);
+  }
+  .traza-history-row:last-child { border-bottom: none; }
+  .traza-history-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .traza-history-ts {
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* TOAST */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--dark);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    z-index: 9999;
+    transition: transform 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+
   .puntos-section {
     margin-top: 18px;
     border: 2px solid var(--teal);
@@ -1257,6 +1454,7 @@
 </head>
 
 <body>
+<div id="toast"></div>
 
   <!-- Botón volver - colócalo ANTES de tu div principal -->
   <div class="btn-volver-wrapper">
@@ -1285,7 +1483,7 @@
         <div class="tab-num">1</div><span>Kits</span>
       </button>
       <button class="nav-tab" onclick="switchTab('traza',this)">
-        <div class="tab-num">2</div><span>Trazabilidad</span>
+        <div class="tab-num">2</div><span>Seguimiento</span>
       </button>
     </nav>
     <div class="content">
@@ -1294,12 +1492,12 @@
       <div class="panel active" id="panel-kits">
         <div class="panel-title">📦 Gestión de kits</div>
         <div class="panel-sub">
-          Selecciona tu rol: <strong>Coordinador</strong> para preparar y registrar kits de ayuda con su contenido y código de trazabilidad, o <strong>Voluntario</strong> para ver los kits disponibles, recoger el tuyo y generar el QR de confirmación.
+          Selecciona tu rol: <strong>Coordinador</strong> para preparar y registrar kits de ayuda con su contenido y código de trazabilidad, o <strong>Donante</strong> para ver los kits disponibles, recoger el tuyo y generar el QR de confirmación.
         </div>
 
         <div class="mode-toggle">
           <button class="mode-btn active" id="modeCoord" onclick="switchMode('coord')">🦺 Coordinador</button>
-          <button class="mode-btn" id="modeVol" onclick="switchMode('vol')">🤝 Donante/Voluntario</button>
+          <button class="mode-btn" id="modeVol" onclick="switchMode('vol')">🎁 Donante</button>
         </div>
 
         <!-- Vista Coordinador -->
@@ -1342,6 +1540,12 @@
             </div>
           </div>
 
+          <!-- COLOR PICKER para kit personalizado -->
+          <div class="custom-color-picker" id="customColorPicker">
+            <div class="custom-color-picker-label">Color de identificación de la caja <span>*</span> <em style="font-weight:400;text-transform:none;letter-spacing:0;font-style:normal;color:var(--muted);">— obligatorio para kit personalizado</em></div>
+            <div class="color-options" id="colorOptions"></div>
+          </div>
+
           <div class="kit-builder">
             <div class="kit-color-strip" id="kitStrip" style="background:#C0392B;"></div>
             <div class="kit-builder-header">
@@ -1364,31 +1568,48 @@
           </div>
 
           <div id="kitCreatedList"></div>
-          <!-- PUNTOS DE NECESIDAD - COORDINADOR -->
-          <div class="puntos-section">
-            <div class="puntos-section-title">📍 Puntos donde se necesitan kits</div>
+
+          <!-- BLOQUE 1: PUNTOS DE RECOGIDA (readonly, flujo externo) -->
+          <div class="puntos-section" style="margin-top:18px;">
+            <div class="puntos-section-title">📦 Puntos de recogida · Hubs registrados</div>
+            <div style="font-size:11px;color:var(--teal-dark);margin-bottom:10px;line-height:1.5;">
+              Lugares donde los donantes pueden entregar sus kits. Registrados por la comunidad en un flujo independiente.
+            </div>
+            <div id="hubsCoordList"></div>
+          </div>
+
+          <!-- BLOQUE 2: PUNTOS DE NECESIDAD (coordinador) -->
+          <div class="puntos-section" style="margin-top:14px;border-color:var(--orange);background:var(--orange-light);">
+            <div class="puntos-section-title" style="color:#7D5200;">📍 Puntos de necesidad</div>
+            <div style="font-size:11px;color:#7D5200;margin-bottom:10px;line-height:1.5;">
+              Lugares donde el kit debe llegar como destino final. Solo visibles para el coordinador.
+            </div>
             <div id="puntosCoordList">
-              <div class="punto-empty" id="puntosEmpty">Aún no has añadido ningún punto de entrega.</div>
+              <div class="punto-empty" id="puntosEmpty">Aún no has añadido ningún punto de necesidad.</div>
             </div>
             <div class="puntos-add-row">
-              <input class="d-input" id="puntoNombre" placeholder="Nombre del punto (ej: Polideportivo Norte)">
+              <input class="d-input" id="puntoNombre" placeholder="Nombre del lugar (ej: Colegio Mediterráneo)">
               <input class="d-input" id="puntoDireccion" placeholder="Dirección">
+              <input class="d-input" id="puntoCantidad" placeholder="Kits necesarios (opcional)" type="number" min="1" style="max-width:180px;">
               <select id="puntoKitTipo">
-                <option value="" disabled selected>— Selecciona un kit creado —</option>
+                <option value="" disabled selected>— Tipo de kit —</option>
               </select>
-              <button class="btn-add-punto" id="btnAddPunto" onclick="addPunto()" disabled 
-                  style="opacity:0.4;cursor:not-allowed;">
-                  + Añadir punto
-            </button>
+              <button class="btn-add-punto" id="btnAddPunto" onclick="addPunto()" disabled
+                style="opacity:0.4;cursor:not-allowed;background:#EF9F27;">
+                + Añadir punto
+              </button>
             </div>
           </div>
         </div>
 
-        <!-- Vista Voluntario -->
+        <!-- Vista Donante -->
         <div id="viewVol" style="display:none;">
-          <!-- Puntos de recogida: SIEMPRE visible, fuera de los steps -->
+          <!-- Puntos de recogida: hubs registrados externamente -->
           <div class="puntos-section" style="margin-bottom:14px;">
-            <div class="puntos-section-title">📍 Puntos de recogida · Ordenados por proximidad</div>
+            <div class="puntos-section-title">📦 Puntos de recogida · Deja tu kit aquí</div>
+            <div style="font-size:11px;color:var(--teal-dark);margin-bottom:10px;line-height:1.5;">
+              Lleva tu caja preparada a cualquiera de estos hubs. Están ordenados por proximidad.
+            </div>
             <div id="volPuntosRecogida"></div>
           </div>
 
@@ -1428,8 +1649,7 @@
                   <button onclick="volGoStep1()">← Elegir otro kit</button>
                 </div>
                 <div class="btn-next">
-                  <button onclick="switchTab('traza', document.querySelectorAll('.nav-tab')[1])">Ver trazabilidad
-                    →</button>
+                  <button onclick="switchTab('traza', document.querySelectorAll('.nav-tab')[1])">Ir a seguimiento →</button>
                 </div>
               </div>
             </div> <!-- ✅ cierra volQrBox -->
@@ -1438,7 +1658,7 @@
       </div> <!-- ✅ cierra panel-kits -->
       <!-- TAB 2: TRAZABILIDAD -->
       <div class="panel" id="panel-traza">
-        <div class="panel-title">✅ Trazabilidad y entrega verificada</div>
+        <div class="panel-title">📦 Seguimiento de kits</div>
         <div class="panel-sub">Cada kit — desde la preparación hasta la confirmación de entrega.</div>
 
         <div class="traza-header">
@@ -1510,8 +1730,18 @@
         document.querySelectorAll('.kit-type-card').forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
         currentKitType = tipo;
-        currentColor = color;
-        document.getElementById('kitStrip').style.background = color;
+        var picker = document.getElementById('customColorPicker');
+        if (tipo === 'custom') {
+          customSelectedColor = null;
+          currentColor = null;
+          picker.classList.add('visible');
+          renderCustomColorPicker();
+          document.getElementById('kitStrip').style.background = '#E5E7EB';
+        } else {
+          picker.classList.remove('visible');
+          currentColor = color;
+          document.getElementById('kitStrip').style.background = color;
+        }
         document.getElementById('kitBuilderTitle').textContent = icon + ' ' + name;
         kitItems = (kitDefaults[tipo] || []).map(i => ({ ...i }));
         renderKitItems();
@@ -1560,53 +1790,61 @@
       };
 
       function addPunto() {
-        var nombre = document.getElementById('puntoNombre').value.trim();
-        var dir    = document.getElementById('puntoDireccion').value.trim();
-        var sel    = document.getElementById('puntoKitTipo');
-        var opt    = sel.options[sel.selectedIndex];
+        var nombre   = document.getElementById('puntoNombre').value.trim();
+        var dir      = document.getElementById('puntoDireccion').value.trim();
+        var cantidad = document.getElementById('puntoCantidad').value.trim();
+        var sel      = document.getElementById('puntoKitTipo');
+        var opt      = sel.options[sel.selectedIndex];
 
-        if (!nombre || !dir || !sel.value) { 
-          alert('Completa todos los campos y selecciona un kit.'); 
-          return; 
+        if (!nombre || !dir || !sel.value) {
+          alert('Completa el nombre, la dirección y el tipo de kit.');
+          return;
         }
 
-        puntosNecesidad.push({ 
-          nombre, 
-          dir, 
-          tipo:  opt.dataset.tipo, 
-          color: opt.dataset.color,
+        puntosNecesidad.push({
+          nombre,
+          dir,
+          cantidad: cantidad ? parseInt(cantidad) : null,
+          tipo:     opt.dataset.tipo,
+          color:    opt.dataset.color,
           kitLabel: opt.textContent
         });
 
         document.getElementById('puntoNombre').value    = '';
         document.getElementById('puntoDireccion').value = '';
+        document.getElementById('puntoCantidad').value  = '';
 
         renderPuntosCoord();
-        renderPuntosVol();
+        showToast('📍 Punto de necesidad añadido');
       }
 
       function delPunto(i) {
         puntosNecesidad.splice(i, 1);
         renderPuntosCoord();
-        renderPuntosVol();
       }
 
       function renderPuntosCoord() {
-        var list  = document.getElementById('puntosCoordList');
-        var empty = document.getElementById('puntosEmpty');
+        var list = document.getElementById('puntosCoordList');
         if (!puntosNecesidad.length) {
           list.innerHTML = '<div class="punto-empty" id="puntosEmpty">Aún no has añadido ningún punto de necesidad.</div>';
           return;
         }
         list.innerHTML = puntosNecesidad.map(function(p, i) {
-          var k = { color: p.color, icon: p.kitLabel.split(' ')[0], nombre: p.kitLabel };
+          var parts = p.kitLabel.split(' ');
+          var icon  = parts[0];
+          var nombre = parts.slice(1).join(' '); // nombre sin el emoji inicial
+          var k = { color: p.color, icon: icon, nombre: nombre };
+          var cantidadBadge = p.cantidad
+            ? `<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff3cd;color:#7D5200;border:1px solid #fad79a;white-space:nowrap;">${p.cantidad} kits</span>`
+            : '';
           return `
-            <div class="punto-card">
+            <div class="punto-card" style="border-color:#fddfa0;background:#fff;">
               <div class="punto-color-dot" style="background:${k.color};"></div>
               <div class="punto-info">
                 <div class="punto-nombre">${p.nombre}</div>
                 <div class="punto-dir">${p.dir}</div>
               </div>
+              ${cantidadBadge}
               <span class="punto-kit-badge" style="background:${k.color}22;color:${k.color};border:1px solid ${k.color}55;">
                 ${k.icon} ${k.nombre}
               </span>
@@ -1616,10 +1854,33 @@
       }
 
       const puntosRecogidaFijos = [
-        { nombre: 'Polideportivo Municipal Norte',  dir: 'Av. de la Constitución, 14' },
-        { nombre: 'Centre Cívic Russafa',           dir: 'C/ Dénia, 67'              },
-        { nombre: 'Pavelló Esportiu Sant Pau',      dir: 'Pg. de Sant Joan, 2'       }
+        { nombre: 'Polideportivo Municipal Norte', dir: 'Av. de la Constitución, 14', kitsAdmite: ['Alimenticio', 'Ropa'],         esFinal: false },
+        { nombre: 'Centre Cívic Russafa',          dir: 'C/ Dénia, 67',              kitsAdmite: ['Sanitario', 'Herramientas'],   esFinal: false },
+        { nombre: 'Pavelló Esportiu Sant Pau',     dir: 'Pg. de Sant Joan, 2',       kitsAdmite: ['Alimenticio', 'Sanitario', 'Ropa', 'Herramientas'], esFinal: true  }
       ];
+
+      function renderHubsCoord() {
+        var list = document.getElementById('hubsCoordList');
+        if (!list) return;
+        list.innerHTML = puntosRecogidaFijos.map(function(p) {
+          var finalBadge = p.esFinal
+            ? '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--teal-light);color:var(--teal-dark);border:1px solid #9FE1CB;white-space:nowrap;">✓ También destino final</span>'
+            : '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--bg);color:var(--muted);border:1px solid var(--border);white-space:nowrap;">Punto intermedio</span>';
+          var kitsHtml = p.kitsAdmite.map(function(k) {
+            return `<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;background:var(--bg);color:var(--muted);border:1px solid var(--border);">${k}</span>`;
+          }).join('');
+          return `
+            <div class="punto-card" style="margin-bottom:6px;">
+              <div style="font-size:18px;flex-shrink:0;">📦</div>
+              <div class="punto-info">
+                <div class="punto-nombre">${p.nombre}</div>
+                <div class="punto-dir">${p.dir}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:5px;">${kitsHtml}</div>
+              </div>
+              ${finalBadge}
+            </div>`;
+        }).join('');
+      }
 
       function renderPuntosVol() {
         var list = document.getElementById('volPuntosRecogida');
@@ -1661,6 +1922,11 @@
 
       function crearKit() {
         if (!kitItems.length) { alert('Añade al menos un elemento al kit.'); return; }
+        if (currentKitType === 'custom' && !customSelectedColor) {
+          alert('Selecciona un color de identificación para el kit personalizado.');
+          document.getElementById('customColorPicker').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return;
+        }
 
         const code = 'KIT-' + Math.random().toString(36).substr(2, 4).toUpperCase();
         const title = document.getElementById('kitBuilderTitle').textContent;
@@ -1679,8 +1945,12 @@
             <div style="font-size:11px;color:var(--muted);">${total} elementos · Listo para asignar</div>
           </div>
           <span class="kit-created-code">${code}</span>
+          <button class="kit-detail-btn" onclick="toggleKitDetail('detail-${code}')">Detalle</button>
           <span class="kit-created-badge">✓ Creado</span>
           <button class="kit-created-cancel-btn" onclick="cancelarKit(${idx}, this)">✕</button>
+          <div class="kit-detail-panel" id="detail-${code}">
+            ${[...kitItems].map(it => `<div class="kit-detail-row"><span>${it.e} ${it.n}</span><span>${it.q} ud.</span></div>`).join('')}
+          </div>
         `;
         list.prepend(div);
 
@@ -1826,12 +2096,23 @@
         document.getElementById('volQrBox').style.display = 'block';
         // --- AVISO DE EMBALAJE ---
         const colorNames = {
-          '#C0392B': { nombre: 'ROJO',     hex: '#C0392B', bg: '#FDF3F2', border: '#f5b7b1' },
-          '#3A7BD5': { nombre: 'AZUL',     hex: '#3A7BD5', bg: '#EEF4FC', border: '#aac4ef' },
-          '#7B5EA7': { nombre: 'MORADO',   hex: '#7B5EA7', bg: '#F5F0FB', border: '#c9b8e8' },
-          '#EF9F27': { nombre: 'NARANJA',  hex: '#EF9F27', bg: '#FEF5EC', border: '#fad79a' },
+          '#C0392B': { nombre: 'ROJO',      hex: '#C0392B', bg: '#FDF3F2', border: '#f5b7b1' },
+          '#3A7BD5': { nombre: 'AZUL',      hex: '#3A7BD5', bg: '#EEF4FC', border: '#aac4ef' },
+          '#7B5EA7': { nombre: 'MORADO',    hex: '#7B5EA7', bg: '#F5F0FB', border: '#c9b8e8' },
+          '#EF9F27': { nombre: 'NARANJA',   hex: '#EF9F27', bg: '#FEF5EC', border: '#fad79a' },
+          '#1D9E75': { nombre: 'VERDE',     hex: '#1D9E75', bg: '#E1F5EE', border: '#9FE1CB' },
+          '#2C3E50': { nombre: 'GRIS OSCURO', hex: '#2C3E50', bg: '#EAECEE', border: '#AEB6BF' },
+          '#E91E8C': { nombre: 'ROSA',      hex: '#E91E8C', bg: '#FDE8F4', border: '#F5A7D8' },
         };
-        var c = colorNames[selectedKit.color] || { nombre: 'EL COLOR ASIGNADO', hex: '#888', bg: '#f5f5f5', border: '#ccc' };
+        // Fallback dinámico: si el color existe en ALL_COLORS lo usa, si no construye uno genérico
+        var kitColor = selectedKit.color;
+        var c = colorNames[kitColor];
+        if (!c) {
+          var found = (typeof ALL_COLORS !== 'undefined') && ALL_COLORS.find(function(x) { return x.hex === kitColor; });
+          c = found
+            ? { nombre: found.nombre.toUpperCase(), hex: kitColor, bg: kitColor + '22', border: kitColor + '88' }
+            : { nombre: 'COLOR ASIGNADO', hex: kitColor || '#888', bg: '#f5f5f5', border: '#ccc' };
+        }
 
         var avisoEl = document.getElementById('volEmbalajeAviso');
         if (avisoEl) {
@@ -1866,7 +2147,11 @@
       // -------- TRAZABILIDAD --------
       const trazaItems = [];
       function addTrazaItem(code, title, color, status) {
-        trazaItems.unshift({ code, title, color, status, ts: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) });
+        var ts = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        trazaItems.unshift({ 
+          code, title, color, status, ts,
+          history: [{ status: 0, ts }]
+        });
         document.getElementById('trazaCount').textContent = trazaItems.length;
         renderTraza('all');
       }
@@ -1888,10 +2173,27 @@
 
         const statusLabel = { 0: '📦 Preparado', 1: '🚚 En camino', 2: '✅ Recibido', cancel: '✕ Cancelado' };
         const statusCls = { 0: 'status-0', 1: 'status-1', 2: 'status-2', cancel: 'status-cancel' };
+        const statusColor = { 0: 'var(--orange)', 1: 'var(--blue)', 2: 'var(--teal)', cancel: 'var(--red)' };
         const steps = [0, 1, 2];
 
-        list.innerHTML = filtered.map(it => `
-  <div class="traza-item" data-status="${it.status}">
+        list.innerHTML = filtered.map(it => {
+          const idx = trazaItems.indexOf(it);
+          // Find matching kit for items list
+          const kit = createdKits.find(k => it.code.startsWith(k.code));
+          const itemsHtml = kit
+            ? kit.items.map(i => `<div class="traza-detail-item-row"><span>${i.e} ${i.n}</span><span>${i.q} ud.</span></div>`).join('')
+            : '<div style="font-size:12px;color:var(--muted);">Sin detalle de elementos disponible.</div>';
+
+          const history = it.history || [{ status: 0, ts: it.ts }];
+          const historyHtml = history.map(h => `
+            <div class="traza-history-row">
+              <div class="traza-history-dot" style="background:${statusColor[h.status] || '#ccc'};"></div>
+              <span>${statusLabel[h.status] || ''}</span>
+              <span class="traza-history-ts">${h.ts}</span>
+            </div>`).join('');
+
+          return `
+  <div class="traza-item" data-status="${it.status}" style="flex-wrap:wrap;">
     <span class="traza-tipo-icon">${it.title.split(' ')[0]}</span>
     <div class="traza-info">
       <div class="traza-name">${it.title}</div>
@@ -1906,15 +2208,28 @@
     </div>
     <div class="traza-item-actions">
       <span class="traza-status ${statusCls[it.status] || ''}">${statusLabel[it.status] || ''}</span>
+      <button class="traza-detail-btn" onclick="toggleTrazaDetail('traza-detail-${idx}')">Detalle</button>
       ${it.status !== 'cancel' && it.status < 2
-            ? `<button class="traza-advance-btn" onclick="advanceTraza(${trazaItems.indexOf(it)})">Avanzar →</button>`
+            ? `<button class="traza-advance-btn" onclick="advanceTraza(${idx})">Avanzar →</button>`
             : ''}
     </div>
-  </div>`).join('');
+    <div class="traza-detail-panel" id="traza-detail-${idx}">
+      <div class="traza-detail-title">Contenido del kit</div>
+      ${itemsHtml}
+      <div class="traza-history-title">Historial de estados</div>
+      ${historyHtml}
+    </div>
+  </div>`}).join('');
       }
 
       function advanceTraza(i) {
-        if (trazaItems[i].status < 2) trazaItems[i].status++;
+        if (trazaItems[i].status < 2) {
+          trazaItems[i].status++;
+          var ts = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+          trazaItems[i].ts = ts;
+          trazaItems[i].history = trazaItems[i].history || [];
+          trazaItems[i].history.push({ status: trazaItems[i].status, ts });
+        }
         renderTraza('all');
         document.getElementById('trazaCount').textContent = trazaItems.length;
       }
@@ -1925,24 +2240,106 @@
         renderTraza(btn.dataset.filter); // ✅ renderTraza ya maneja el caso vacío internamente
       }
 
-      // Init
-      selKitType(document.querySelector('.kit-type-card.selected'), 'food', '🍱', 'Kit Alimenticio', '#C0392B');
+      // -------- TOGGLE DETAIL PANELS --------
+      function toggleKitDetail(id) {
+        var panel = document.getElementById(id);
+        if (!panel) return;
+        panel.classList.toggle('open');
+      }
+      function toggleTrazaDetail(id) {
+        var panel = document.getElementById(id);
+        if (!panel) return;
+        panel.classList.toggle('open');
+      }
 
-      // ✅ Al cargar la página, comprobar si viene de un escaneo QR
-      document.addEventListener('DOMContentLoaded', function () {
+      // -------- TOAST --------
+      function showToast(msg) {
+        var t = document.getElementById('toast');
+        if (!t) return;
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(function() { t.classList.remove('show'); }, 2800);
+      }
+
+      // -------- CUSTOM COLOR PICKER --------
+      const ALL_COLORS = [
+        { hex: '#C0392B', nombre: 'Rojo' },
+        { hex: '#3A7BD5', nombre: 'Azul' },
+        { hex: '#7B5EA7', nombre: 'Morado' },
+        { hex: '#EF9F27', nombre: 'Naranja' },
+        { hex: '#1D9E75', nombre: 'Verde' },
+        { hex: '#2C3E50', nombre: 'Gris oscuro' },
+        { hex: '#E91E8C', nombre: 'Rosa' },
+      ];
+      // Colors assigned to standard kit types
+      const usedColorsByType = {
+        food:    '#C0392B',
+        med:     '#3A7BD5',
+        clothes: '#7B5EA7',
+        tools:   '#EF9F27',
+      };
+      let customSelectedColor = null;
+
+      function renderCustomColorPicker() {
+        var usedHexes = Object.values(usedColorsByType);
+        var available = ALL_COLORS.filter(function(c) { return !usedHexes.includes(c.hex); });
+        var container = document.getElementById('colorOptions');
+        customSelectedColor = null;
+        container.innerHTML = available.map(function(c) {
+          return `<div class="color-option" data-hex="${c.hex}" onclick="selectCustomColor(this, '${c.hex}')">
+            <div class="color-swatch" style="background:${c.hex};"></div>
+            <span class="color-option-name">${c.nombre}</span>
+          </div>`;
+        }).join('');
+      }
+
+      function selectCustomColor(el, hex) {
+        document.querySelectorAll('#colorOptions .color-option').forEach(function(o) { o.classList.remove('selected'); });
+        el.classList.add('selected');
+        customSelectedColor = hex;
+        // update strip preview
+        document.getElementById('kitStrip').style.background = hex;
+        currentColor = hex;
+      }
+
+      // -------- MANDATORY DONOR NAME --------
+      document.addEventListener('DOMContentLoaded', function() {
+        var nameInput = document.getElementById('volNombre');
+        var qrBtn = document.querySelector('[onclick="generarQR()"]');
+        if (nameInput && qrBtn) {
+          qrBtn.disabled = true;
+          qrBtn.style.opacity = '0.45';
+          qrBtn.style.cursor = 'not-allowed';
+          nameInput.addEventListener('input', function() {
+            var ok = nameInput.value.trim().length > 0;
+            qrBtn.disabled = !ok;
+            qrBtn.style.opacity = ok ? '1' : '0.45';
+            qrBtn.style.cursor = ok ? 'pointer' : 'not-allowed';
+          });
+        }
+
+        // QR scan param
         var params = new URLSearchParams(window.location.search);
         var kitCode = params.get('kit');
         if (kitCode) {
-          // Extraer el código base (KIT-AB12 de KIT-AB12-ANA)
           var baseCode = kitCode.split('-').slice(0, 2).join('-');
-          var existing = trazaItems.find(i => i.code === baseCode);
+          var existing = trazaItems.find(function(i) { return i.code === baseCode; });
           if (existing) {
-            existing.status = 1; // En camino
+            existing.status = 1;
             existing.ts = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            existing.history = existing.history || [];
+            existing.history.push({ status: 1, ts: existing.ts });
             renderTraza('all');
           }
         }
       });
+
+      // Init
+      selKitType(document.querySelector('.kit-type-card.selected'), 'food', '🍱', 'Kit Alimenticio', '#C0392B');
+      renderHubsCoord();
+      renderPuntosVol();
+
+      // ✅ QR scan handled in DOMContentLoaded above
     </script>
 </body>
 
