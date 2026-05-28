@@ -439,11 +439,13 @@
       return m;
     }
 
-    function addMarker(m) {
+   function addMarker(m) {
       var tipo = m.tipo || 'kits';
       var icon = (tipo === 'emergencia') ? makeEmergencyIcon(36) : makeIcon(m.color, m.icon, 26);
+      // Si tiene direccion o detalle usa makePopup, si no usa tip directamente
+      var popupContent = (m.direccion || m.detalle) ? makePopup(m) : (m.tip || m.popup || '');
       var marker = L.marker([m.lat, m.lng], { icon:icon, zIndexOffset: tipo==='emergencia'?1000:500 })
-        .bindPopup(makePopup(m), { maxWidth:220 })
+        .bindPopup(popupContent, { maxWidth:220 })
         .addTo(map);
       if (!markersByTipo[tipo]) markersByTipo[tipo] = [];
       markersByTipo[tipo].push(marker);
