@@ -82,7 +82,7 @@
     .map-search-results {
       position:absolute; top:calc(100% + 6px); left:0; right:0;
       background:#fff; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.14);
-      border:1px solid rgba(0,0,0,0.07); overflow:hidden; display:none; z-index:10;
+      border:1px solid rgba(0,0,0,0.07); overflow:hidden; display:none; z-index:2000;
     }
     .map-search-results.visible { display:block; }
     .map-search-result-item {
@@ -454,13 +454,7 @@
     ctxPins.forEach(function(m){ addMarker(normalizarPin(m)); });
     pinsValidados.forEach(function(m){ addMarker(normalizarPin(m)); });
 
-    if (mapData.pinLat) {
-      L.marker([pinLat,pinLng], { icon:pinIcon('#E24B4A'), zIndexOffset:2000 })
-        .bindPopup('<b>📍 Ubicación seleccionada</b>', { maxWidth:220 })
-        .addTo(map).openPopup();
-    }
-
-   
+      
    // ── Leyenda con barras de cobertura ──
  
     function buildLegend() {
@@ -524,6 +518,47 @@
     }
 
     // ── Búsqueda ──
+   
+    // ── Pin ubicación móvil ──
+    var locationPin = L.marker([pinLat, pinLng], {
+      icon: pinIcon('#E24B4A'), zIndexOffset:2000
+    }).bindPopup('<b>📍 Ubicación seleccionada</b>', { maxWidth:220 });
+
+    if (mapData.pinLat) {
+      locationPin.addTo(map).openPopup();
+    }
+
+    function moverPin(lat, lng, label) {
+      locationPin.setLatLng([lat, lng])
+        .bindPopup('<b>📍 ' + (label || 'Ubicación seleccionada') + '</b>', { maxWidth:220 });
+      if (!map.hasLayer(locationPin)) locationPin.addTo(map);
+      map.setView([lat, lng], map.getZoom());
+    }
+
+    // ── Click en mapa → mueve pin y geocodifica inverso ──
+    map.on('click', function(e) {
+      var lat = e.latlng.lat, lng = e.latlng.lng;
+      fetch('https://nominatim.openstreetmap.org/reverse?format=json&lat='+lat+'&lon='+lng,
+        { headers:{'Accept-Language':'es'} })
+        .then(function(r){ return r.json(); })
+        .then(function(data) {
+          var nombre = data.display_name || (lat.toFixed(5)+', '+lng.toFixed(5));
+           var corto = data.address ? [
+            data.address.road,
+            data.address.house_number,
+            data.address.city || data.address.town || data.address.village || data.address.municipality,
+            data.address.state || data.address.province || data.address.county
+          ].filter(Boolean).join(', ') : nombre;
+          document.getElementById('searchInput').value = corto;
+          moverPin(lat, lng, corto);
+        })
+        .catch(function() {
+          document.getElementById('searchInput').value = lat.toFixed(5)+', '+lng.toFixed(5);
+          moverPin(lat, lng);
+        });
+    });
+
+    // ── Búsqueda ──
     var searchTimeout = null;
     function onSearchInput() {
       var val = document.getElementById('searchInput').value.trim();
@@ -544,8 +579,9 @@
             div.className = 'map-search-result-item';
             div.textContent = item.display_name;
             div.onclick = function() {
-              map.setView([parseFloat(item.lat), parseFloat(item.lon)], 16);
+              var lat = parseFloat(item.lat), lng = parseFloat(item.lon);
               document.getElementById('searchInput').value = item.display_name;
+              moverPin(lat, lng, item.display_name);
               hideResults();
             };
             box.appendChild(div);
@@ -562,7 +598,10 @@
         .then(function(r){ return r.json(); })
         .then(function(data) {
           hideResults();
-          if (data && data[0]) map.setView([parseFloat(data[0].lat), parseFloat(data[0].lon)], 16);
+          if (data && data[0]) {
+            var lat = parseFloat(data[0].lat), lng = parseFloat(data[0].lon);
+            moverPin(lat, lng, data[0].display_name);
+          }
         })
         .catch(function(){ hideResults(); });
     }
@@ -572,6 +611,7 @@
     document.addEventListener('click', function(e) {
       if (!document.getElementById('searchBar').contains(e.target)) hideResults();
     });
+
   </script>
 
 </body>
