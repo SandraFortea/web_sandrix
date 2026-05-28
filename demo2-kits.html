@@ -1271,6 +1271,52 @@
   }
   #toast.show { transform: translateX(-50%) translateY(0); }
 
+  /* QR ACTIONS */
+  .qr-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+  .qr-action-btn {
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    background: var(--white);
+    color: var(--dark);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.18s;
+    flex: 1;
+    min-width: 120px;
+    max-width: 180px;
+  }
+  .qr-action-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+    background: var(--teal-light);
+  }
+  .qr-action-btn--print {
+    border-color: var(--dark);
+    background: var(--dark);
+    color: #fff;
+  }
+  .qr-action-btn--print:hover {
+    background: #2c2c4e;
+    border-color: #2c2c4e;
+    color: #fff;
+  }
+  @media (max-width: 400px) {
+    .qr-action-btn { max-width: 100%; min-width: unset; }
+  }
+  #printLabel { display: none; }
+  @media print {
+    body > *:not(#printLabel) { display: none !important; }
+    #printLabel { display: flex !important; }
+  }
 
   .puntos-section {
     margin-top: 18px;
@@ -1455,6 +1501,9 @@
 
 <body>
 <div id="toast"></div>
+<div id="printLabel" style="flex-direction:column;align-items:center;justify-content:center;padding:32px;font-family:'DM Sans',sans-serif;min-height:100vh;background:#fff;gap:16px;">
+  <div id="printLabelContent" style="text-align:center;max-width:300px;"></div>
+</div>
 
   <!-- Botón volver - colócalo ANTES de tu div principal -->
   <div class="btn-volver-wrapper">
@@ -1637,10 +1686,14 @@
               Generar QR del kit</button>
             <div id="volQrBox" style="display:none;" class="qr-box">
               <div id="volEmbalajeAviso" style="display:none;border:1.5px solid;border-radius:12px;padding:14px;margin-bottom:12px;"></div>
-              <div id="volQrCanvas"></div> <!-- ✅ div, no canvas -->
+              <div id="volQrCanvas"></div>
               <div class="qr-code-txt" id="volQrCode">KIT-XXXX</div>
-              <div style="font-size:11px;color:var(--muted);">
+              <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">
                 Muestra este código en el punto de recogida
+              </div>
+              <div class="qr-actions">
+                <button class="qr-action-btn" onclick="compartirQR()">📲 Compartir</button>
+                <button class="qr-action-btn qr-action-btn--print" onclick="imprimirQR()">🖨️ Imprimir etiqueta</button>
               </div>
               
 
@@ -1708,7 +1761,7 @@
         document.getElementById('viewVol').style.display = m === 'vol' ? 'block' : 'none';
         if (m === 'vol') {
           renderVolKits();
-          renderPuntosVol(); // añade esta línea
+          renderPuntosVol(null);
         }
       }
 
@@ -1807,7 +1860,8 @@
           cantidad: cantidad ? parseInt(cantidad) : null,
           tipo:     opt.dataset.tipo,
           color:    opt.dataset.color,
-          kitLabel: opt.textContent
+          kitLabel: opt.textContent,
+          validado: true   // coordinador de emergencia = validado por defecto
         });
 
         document.getElementById('puntoNombre').value    = '';
@@ -1835,8 +1889,11 @@
           var nombre = parts.slice(1).join(' '); // nombre sin el emoji inicial
           var k = { color: p.color, icon: icon, nombre: nombre };
           var cantidadBadge = p.cantidad
-            ? `<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff3cd;color:#7D5200;border:1px solid #fad79a;white-space:nowrap;">${p.cantidad} kits</span>`
+            ? `<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff3cd;color:#7D5200;border:1px solid #fad79a;white-space:nowrap;flex-shrink:0;">${p.cantidad} kits</span>`
             : '';
+          var validadoBadge = p.validado
+            ? '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--teal-light);color:var(--teal-dark);border:1px solid #9FE1CB;white-space:nowrap;flex-shrink:0;">✓ Validado</span>'
+            : '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff3cd;color:#7D5200;border:1px solid #fad79a;white-space:nowrap;flex-shrink:0;">⏳ Pendiente</span>';
           return `
             <div class="punto-card" style="border-color:#fddfa0;background:#fff;">
               <div class="punto-color-dot" style="background:${k.color};"></div>
@@ -1845,6 +1902,7 @@
                 <div class="punto-dir">${p.dir}</div>
               </div>
               ${cantidadBadge}
+              ${validadoBadge}
               <span class="punto-kit-badge" style="background:${k.color}22;color:${k.color};border:1px solid ${k.color}55;">
                 ${k.icon} ${k.nombre}
               </span>
@@ -1882,38 +1940,66 @@
         }).join('');
       }
 
-      function renderPuntosVol() {
+      function renderPuntosVol(kitTipoActivo) {
         var list = document.getElementById('volPuntosRecogida');
         if (!list) return;
 
-        // Distancia simulada estable: basada en índice + decimal fijo
         var conDistancia = puntosRecogidaFijos.map(function(p, i) {
           var distancia = (0.4 + i * 0.6 + (i % 3) * 0.15).toFixed(1);
           return Object.assign({}, p, { distancia: parseFloat(distancia) });
         });
-
         conDistancia.sort(function(a, b) { return a.distancia - b.distancia; });
+
+        // Nombre legible del tipo activo para comparar con kitsAdmite
+        var tipoNombres = { food: 'Alimenticio', med: 'Sanitario', clothes: 'Ropa', tools: 'Herramientas' };
+        var tipoLegible = kitTipoActivo ? (tipoNombres[kitTipoActivo] || null) : null;
 
         list.innerHTML = conDistancia.map(function(p, i) {
           var esMasCercano = i === 0;
+          var admite = !tipoLegible || p.kitsAdmite.includes(tipoLegible);
+          var borderColor = !tipoLegible
+            ? (esMasCercano ? '#9FE1CB' : 'var(--border)')
+            : (admite ? '#9FE1CB' : 'var(--border)');
+          var bgColor = !tipoLegible
+            ? (esMasCercano ? 'var(--teal-light)' : 'var(--white)')
+            : (admite ? 'var(--teal-light)' : 'var(--bg)');
+
+          var compatBadge = tipoLegible
+            ? (admite
+                ? '<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;background:var(--teal);color:#fff;white-space:nowrap;flex-shrink:0;">✓ Admite este kit</span>'
+                : '<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;background:var(--bg);color:var(--muted);border:1px solid var(--border);white-space:nowrap;flex-shrink:0;">No admite este tipo</span>')
+            : '';
+
+          var kitsAdmiteHtml = p.kitsAdmite.map(function(k) {
+            var esActivo = tipoLegible && k === tipoLegible;
+            return `<span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:20px;
+              background:${esActivo ? 'var(--teal-light)' : 'var(--bg)'};
+              color:${esActivo ? 'var(--teal-dark)' : 'var(--muted)'};
+              border:1px solid ${esActivo ? '#9FE1CB' : 'var(--border)'};">${k}</span>`;
+          }).join('');
+
           return `
             <div style="
-              display:flex;align-items:flex-start;gap:10px;
+              display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap;
               padding:10px 12px;margin-bottom:6px;
               border-radius:var(--radius-sm);
-              border:1.5px solid ${esMasCercano ? '#9FE1CB' : 'var(--border)'};
-              background:${esMasCercano ? 'var(--teal-light)' : 'var(--white)'};
+              border:1.5px solid ${borderColor};
+              background:${bgColor};
+              opacity:${tipoLegible && !admite ? '0.55' : '1'};
+              transition:all 0.2s;
             ">
-              <div style="font-size:20px;">📍</div>
-              <div style="flex:1;">
-                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <div style="font-size:20px;flex-shrink:0;">${admite || !tipoLegible ? '📦' : '📦'}</div>
+              <div style="flex:1;min-width:0;">
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:2px;">
                   <span style="font-size:12px;font-weight:700;color:var(--dark);">${p.nombre}</span>
-                  ${esMasCercano ? '<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;background:var(--teal);color:#fff;">Más cercano</span>' : ''}
+                  ${esMasCercano && (admite || !tipoLegible) ? '<span style="font-size:10px;font-weight:600;padding:1px 7px;border-radius:20px;background:var(--teal);color:#fff;">Más cercano</span>' : ''}
                 </div>
-                <div style="font-size:11px;color:var(--muted);margin-top:1px;">${p.dir}</div>
+                <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">${p.dir}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px;">${kitsAdmiteHtml}</div>
               </div>
-              <div style="font-size:12px;font-weight:700;color:var(--teal-dark);white-space:nowrap;">
-                ${p.distancia} km
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;">
+                <div style="font-size:12px;font-weight:700;color:var(--teal-dark);white-space:nowrap;">${p.distancia} km</div>
+                ${compatBadge}
               </div>
             </div>`;
         }).join('');
@@ -1933,7 +2019,7 @@
         const total = kitItems.reduce((s, i) => s + i.q, 0);
         const idx = createdKits.length;
 
-        createdKits.push({ code, title, items: [...kitItems], color: currentColor, total, cancelado: false });
+        createdKits.push({ code, title, items: [...kitItems], color: currentColor, total, cancelado: false, tipo: currentKitType });
 
         const list = document.getElementById('kitCreatedList');
         const div = document.createElement('div');
@@ -2053,6 +2139,8 @@
         selectedKit = createdKits[i];
         document.getElementById('volStep1').style.display = 'none';
         document.getElementById('volStep2').style.display = 'block';
+        // Actualizar hubs con compatibilidad según tipo de kit seleccionado
+        renderPuntosVol(selectedKit.tipo || selectedKit.title);
         const inst = document.getElementById('volInstructions');
         inst.innerHTML = `<div style="font-size:12px;font-weight:600;color:var(--dark);margin-bottom:8px;">Contenido: ${selectedKit.title}</div>
   ${selectedKit.items.map(it => `<div style="display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid var(--border);">
@@ -2066,25 +2154,29 @@
         var aviso = document.getElementById('volEmbalajeAviso');
         if (aviso) aviso.style.display = 'none';
         renderVolKits();
+        renderPuntosVol(null); // resetear compatibilidad
       }
 
-      var _qrInstance = null;
+      // Contadores de instancia por plantilla
+      const kitInstanceCounters = {};
 
       function generarQR() {
-        var nombre = document.getElementById('volNombre').value.trim() || 'Anónimo';
-        if (!selectedKit) return;
+        var nombre = document.getElementById('volNombre').value.trim();
+        if (!nombre || !selectedKit) return;
 
-        var code = selectedKit.code + '-' + nombre.split(' ')[0].toUpperCase().substr(0, 3);
+        // Código único: TIPO-NNN-NNNN  (ej: FOOD-001-0042)
+        var tipoKey = selectedKit.code.replace('KIT-','');
+        kitInstanceCounters[tipoKey] = (kitInstanceCounters[tipoKey] || 0) + 1;
+        var seq = String(kitInstanceCounters[tipoKey]).padStart(4, '0');
+        var code = selectedKit.code + '-' + seq;
         document.getElementById('volQrCode').textContent = code;
 
-        // ✅ URL real que abrirá el QR al escanearlo
         var url = 'https://kit2help.es/demo2-kits.html?kit=' + encodeURIComponent(code);
 
         var container = document.getElementById('volQrCanvas');
         container.innerHTML = '';
-        _qrInstance = null;
 
-        _qrInstance = new QRCode(container, {
+        new QRCode(container, {
           text: url,              // ✅ URL en lugar del código
           width: 120,
           height: 120,
@@ -2141,15 +2233,15 @@
         }
         // --- FIN AVISO ---
 
-        addTrazaItem(code, selectedKit.title, selectedKit.color, 0);
+        addTrazaItem(code, selectedKit.title, selectedKit.color, 0, nombre);
       }
 
       // -------- TRAZABILIDAD --------
       const trazaItems = [];
-      function addTrazaItem(code, title, color, status) {
+      function addTrazaItem(code, title, color, status, donante) {
         var ts = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
         trazaItems.unshift({ 
-          code, title, color, status, ts,
+          code, title, color, status, ts, donante: donante || '',
           history: [{ status: 0, ts }]
         });
         document.getElementById('trazaCount').textContent = trazaItems.length;
@@ -2198,7 +2290,7 @@
     <div class="traza-info">
       <div class="traza-name">${it.title}</div>
       <div class="traza-meta">
-        <span class="traza-code">${it.code}</span> · Actualizado · ${it.ts}
+        <span class="traza-code">${it.code}</span>${it.donante ? ` · 👤 ${it.donante}` : ''} · ${it.ts}
       </div>
       ${it.status !== 'cancel'
             ? `<div class="traza-progress">${steps.map(s =>
@@ -2302,8 +2394,14 @@
         currentColor = hex;
       }
 
-      // -------- MANDATORY DONOR NAME --------
+      // -------- MANDATORY DONOR NAME + INIT --------
       document.addEventListener('DOMContentLoaded', function() {
+        // Init
+        selKitType(document.querySelector('.kit-type-card.selected'), 'food', '🍱', 'Kit Alimenticio', '#C0392B');
+        renderHubsCoord();
+        renderPuntosVol(null);
+
+        // Nombre obligatorio donante
         var nameInput = document.getElementById('volNombre');
         var qrBtn = document.querySelector('[onclick="generarQR()"]');
         if (nameInput && qrBtn) {
@@ -2334,12 +2432,52 @@
         }
       });
 
-      // Init
-      selKitType(document.querySelector('.kit-type-card.selected'), 'food', '🍱', 'Kit Alimenticio', '#C0392B');
-      renderHubsCoord();
-      renderPuntosVol();
+      // -------- COMPARTIR / IMPRIMIR QR --------
+      function compartirQR() {
+        var code = document.getElementById('volQrCode').textContent;
+        var url = 'https://kit2help.es/demo2-kits.html?kit=' + encodeURIComponent(code);
+        if (navigator.share) {
+          navigator.share({ title: 'Kit ' + code, text: 'Mi código de kit: ' + code, url: url })
+            .catch(function() {});
+        } else {
+          try {
+            navigator.clipboard.writeText(url);
+            showToast('📋 Enlace copiado al portapapeles');
+          } catch(e) {
+            showToast('📋 ' + url);
+          }
+        }
+      }
 
-      // ✅ QR scan handled in DOMContentLoaded above
+      function imprimirQR() {
+        var code = document.getElementById('volQrCode').textContent;
+        if (!selectedKit) return;
+        var colorNames = {
+          '#C0392B':'ROJO','#3A7BD5':'AZUL','#7B5EA7':'MORADO','#EF9F27':'NARANJA',
+          '#1D9E75':'VERDE','#2C3E50':'GRIS OSCURO','#E91E8C':'ROSA'
+        };
+        var colorNombre = colorNames[selectedKit.color] || 'COLOR ASIGNADO';
+
+        // Clonar el QR canvas al label de impresión
+        var qrSrc = '';
+        var qrImg = document.querySelector('#volQrCanvas img');
+        var qrCanvas = document.querySelector('#volQrCanvas canvas');
+        if (qrImg) qrSrc = qrImg.src;
+        else if (qrCanvas) qrSrc = qrCanvas.toDataURL();
+
+        document.getElementById('printLabelContent').innerHTML = `
+          <div style="border:3px solid ${selectedKit.color};border-radius:12px;padding:24px;background:#fff;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#666;margin-bottom:8px;">Kit2Help · Etiqueta de caja</div>
+            <div style="font-size:20px;font-weight:800;color:#1a1a2e;margin-bottom:4px;">${selectedKit.title}</div>
+            <div style="display:inline-block;padding:4px 14px;border-radius:20px;background:${selectedKit.color};color:#fff;font-size:13px;font-weight:700;margin-bottom:16px;">■ ${colorNombre}</div>
+            ${qrSrc ? `<div style="margin:0 auto 12px;"><img src="${qrSrc}" width="140" height="140" style="display:block;margin:0 auto;"></div>` : ''}
+            <div style="font-size:16px;font-weight:700;font-family:monospace;letter-spacing:2px;color:#1a1a2e;margin-bottom:8px;">${code}</div>
+            <div style="font-size:11px;color:#666;">Escanea para confirmar entrega</div>
+          </div>`;
+        window.print();
+      }
+
+      // ✅ Init inside DOMContentLoaded above
     </script>
 </body>
 
