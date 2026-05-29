@@ -43,7 +43,7 @@
       --teal: #1D9E75;
       --teal-light: #E1F5EE;
       --teal-dark: #0E4D38;
-      --orange-light: #FEF5EC;
+      --orange: #EF9F27;
       --orange-light: #FEF5EC;
       --red: #E24B4A;
       --red-light: #FCEBEB;
@@ -1463,25 +1463,61 @@
     background: var(--orange-light);
   }
 
+    /* PUNTO KITS TEMP LIST */
+  .punto-kits-temp {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin: 8px 0 6px;
+  }
+  .punto-kit-temp-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .kit-temp-label { flex:1; min-width:0; font-weight:600; color:var(--dark); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .kit-temp-qty   { font-size:11px; color:var(--muted); white-space:nowrap; }
+  .punto-kit-temp-remove { background:none; border:none; color:var(--muted); cursor:pointer; font-size:13px; padding:0 2px; line-height:1; }
+  .punto-kit-temp-remove:hover { color:var(--red); }
+  .punto-kit-add-row { display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-top:6px; }
+  .punto-kit-add-row select { flex:1; min-width:140px; }
+  .punto-kit-add-row input[type=number] { width:100px; flex-shrink:0; }
+  .btn-add-kit-line {
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    border: 1.5px dashed var(--orange);
+    background: var(--white);
+    color: var(--orange);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    transition: all 0.18s;
+  }
+  .btn-add-kit-line:hover { background: var(--orange-light); }
+  .btn-add-kit-line:disabled { opacity:0.4; cursor:not-allowed; }
+
   @media (max-width: 600px) {
 
-    /* El formulario de añadir punto pasa a columna */
     .puntos-add-row {
       flex-direction: column;
       gap: 8px;
     }
-
     .puntos-add-row .d-input,
     .puntos-add-row select,
     .btn-add-punto {
       width: 100%;
       min-width: unset;
     }
-
-    /* La tarjeta de punto en coordinador oculta el badge
-      y lo baja bajo el nombre/dirección */
     .punto-card {
-      flex-wrap: wrap;
+      align-items: flex-start;
     }
 
     .punto-kit-badge {
@@ -1494,6 +1530,14 @@
       order: 2;
       margin-left: auto;
     }
+
+    /* Separación entre lista de puntos guardados y el formulario */
+    #puntosCoordList:not(:empty) {
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1.5px dashed #fddfa0;
+    }
+
   }
   
   </style>
@@ -1589,8 +1633,10 @@
             </div>
           </div>
 
-          <!-- COLOR PICKER para kit personalizado -->
+        <!-- COLOR PICKER para kit personalizado -->
           <div class="custom-color-picker" id="customColorPicker">
+            <div class="custom-color-picker-label" style="margin-bottom:6px;">Nombre del kit <span>*</span> <em style="font-weight:400;text-transform:none;letter-spacing:0;font-style:normal;color:var(--muted);">— obligatorio para kit personalizado</em></div>
+            <input class="d-input" id="customKitNombre" placeholder="Ej: Kit Escolar, Kit Bebé…" style="margin-bottom:12px;">
             <div class="custom-color-picker-label">Color de identificación de la caja <span>*</span> <em style="font-weight:400;text-transform:none;letter-spacing:0;font-style:normal;color:var(--muted);">— obligatorio para kit personalizado</em></div>
             <div class="color-options" id="colorOptions"></div>
           </div>
@@ -1622,34 +1668,46 @@
           <div class="puntos-section" style="margin-top:18px;">
             <div class="puntos-section-title">📦 Puntos de recogida · Hubs registrados</div>
             <div style="font-size:11px;color:var(--teal-dark);margin-bottom:10px;line-height:1.5;">
-              Lugares donde los donantes pueden entregar sus kits.  Registrados en el módulo de emergencias.
+              Lugares donde los donantes pueden entregar sus kits. Registrados en el módulo de emergencias.
             </div>
             <div id="hubsCoordList"></div>
           </div>
 
           <!-- BLOQUE 2: PUNTOS DE NECESIDAD (coordinador) -->
-          <div class="puntos-section" style="margin-top:14px;border-color:var(--orange);background:var(--orange-light);">
-            <div class="puntos-section-title" style="color:#7D5200;">📍 Puntos de necesidad</div>
-            <div style="font-size:11px;color:#7D5200;margin-bottom:10px;line-height:1.5;">
-              Lugares donde el kit debe llegar como destino final. Solo visibles para el coordinador.
+          
+        <div class="puntos-section" style="margin-top:14px;border-color:var(--orange);background:var(--orange-light);">
+          <div class="puntos-section-title" style="color:#7D5200;">📍 Puntos de necesidad</div>
+          <div style="font-size:11px;color:#7D5200;margin-bottom:10px;line-height:1.5;">
+            Lugares donde los kits deben llegar como destino final. Solo visibles para el coordinador.
+          </div>
+          <div id="puntosCoordList">
+            <div class="punto-empty" id="puntosEmpty">Aún no has añadido ningún punto de necesidad.</div>
+          </div>
+          <div class="puntos-add-row" style="flex-direction:column;gap:8px;">
+            <input class="d-input" id="puntoNombre" placeholder="Nombre del lugar (ej: Colegio Mediterráneo)">
+            <input class="d-input" id="puntoDireccion" placeholder="Dirección">
+
+            <div style="font-size:11px;font-weight:700;color:#7D5200;text-transform:uppercase;letter-spacing:0.5px;margin-top:4px;">
+              Kits necesarios en este punto
             </div>
-            <div id="puntosCoordList">
-              <div class="punto-empty" id="puntosEmpty">Aún no has añadido ningún punto de necesidad.</div>
-            </div>
-            <div class="puntos-add-row">
-              <input class="d-input" id="puntoNombre" placeholder="Nombre del lugar (ej: Colegio Mediterráneo)">
-              <input class="d-input" id="puntoDireccion" placeholder="Dirección">
-              <input class="d-input" id="puntoCantidad" placeholder="Kits necesarios (opcional)" type="number" min="1" style="max-width:180px;">
+            <div class="punto-kits-temp" id="puntoKitsTempList"></div>
+            <div class="punto-kit-add-row">
               <select id="puntoKitTipo">
-                <option value="" disabled selected>— Tipo de kit —</option>
+                <option value="" disabled selected>— Selecciona un kit creado —</option>
               </select>
-              <button class="btn-add-punto" id="btnAddPunto" onclick="addPunto()" disabled
-                style="opacity:0.4;cursor:not-allowed;background:#EF9F27;">
-                + Añadir punto
+              <input type="number" class="d-input" id="puntoCantidad" placeholder="Cantidad (opcional)" min="1">
+              <button class="btn-add-kit-line" id="btnAddKitLine" onclick="addKitLineToPunto()" disabled>
+                + Añadir kit
               </button>
             </div>
+
+            <button class="btn-add-punto" id="btnAddPunto" onclick="addPunto()" disabled
+              style="opacity:0.4;cursor:not-allowed;background:#EF9F27;">
+              ✓ Guardar punto de necesidad
+            </button>
           </div>
         </div>
+        </div> <!-- cierra viewCoord -->
 
         <!-- Vista Donante -->
         <div id="viewVol" style="display:none;">
@@ -1790,7 +1848,10 @@
           picker.classList.add('visible');
           renderCustomColorPicker();
           document.getElementById('kitStrip').style.background = '#E5E7EB';
+          var cn = document.getElementById('customKitNombre');
+          if (cn) cn.value = '';
         } else {
+         // picker.classList.remove
           picker.classList.remove('visible');
           currentColor = color;
           document.getElementById('kitStrip').style.background = color;
@@ -1842,74 +1903,124 @@
         tools:   { color: '#EF9F27', icon: '🔧', nombre: 'Herramientas'}
       };
 
-      function addPunto() {
-        var nombre   = document.getElementById('puntoNombre').value.trim();
-        var dir      = document.getElementById('puntoDireccion').value.trim();
-        var cantidad = document.getElementById('puntoCantidad').value.trim();
-        var sel      = document.getElementById('puntoKitTipo');
-        var opt      = sel.options[sel.selectedIndex];
+      // -------- PUNTOS DE NECESIDAD — estado temporal --------
+    var puntosKitsTemp = [];
 
-        if (!nombre || !dir || !sel.value) {
-          alert('Completa el nombre, la dirección y el tipo de kit.');
-          return;
-        }
-
-        puntosNecesidad.push({
-          nombre,
-          dir,
-          cantidad: cantidad ? parseInt(cantidad) : null,
-          tipo:     opt.dataset.tipo,
-          color:    opt.dataset.color,
-          kitLabel: opt.textContent,
-          validado: true   // coordinador de emergencia = validado por defecto
-        });
-
-        document.getElementById('puntoNombre').value    = '';
-        document.getElementById('puntoDireccion').value = '';
-        document.getElementById('puntoCantidad').value  = '';
-
-        renderPuntosCoord();
-        showToast('📍 Punto de necesidad añadido');
-      }
-
-      function delPunto(i) {
-        puntosNecesidad.splice(i, 1);
-        renderPuntosCoord();
-      }
-
-      function renderPuntosCoord() {
-        var list = document.getElementById('puntosCoordList');
-        if (!puntosNecesidad.length) {
-          list.innerHTML = '<div class="punto-empty" id="puntosEmpty">Aún no has añadido ningún punto de necesidad.</div>';
-          return;
-        }
-        list.innerHTML = puntosNecesidad.map(function(p, i) {
-          var parts = p.kitLabel.split(' ');
-          var icon  = parts[0];
-          var nombre = parts.slice(1).join(' '); // nombre sin el emoji inicial
-          var k = { color: p.color, icon: icon, nombre: nombre };
-          var cantidadBadge = p.cantidad
-            ? `<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff3cd;color:#7D5200;border:1px solid #fad79a;white-space:nowrap;flex-shrink:0;">${p.cantidad} kits</span>`
-            : '';
-          var validadoBadge = p.validado
-            ? '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--teal-light);color:var(--teal-dark);border:1px solid #9FE1CB;white-space:nowrap;flex-shrink:0;">✓ Validado</span>'
-            : '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff3cd;color:#7D5200;border:1px solid #fad79a;white-space:nowrap;flex-shrink:0;">⏳ Pendiente</span>';
-          return `
-            <div class="punto-card" style="border-color:#fddfa0;background:#fff;">
-              <div class="punto-color-dot" style="background:${k.color};"></div>
-              <div class="punto-info">
-                <div class="punto-nombre">${p.nombre}</div>
-                <div class="punto-dir">${p.dir}</div>
-              </div>
-              ${cantidadBadge}
-              ${validadoBadge}
-              <span class="punto-kit-badge" style="background:${k.color}22;color:${k.color};border:1px solid ${k.color}55;">
-                ${k.icon} ${k.nombre}
-              </span>
-              <button class="punto-del-btn" onclick="delPunto(${i})">✕</button>
-            </div>`;
+    function renderPuntoKitsTemp() {
+      var list = document.getElementById('puntoKitsTempList');
+      if (!list) return;
+      if (!puntosKitsTemp.length) {
+        list.innerHTML = '<div style="font-size:11px;color:var(--muted);padding:4px 0;">Añade al menos un kit antes de guardar el punto.</div>';
+      } else {
+        list.innerHTML = puntosKitsTemp.map(function(k, i) {
+          var parts  = k.label.split(' ');
+          var icon   = parts[0];
+          var nombre = parts.slice(1).join(' ');
+          return `<div class="punto-kit-temp-row">
+            <span style="width:10px;height:10px;border-radius:50%;background:${k.color};flex-shrink:0;display:inline-block;"></span>
+            <span class="kit-temp-label">${icon} ${nombre}</span>
+            <span class="kit-temp-qty">${k.cantidad ? k.cantidad + ' uds.' : 'cantidad libre'}</span>
+            <button class="punto-kit-temp-remove" onclick="removeKitTemp(${i})">✕</button>
+          </div>`;
         }).join('');
       }
+      var btnGuardar = document.getElementById('btnAddPunto');
+      var nombre = (document.getElementById('puntoNombre').value || '').trim();
+      var dir    = (document.getElementById('puntoDireccion').value || '').trim();
+      var ok = puntosKitsTemp.length > 0 && nombre && dir;
+      btnGuardar.disabled      = !ok;
+      btnGuardar.style.opacity = ok ? '1' : '0.4';
+      btnGuardar.style.cursor  = ok ? 'pointer' : 'not-allowed';
+    }
+
+    function addKitLineToPunto() {
+      var sel = document.getElementById('puntoKitTipo');
+      var opt = sel.options[sel.selectedIndex];
+      if (!sel.value) { alert('Selecciona un kit.'); return; }
+      if (puntosKitsTemp.some(function(k) { return k.code === sel.value; })) {
+        alert('Este kit ya está en la lista.'); return;
+      }
+      var cantidad = parseInt(document.getElementById('puntoCantidad').value) || null;
+      puntosKitsTemp.push({
+        code:     sel.value,
+        label:    opt.textContent,
+        color:    opt.dataset.color,
+        tipo:     opt.dataset.tipo,
+        cantidad: cantidad
+      });
+      sel.selectedIndex = 0;
+      document.getElementById('puntoCantidad').value = '';
+      document.getElementById('btnAddKitLine').disabled = true;
+      renderPuntoKitsTemp();
+    }
+
+    function removeKitTemp(i) {
+      puntosKitsTemp.splice(i, 1);
+      renderPuntoKitsTemp();
+    }
+
+    function addPunto() {
+      var nombre = document.getElementById('puntoNombre').value.trim();
+      var dir    = document.getElementById('puntoDireccion').value.trim();
+      if (!nombre || !dir || !puntosKitsTemp.length) {
+        alert('Completa el nombre, la dirección y añade al menos un kit.');
+        return;
+      }
+      puntosNecesidad.push({
+        nombre,
+        dir,
+        kits:    [...puntosKitsTemp],
+        validado: true
+      });
+      document.getElementById('puntoNombre').value    = '';
+      document.getElementById('puntoDireccion').value = '';
+      document.getElementById('puntoCantidad').value  = '';
+      document.getElementById('puntoKitTipo').selectedIndex = 0;
+      puntosKitsTemp = [];
+      renderPuntoKitsTemp();
+      renderPuntosCoord();
+      showToast('📍 Punto de necesidad añadido');
+    }
+
+    function delPunto(i) {
+      puntosNecesidad.splice(i, 1);
+      renderPuntosCoord();
+    }
+
+    function renderPuntosCoord() {
+      var list = document.getElementById('puntosCoordList');
+      if (!puntosNecesidad.length) {
+        list.innerHTML = '<div class="punto-empty" id="puntosEmpty">Aún no has añadido ningún punto de necesidad.</div>';
+        return;
+      }
+      list.innerHTML = puntosNecesidad.map(function(p, i) {
+        var validadoBadge = p.validado
+          ? '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--teal-light);color:var(--teal-dark);border:1px solid #9FE1CB;white-space:nowrap;flex-shrink:0;">✓ Validado</span>'
+          : '<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:#fff3cd;color:#7D5200;border:1px solid #fad79a;white-space:nowrap;flex-shrink:0;">⏳ Pendiente</span>';
+
+        var kitsHtml = (p.kits || []).map(function(k) {
+          var parts  = k.label.split(' ');
+          var icon   = parts[0];
+          var nombre = parts.slice(1).join(' ');
+          var qty    = k.cantidad ? ' · ' + k.cantidad + ' uds.' : '';
+          return '<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;' +
+            'padding:2px 8px;border-radius:20px;' +
+            'background:' + k.color + '22;color:' + k.color + ';border:1px solid ' + k.color + '55;' +
+            'white-space:nowrap;">' + icon + ' ' + nombre + qty + '</span>';
+        }).join('');
+
+        return '<div class="punto-card" style="border-color:#fddfa0;background:#fff;align-items:flex-start;">' +
+        '<div class="punto-color-dot" style="background:#EF9F27;margin-top:3px;"></div>' +
+        '<div class="punto-info" style="flex:1;min-width:0;">' +
+          '<div class="punto-nombre">' + p.nombre + '</div>' +
+          '<div class="punto-dir">' + p.dir + '</div>' +
+          '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;">' + kitsHtml + '</div>' +
+          '<div style="margin-top:6px;">' + validadoBadge + '</div>' +
+        '</div>' +
+        '<button class="punto-del-btn" onclick="delPunto(' + i + ')" style="margin-top:2px;">✕</button>' +
+      '</div>';
+      }).join('');
+    }
 
       const puntosRecogidaFijos = [
         { nombre: 'Polideportivo Municipal Norte', dir: 'Av. de la Constitución, 14', kitsAdmite: ['Alimenticio', 'Ropa'],         esFinal: false },
@@ -2008,14 +2119,24 @@
 
       function crearKit() {
         if (!kitItems.length) { alert('Añade al menos un elemento al kit.'); return; }
-        if (currentKitType === 'custom' && !customSelectedColor) {
-          alert('Selecciona un color de identificación para el kit personalizado.');
-          document.getElementById('customColorPicker').scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
+       if (currentKitType === 'custom') {
+          var customNombre = (document.getElementById('customKitNombre').value || '').trim();
+          if (!customNombre) {
+            alert('Escribe un nombre para el kit personalizado.');
+            document.getElementById('customKitNombre').focus();
+            return;
+          }
+          if (!customSelectedColor) {
+            alert('Selecciona un color de identificación para el kit personalizado.');
+            document.getElementById('customColorPicker').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+          }
         }
 
         const code = 'KIT-' + Math.random().toString(36).substr(2, 4).toUpperCase();
-        const title = document.getElementById('kitBuilderTitle').textContent;
+        const title = currentKitType === 'custom'
+          ? '✏️ ' + document.getElementById('customKitNombre').value.trim()
+          : document.getElementById('kitBuilderTitle').textContent;
         const total = kitItems.reduce((s, i) => s + i.q, 0);
         const idx = createdKits.length;
 
@@ -2048,16 +2169,25 @@
         document.getElementById('btnAddPunto').style.cursor = 'pointer';
 
         // Añadir kit al select de puntos
+        
         var sel = document.getElementById('puntoKitTipo');
         var yaExiste = Array.from(sel.options).some(function(o) { return o.value === code; });
         if (!yaExiste) {
           var opt = document.createElement('option');
-          opt.value             = code;
-          opt.dataset.color     = currentColor;
-          opt.dataset.tipo      = currentKitType;
-          opt.textContent       = title + ' · ' + code;
+          opt.value         = code;
+          opt.dataset.color = currentColor;
+          opt.dataset.tipo  = currentKitType;
+          opt.textContent   = title + ' · ' + code;
           sel.appendChild(opt);
+          // Activar listener del select la primera vez
+          if (sel.options.length === 2) {
+            sel.addEventListener('change', function() {
+              var btn = document.getElementById('btnAddKitLine');
+              btn.disabled = !sel.value;
+            });
+          }
         }
+        renderPuntoKitsTemp();
 
       }
 
@@ -2088,6 +2218,18 @@
           var badge = document.getElementById('trazaCount');
           if (badge) badge.textContent = count;
         }
+
+        // ✅ Elimina el kit cancelado del selector de puntos de necesidad
+        var sel = document.getElementById('puntoKitTipo');
+        if (sel) {
+          var opt = sel.querySelector('option[value="' + code + '"]');
+          if (opt) opt.remove();
+        }
+
+        // ✅ Si el kit ya estaba añadido a la lista temporal, lo elimina también
+        var antes = puntosKitsTemp.length;
+        puntosKitsTemp = puntosKitsTemp.filter(function(k) { return k.code !== code; });
+        if (puntosKitsTemp.length !== antes) renderPuntoKitsTemp();
 
         renderVolKits();
       }
@@ -2394,6 +2536,12 @@
         currentColor = hex;
       }
 
+      // Recheck botón guardar cuando cambian nombre o dirección
+      ['puntoNombre', 'puntoDireccion'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('input', renderPuntoKitsTemp);
+      });
+
       // -------- MANDATORY DONOR NAME + INIT --------
       document.addEventListener('DOMContentLoaded', function() {
         // Init
@@ -2479,6 +2627,7 @@
 
       // ✅ Init inside DOMContentLoaded above
     </script>
+  </div> <!-- cierra shell -->
 </body>
 
 </html>
