@@ -2,7 +2,7 @@
 <html lang="es">
 
 <head>
-   <!-- Google Tag Manager -->
+  <!-- Google Tag Manager -->
   <script>(function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({
         'gtm.start':
@@ -13,7 +13,7 @@
     })(window, document, 'script', 'dataLayer', 'GTM-PWJN89WB');</script>
   <!-- End Google Tag Manager -->
   <!-- Google tag (gtag.js) -->
-  
+
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-0CGM2ND1FB"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -22,7 +22,7 @@
 
     gtag('config', 'G-0CGM2ND1FB');
   </script>
-  
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kit2Help · Emergencias</title>
@@ -817,15 +817,47 @@
       transition: all 0.18s;
     }
 
-    .muro-prio-btn.active-all  { background: var(--dark); border-color: var(--dark); color: #fff; }
-    .muro-prio-btn.active-high { background: var(--red-light); border-color: var(--red); color: var(--red-dark); }
-    .muro-prio-btn.active-mid  { background: var(--orange-light); border-color: var(--orange); color: #7D5200; }
-    .muro-prio-btn.active-low  { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
-    .muro-prio-btn.active-need { background: var(--red-light); border-color: var(--red); color: var(--red-dark); }
-    .muro-prio-btn.active-offer{ background: var(--teal-light); border-color: var(--teal); color: #0E4D38; }
+    .muro-prio-btn.active-all {
+      background: var(--dark);
+      border-color: var(--dark);
+      color: #fff;
+    }
+
+    .muro-prio-btn.active-high {
+      background: var(--red-light);
+      border-color: var(--red);
+      color: var(--red-dark);
+    }
+
+    .muro-prio-btn.active-mid {
+      background: var(--orange-light);
+      border-color: var(--orange);
+      color: #7D5200;
+    }
+
+    .muro-prio-btn.active-low {
+      background: var(--blue-light);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .muro-prio-btn.active-need {
+      background: var(--red-light);
+      border-color: var(--red);
+      color: var(--red-dark);
+    }
+
+    .muro-prio-btn.active-offer {
+      background: var(--teal-light);
+      border-color: var(--teal);
+      color: #0E4D38;
+    }
 
     /* Muro select móvil */
-    .muro-cat-select { display: none; margin-bottom: 10px; }
+    .muro-cat-select {
+      display: none;
+      margin-bottom: 10px;
+    }
 
     /* Muro item expand */
     .muro-expand {
@@ -837,7 +869,10 @@
       color: var(--dark);
       line-height: 1.6;
     }
-    .muro-expand.show { display: block; }
+
+    .muro-expand.show {
+      display: block;
+    }
 
     /* Muro map link button */
     .muro-map-link {
@@ -845,7 +880,7 @@
       align-items: center;
       gap: 6px;
       padding: 7px 14px;
-      border: 1.5px solid rgba(29,158,117,0.4);
+      border: 1.5px solid rgba(29, 158, 117, 0.4);
       border-radius: var(--radius-sm);
       background: var(--teal-light);
       color: #0E4D38;
@@ -857,6 +892,7 @@
       text-decoration: none;
       margin-bottom: 14px;
     }
+
     .muro-map-link:hover {
       background: var(--teal);
       color: #fff;
@@ -1025,8 +1061,14 @@
       }
 
       /* ── Muro móvil ── */
-      #muroCatChips { display: none; }
-      .muro-cat-select { display: block; }
+      #muroCatChips {
+        display: none;
+      }
+
+      .muro-cat-select {
+        display: block;
+      }
+
       .muro-map-link {
         font-size: 11px;
         padding: 6px 12px;
@@ -1034,6 +1076,7 @@
         justify-content: center;
         margin-bottom: 10px;
       }
+
       /* footer normal en móvil: flex wrap */
       .muro-footer {
         display: flex;
@@ -1041,6 +1084,7 @@
         gap: 5px;
         align-items: center;
       }
+
       .muro-footer .val-btn.val-btn-more {
         margin-left: auto;
       }
@@ -1049,49 +1093,60 @@
       .val-filters {
         gap: 5px;
       }
+
       .val-filter-btn {
         font-size: 11px;
         padding: 5px 10px;
       }
+
       .val-prio-filter {
         gap: 4px;
         padding: 6px 8px;
       }
+
       .val-prio-filter-label {
         width: 100%;
         margin-bottom: 2px;
       }
+
       .val-prio-btn {
         font-size: 10px;
         padding: 3px 8px;
       }
+
       .val-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
         padding: 10px 12px;
       }
+
       .val-actions {
         width: 100%;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 5px;
       }
+
       .val-btn {
         font-size: 11px;
         padding: 7px 6px;
         text-align: center;
         justify-content: center;
       }
+
       .val-btn-more {
         grid-column: 1 / -1;
       }
+
       .val-expand-grid {
         grid-template-columns: 1fr;
       }
+
       .vol-grid {
         grid-template-columns: 1fr;
       }
+
       .nav-tab span {
         font-size: 10px;
       }
@@ -1357,45 +1412,107 @@
 
     /* Triaje: badge necesidad/oferta */
     .val-badge-need {
-      display: inline-flex; align-items: center; gap: 3px;
-      font-size: 10px; font-weight: 700; padding: 2px 7px;
-      border-radius: 20px; background: var(--red-light);
-      color: var(--red-dark); border: 1px solid rgba(226,75,74,0.3);
-      margin-left: 6px; vertical-align: middle;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      background: var(--red-light);
+      color: var(--red-dark);
+      border: 1px solid rgba(226, 75, 74, 0.3);
+      margin-left: 6px;
+      vertical-align: middle;
     }
+
     .val-badge-offer {
-      display: inline-flex; align-items: center; gap: 3px;
-      font-size: 10px; font-weight: 700; padding: 2px 7px;
-      border-radius: 20px; background: var(--teal-light);
-      color: #0E4D38; border: 1px solid rgba(29,158,117,0.3);
-      margin-left: 6px; vertical-align: middle;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      background: var(--teal-light);
+      color: #0E4D38;
+      border: 1px solid rgba(29, 158, 117, 0.3);
+      margin-left: 6px;
+      vertical-align: middle;
     }
+
     .val-prio-filter {
-      display: none; gap: 5px; flex-wrap: wrap;
-      margin-bottom: 10px; padding: 8px 10px;
-      background: var(--bg); border-radius: var(--radius-sm);
+      display: none;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
       border: 1px solid var(--border);
     }
-    .val-prio-filter.show { display: flex; }
+
+    .val-prio-filter.show {
+      display: flex;
+    }
+
     .val-prio-filter-label {
-      font-size: 11px; font-weight: 600; color: var(--muted);
-      text-transform: uppercase; letter-spacing: 0.5px;
-      align-self: center; margin-right: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      align-self: center;
+      margin-right: 4px;
     }
+
     .val-prio-btn {
-      padding: 4px 10px; border-radius: 20px; font-size: 11px;
-      font-weight: 600; cursor: pointer; border: 1.5px solid var(--border);
-      background: var(--white); color: var(--muted);
-      font-family: 'DM Sans', sans-serif; transition: all 0.18s;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--white);
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.18s;
     }
-    .val-prio-btn.active-all  { background: var(--dark); border-color: var(--dark); color: #fff; }
-    .val-prio-btn.active-high { background: var(--red-light); border-color: var(--red); color: var(--red-dark); }
-    .val-prio-btn.active-mid  { background: var(--orange-light); border-color: var(--orange); color: #7D5200; }
-    .val-prio-btn.active-low  { background: var(--blue-light); border-color: var(--blue); color: var(--blue); }
+
+    .val-prio-btn.active-all {
+      background: var(--dark);
+      border-color: var(--dark);
+      color: #fff;
+    }
+
+    .val-prio-btn.active-high {
+      background: var(--red-light);
+      border-color: var(--red);
+      color: var(--red-dark);
+    }
+
+    .val-prio-btn.active-mid {
+      background: var(--orange-light);
+      border-color: var(--orange);
+      color: #7D5200;
+    }
+
+    .val-prio-btn.active-low {
+      background: var(--blue-light);
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
     .val-btn-covered {
-      background: #EAF3DE; border-color: #639922; color: #3B6D11;
+      background: #EAF3DE;
+      border-color: #639922;
+      color: #3B6D11;
     }
-    .val-btn-covered:hover { background: #639922; color: #fff; }
+
+    .val-btn-covered:hover {
+      background: #639922;
+      color: #fff;
+    }
 
     /* Kit multiselect */
     .kit-list {
@@ -1672,8 +1789,8 @@
 
         <div class="form-group">
           <label>Descripción</label>
-          <textarea class="d-textarea" id="necDesc"
-            rows="2" placeholder="Describe la situación de emergencia..."></textarea>
+          <textarea class="d-textarea" id="necDesc" rows="2"
+            placeholder="Describe la situación de emergencia..."></textarea>
         </div>
 
         <button class="btn-primary" id="necBtn" onclick="enviarNec()">Enviar necesidad</button>
@@ -1739,17 +1856,22 @@
         <div class="val-prio-filter" id="valPrioFilter">
           <span class="val-prio-filter-label">Prioridad:</span>
           <button class="val-prio-btn active-all" onclick="filtrarPrio('todas',this)">Todas</button>
-          <button class="val-prio-btn" onclick="filtrarPrio('alta',this)" style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">🔴 Alta</button>
-          <button class="val-prio-btn" onclick="filtrarPrio('media',this)" style="background:var(--orange-light);border-color:var(--orange);color:#7D5200;">🟡 Media</button>
-          <button class="val-prio-btn" onclick="filtrarPrio('baja',this)" style="background:var(--blue-light);border-color:var(--blue);color:var(--blue);">🔵 Baja</button>
+          <button class="val-prio-btn" onclick="filtrarPrio('alta',this)"
+            style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">🔴 Alta</button>
+          <button class="val-prio-btn" onclick="filtrarPrio('media',this)"
+            style="background:var(--orange-light);border-color:var(--orange);color:#7D5200;">🟡 Media</button>
+          <button class="val-prio-btn" onclick="filtrarPrio('baja',this)"
+            style="background:var(--blue-light);border-color:var(--blue);color:var(--blue);">🔵 Baja</button>
         </div>
 
         <!-- Sub-filtro Necesidad/Oferta: visible en todos los estados -->
         <div class="val-prio-filter show" id="valFlowFilter" style="margin-bottom:12px;">
           <span class="val-prio-filter-label">Tipo:</span>
           <button class="val-prio-btn active-all" onclick="filtrarFlow('todas',this)">Todos</button>
-          <button class="val-prio-btn" onclick="filtrarFlow('necesidad',this)" style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">↓ Necesidad</button>
-          <button class="val-prio-btn" onclick="filtrarFlow('oferta',this)" style="background:var(--teal-light);border-color:var(--teal);color:#0E4D38;">↑ Oferta</button>
+          <button class="val-prio-btn" onclick="filtrarFlow('necesidad',this)"
+            style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">↓ Necesidad</button>
+          <button class="val-prio-btn" onclick="filtrarFlow('oferta',this)"
+            style="background:var(--teal-light);border-color:var(--teal);color:#0E4D38;">↑ Oferta</button>
         </div>
 
         <div id="valList">
@@ -1807,12 +1929,18 @@
 
         <!-- Filtro por categoría — chips desktop, select en móvil -->
         <div class="muro-filters" id="muroCatChips">
-          <button class="muro-filter-btn active" onclick="filtrarMuro('todas',this)"><span class="mf-dot" style="background:var(--dark);"></span>Todas</button>
-          <button class="muro-filter-btn" onclick="filtrarMuro('emergency',this)"><span class="mf-dot" style="background:var(--red);"></span>Emergencia</button>
-          <button class="muro-filter-btn" onclick="filtrarMuro('checkpoint',this)"><span class="mf-dot" style="background:var(--orange);"></span>Punto encuentro</button>
-          <button class="muro-filter-btn" onclick="filtrarMuro('storage',this)"><span class="mf-dot" style="background:var(--teal);"></span>Recogida kits</button>
-          <button class="muro-filter-btn" onclick="filtrarMuro('volunteer',this)"><span class="mf-dot" style="background:var(--purple);"></span>Voluntarios</button>
-          <button class="muro-filter-btn" onclick="filtrarMuro('shelter',this)"><span class="mf-dot" style="background:var(--blue);"></span>Refugio</button>
+          <button class="muro-filter-btn active" onclick="filtrarMuro('todas',this)"><span class="mf-dot"
+              style="background:var(--dark);"></span>Todas</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('emergency',this)"><span class="mf-dot"
+              style="background:var(--red);"></span>Emergencia</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('checkpoint',this)"><span class="mf-dot"
+              style="background:var(--orange);"></span>Punto encuentro</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('storage',this)"><span class="mf-dot"
+              style="background:var(--teal);"></span>Recogida kits</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('volunteer',this)"><span class="mf-dot"
+              style="background:var(--purple);"></span>Voluntarios</button>
+          <button class="muro-filter-btn" onclick="filtrarMuro('shelter',this)"><span class="mf-dot"
+              style="background:var(--blue);"></span>Refugio</button>
         </div>
         <select class="muro-cat-select d-select" onchange="filtrarMuroSelect(this)">
           <option value="todas">📋 Todas las categorías</option>
@@ -1827,17 +1955,22 @@
         <div class="val-prio-filter show" id="muroPrioFilter" style="margin-bottom:8px;">
           <span class="val-prio-filter-label">Prioridad:</span>
           <button class="val-prio-btn active-all" onclick="filtrarMuroPrio('todas',this)">Todas</button>
-          <button class="val-prio-btn" onclick="filtrarMuroPrio('alta',this)" style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">🔴 Alta</button>
-          <button class="val-prio-btn" onclick="filtrarMuroPrio('media',this)" style="background:var(--orange-light);border-color:var(--orange);color:#7D5200;">🟡 Media</button>
-          <button class="val-prio-btn" onclick="filtrarMuroPrio('baja',this)" style="background:var(--blue-light);border-color:var(--blue);color:var(--blue);">🔵 Baja</button>
+          <button class="val-prio-btn" onclick="filtrarMuroPrio('alta',this)"
+            style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">🔴 Alta</button>
+          <button class="val-prio-btn" onclick="filtrarMuroPrio('media',this)"
+            style="background:var(--orange-light);border-color:var(--orange);color:#7D5200;">🟡 Media</button>
+          <button class="val-prio-btn" onclick="filtrarMuroPrio('baja',this)"
+            style="background:var(--blue-light);border-color:var(--blue);color:var(--blue);">🔵 Baja</button>
         </div>
 
         <!-- Sub-filtro necesidad/oferta — mismo estilo que triaje -->
         <div class="val-prio-filter show" id="muroFlowFilter" style="margin-bottom:14px;">
           <span class="val-prio-filter-label">Tipo:</span>
           <button class="val-prio-btn active-all" onclick="filtrarMuroFlow('todas',this)">Todos</button>
-          <button class="val-prio-btn" onclick="filtrarMuroFlow('necesidad',this)" style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">↓ Necesidad</button>
-          <button class="val-prio-btn" onclick="filtrarMuroFlow('oferta',this)" style="background:var(--teal-light);border-color:var(--teal);color:#0E4D38;">↑ Oferta</button>
+          <button class="val-prio-btn" onclick="filtrarMuroFlow('necesidad',this)"
+            style="background:var(--red-light);border-color:var(--red);color:var(--red-dark);">↓ Necesidad</button>
+          <button class="val-prio-btn" onclick="filtrarMuroFlow('oferta',this)"
+            style="background:var(--teal-light);border-color:var(--teal);color:#0E4D38;">↑ Oferta</button>
         </div>
 
         <div id="muroFeed">
@@ -1889,37 +2022,7 @@
             </div>
           </div>
 
-          <div class="muro-item" data-tipo="info">
-            <div class="muro-dot-side" style="background:var(--blue);"></div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:600;color:var(--dark);">🏠 Refugio disponible · C/ Colón, 40</div>
-              <div class="muro-body-txt">30 plazas de hospedaje. Familias y personas mayores con prioridad. Resp.: Ana
-                G.</div>
-              <div class="muro-footer">
-                <span class="muro-time">Hace 20 min · Validado</span>
-                <span class="muro-tag" style="background:var(--blue-light);color:#1C3F7A;">Refugio</span>
-                <button class="muro-claim-btn" onclick="claimMuro(this)"
-                  style="background:var(--blue);color:#fff;">Derivar persona</button>
-              </div>
-            </div>
-          </div>-->
-
-          <!-- Item dinámico: aparece cuando se valida la emergencia en triaje 
-          <div class="muro-item" id="muroEmergDin" data-tipo="urgente" style="display:none;">
-            <div class="muro-dot-side" style="background:var(--red);"></div>
-           <div style="flex:1;">
-              <div style="font-size:13px;font-weight:600;color:var(--red-dark);">🚨 Emergencia · C/ Sueca, 22</div>
-              <div class="muro-body-txt" style="color:var(--red-dark);">Familia 2 menores+anciano. Sin víveres 2 días. 6
-                personas. Prioridad Alta.</div>
-              <div class="muro-footer">
-                <span class="muro-time" style="color:var(--red);">Recién validada ·</span>
-                <span class="muro-tag" style="background:rgba(226,75,74,0.15);color:var(--red-dark);">🚨 Nueva</span>
-                <button class="muro-claim-btn" onclick="claimMuro(this)"
-                  style="background:var(--red);color:#fff;">Atender</button>
-              </div>
-            </div> 
-          </div> 
-        </div>-->
+          -->
         </div>
       </div>
     </div>
@@ -2078,7 +2181,7 @@
       function _getKitsSeleccionados() {
         var items = document.querySelectorAll('#subKits .kit-item input:checked');
         var names = [];
-        items.forEach(function(cb) {
+        items.forEach(function (cb) {
           var label = cb.closest('.kit-item');
           var nameEl = label ? label.querySelector('.kit-item-label') : null;
           var codeEl = label ? label.querySelector('.kit-item-code') : null;
@@ -2161,18 +2264,18 @@
             <div class="val-field">Prioridad<span style="color:${prioColor};">${prioTxt}</span></div>
             <div class="val-field">${personasLabel}<span>${personasVal}</span></div>
             <div class="val-field">Recibida<span>Hace 1 min</span></div>
-            <div class="val-field" style="grid-column:1/-1;">Descripción<span>${desc.substring(0,200)}</span></div>`;
+            <div class="val-field" style="grid-column:1/-1;">Descripción<span>${desc.substring(0, 200)}</span></div>`;
         } else if (catActual === 'checkpoint') {
           const checkTipo = document.querySelector('#subCheck .chip.sel');
           detalleFields = `
             <div class="val-field">Subtipo<span>${checkTipo ? checkTipo.textContent.trim() : '—'}</span></div>
             <div class="val-field">Recibida<span>Hace 1 min</span></div>
-            <div class="val-field" style="grid-column:1/-1;">Horario / Info<span>${desc.substring(0,200)}</span></div>`;
+            <div class="val-field" style="grid-column:1/-1;">Horario / Info<span>${desc.substring(0, 200)}</span></div>`;
         } else if (catActual === 'storage') {
           detalleFields = `
             <div class="val-field">Kits<span>${kitsSeleccionados.length ? kitsSeleccionados.join(', ') : '— Ninguno seleccionado'}</span></div>
             <div class="val-field">Recibida<span>Hace 1 min</span></div>
-            <div class="val-field" style="grid-column:1/-1;">Horario / Info<span>${desc.substring(0,200)}</span></div>`;
+            <div class="val-field" style="grid-column:1/-1;">Horario / Info<span>${desc.substring(0, 200)}</span></div>`;
         } else if (catActual === 'volunteer') {
           const volTipoEl = document.querySelector('.vol-card.sel .vol-name');
           const volDescEl = document.querySelector('.vol-card.sel .vol-desc');
@@ -2183,14 +2286,14 @@
             ${volAccionActual === 'requerir' ? `<div class="val-field">Prioridad<span style="color:${prioColor};">${prioTxt}</span></div>` : ''}
             ${volAccionActual === 'ofrecer' && rangoVal ? `<div class="val-field">Radio desplazamiento<span>${rangoVal}</span></div>` : ''}
             <div class="val-field">Recibida<span>Hace 1 min</span></div>
-            <div class="val-field" style="grid-column:1/-1;">Descripción<span>${desc.substring(0,200)}</span></div>`;
+            <div class="val-field" style="grid-column:1/-1;">Descripción<span>${desc.substring(0, 200)}</span></div>`;
         } else if (catActual === 'shelter') {
           detalleFields = `
             <div class="val-field">Solicitud<span>${shelTipoActual === 'ofrecer' ? 'Ofrecer espacio' : 'Solicitar plaza'}</span></div>
             <div class="val-field">${personasLabel}<span>${personasVal}</span></div>
             ${shelTipoActual === 'solicitar' ? `<div class="val-field">Prioridad<span style="color:${prioColor};">${prioTxt}</span></div>` : ''}
             <div class="val-field">Recibida<span>Hace 1 min</span></div>
-            <div class="val-field" style="grid-column:1/-1;">Descripción<span>${desc.substring(0,200)}</span></div>`;
+            <div class="val-field" style="grid-column:1/-1;">Descripción<span>${desc.substring(0, 200)}</span></div>`;
         }
 
         // IDs únicos
@@ -2207,7 +2310,7 @@
         card.dataset.tipo = catActual;
         card.dataset.prio = prioKey;
         card.dataset.flow = esOferta ? 'oferta' : 'necesidad';
-         // Guardar coordenadas del marcador en el momento del envío
+        // Guardar coordenadas del marcador en el momento del envío
         if (_necMarker) {
           var ll = _necMarker.getLatLng();
           card.dataset.lat = ll.lat;
@@ -2297,18 +2400,18 @@
         var estado = ok ? 'validada' : 'rechazada';
         card.dataset.estado = estado;
 
-        var btnOk  = card.querySelector('.val-btn-ok');
+        var btnOk = card.querySelector('.val-btn-ok');
         var btnRej = card.querySelector('.val-btn-rej');
         var btnCov = card.querySelector('.val-btn-covered');
 
         if (ok) {
-          if (btnOk)  { btnOk.disabled = true;  btnOk.style.opacity = '0.5'; }
+          if (btnOk) { btnOk.disabled = true; btnOk.style.opacity = '0.5'; }
           if (btnRej) { btnRej.disabled = false; btnRej.style.opacity = '1'; }
           if (btnCov) { btnCov.disabled = false; btnCov.style.opacity = '1'; }
         } else {
-          if (btnRej) { btnRej.disabled = true;  btnRej.style.opacity = '0.5'; }
-          if (btnOk)  { btnOk.disabled = false;  btnOk.style.opacity = '1'; }
-          if (btnCov) { btnCov.disabled = true;  btnCov.style.opacity = '0.4'; }
+          if (btnRej) { btnRej.disabled = true; btnRej.style.opacity = '0.5'; }
+          if (btnOk) { btnOk.disabled = false; btnOk.style.opacity = '1'; }
+          if (btnCov) { btnCov.disabled = true; btnCov.style.opacity = '0.4'; }
         }
 
         done.textContent = ok
@@ -2318,20 +2421,20 @@
 
         if (ok) {
           var titulo = card.querySelector('.val-title-txt') ? card.querySelector('.val-title-txt').textContent : 'Necesidad';
-          var meta   = card.querySelector('.val-meta') ? card.querySelector('.val-meta').textContent : '';
-          var tipo   = card.dataset.tipo || 'default';
-          var icono  = card.querySelector('.val-icon') ? card.querySelector('.val-icon').textContent : '📋';
-          var color  = card.style.borderLeftColor || 'var(--teal)';
+          var meta = card.querySelector('.val-meta') ? card.querySelector('.val-meta').textContent : '';
+          var tipo = card.dataset.tipo || 'default';
+          var icono = card.querySelector('.val-icon') ? card.querySelector('.val-icon').textContent : '📋';
+          var color = card.style.borderLeftColor || 'var(--teal)';
 
           var muro = document.getElementById('muroFeed');
           if (muro) {
             var tipoConfig = {
-              'emergency': { color: 'var(--red)',    colorLight: 'var(--red-light)',    tag: '🚨 Emergencia',        btn: 'Atender',        textColor: 'var(--red-dark)' },
-              'checkpoint':{ color: 'var(--orange)', colorLight: 'var(--orange-light)', tag: '📍 Punto de encuentro',btn: 'Registrarse',    textColor: '#7D5200' },
-              'storage':   { color: 'var(--teal)',   colorLight: 'var(--teal-light)',   tag: '📦 Recogida de kits',  btn: 'Llevar kits',    textColor: '#0E4D38' },
-              'volunteer': { color: 'var(--purple)', colorLight: 'var(--purple-light)', tag: '🤝 Voluntarios',       btn: 'Coordinar',      textColor: '#4A2D7A' },
-              'shelter':   { color: 'var(--blue)',   colorLight: 'var(--blue-light)',   tag: '🏠 Refugio',           btn: 'Derivar persona',textColor: '#1C3F7A' },
-              'default':   { color: 'var(--teal)',   colorLight: 'var(--teal-light)',   tag: '📋 Necesidad',         btn: 'Atender',        textColor: '#0E4D38' }
+              'emergency': { color: 'var(--red)', colorLight: 'var(--red-light)', tag: '🚨 Emergencia', btn: 'Atender', textColor: 'var(--red-dark)' },
+              'checkpoint': { color: 'var(--orange)', colorLight: 'var(--orange-light)', tag: '📍 Punto de encuentro', btn: 'Registrarse', textColor: '#7D5200' },
+              'storage': { color: 'var(--teal)', colorLight: 'var(--teal-light)', tag: '📦 Recogida de kits', btn: 'Llevar kits', textColor: '#0E4D38' },
+              'volunteer': { color: 'var(--purple)', colorLight: 'var(--purple-light)', tag: '🤝 Voluntarios', btn: 'Coordinar', textColor: '#4A2D7A' },
+              'shelter': { color: 'var(--blue)', colorLight: 'var(--blue-light)', tag: '🏠 Refugio', btn: 'Derivar persona', textColor: '#1C3F7A' },
+              'default': { color: 'var(--teal)', colorLight: 'var(--teal-light)', tag: '📋 Necesidad', btn: 'Atender', textColor: '#0E4D38' }
             };
             var cfg = tipoConfig[tipo] || tipoConfig['default'];
             var isFlow = card.dataset.flow === 'oferta';
@@ -2346,7 +2449,7 @@
             nuevaCard.dataset.flow = card.dataset.flow || 'necesidad';
             nuevaCard.style.cssText = 'border:1.5px solid ' + cfg.color + ';background:' + cfg.colorLight + ';opacity:0;transition:opacity 0.4s ease;flex-direction:column;padding:0;';
 
-            var muroExpandId = 'me_' + Date.now() + '_' + Math.random().toString(36).substr(2,4);
+            var muroExpandId = 'me_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
             // Reutilizar los campos de detalle del triaje
             var expandContent = '';
             var triageEid = card.dataset.eid || '';
@@ -2388,9 +2491,9 @@
             var pinLat = parseFloat(card.dataset.lat);
             var pinLng = parseFloat(card.dataset.lng);
             var meta = {
-              flow:     card.dataset.flow || 'necesidad',
-              metaTxt:  card.querySelector('.val-meta') ? card.querySelector('.val-meta').textContent.trim() : '',
-              desc:     card.querySelector('.val-field:last-child span') ? card.querySelector('.val-field:last-child span').textContent.trim() : ''
+              flow: card.dataset.flow || 'necesidad',
+              metaTxt: card.querySelector('.val-meta') ? card.querySelector('.val-meta').textContent.trim() : '',
+              desc: card.querySelector('.val-field:last-child span') ? card.querySelector('.val-field:last-child span').textContent.trim() : ''
             };
             _necAddPinValidado(tipo, ubicacion, isNaN(pinLat) ? null : { lat: pinLat, lng: pinLng }, meta);
           }
@@ -2399,10 +2502,10 @@
           if (confirm) {
             var badge = confirm.querySelector('.confirm-badge');
             var title = confirm.querySelector('.confirm-title');
-            var info  = confirm.querySelector('div[style*="margin-top:10px"]');
+            var info = confirm.querySelector('div[style*="margin-top:10px"]');
             if (badge) { badge.textContent = '● Validada'; badge.style.cssText = 'background:#D1FAE5;color:#065F46;border:1px solid #6EE7B7;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:700;'; }
             if (title) title.textContent = '✅ Necesidad validada y publicada';
-            if (info)  info.innerHTML = '📢 Tu necesidad está activa en el muro. Un voluntario la atenderá pronto.';
+            if (info) info.innerHTML = '📢 Tu necesidad está activa en el muro. Un voluntario la atenderá pronto.';
           }
         }
       }
@@ -2413,20 +2516,20 @@
         if (!card || !done) return;
         card.dataset.estado = 'cerrada';
         var btns = card.querySelectorAll('.val-btn');
-        btns.forEach(function(b) { b.disabled = true; b.style.opacity = '0.4'; });
+        btns.forEach(function (b) { b.disabled = true; b.style.opacity = '0.4'; });
         done.textContent = '✓ Necesidad cubierta. Caso cerrado.';
         done.className = 'val-done show ok';
       }
 
       let _filtroEstado = 'todas';
-      let _filtroPrio   = 'todas';
-      let _filtroFlow   = 'todas';
+      let _filtroPrio = 'todas';
+      let _filtroFlow = 'todas';
 
       function _aplicarFiltros() {
-        document.querySelectorAll('#valList .val-card').forEach(function(card) {
+        document.querySelectorAll('#valList .val-card').forEach(function (card) {
           var okEstado = _filtroEstado === 'todas' || card.dataset.estado === _filtroEstado;
-          var okPrio   = _filtroPrio  === 'todas' || card.dataset.prio  === _filtroPrio;
-          var okFlow   = _filtroFlow  === 'todas' || card.dataset.flow  === _filtroFlow;
+          var okPrio = _filtroPrio === 'todas' || card.dataset.prio === _filtroPrio;
+          var okFlow = _filtroFlow === 'todas' || card.dataset.flow === _filtroFlow;
           card.style.display = (okEstado && okPrio && okFlow) ? 'block' : 'none';
         });
       }
@@ -2453,8 +2556,8 @@
         btn.classList.add('active-all');
         btn.style.fontWeight = '700';
         // Aplicar color activo según tipo
-        if (flow === 'necesidad') { btn.style.background='var(--red-light)'; btn.style.borderColor='var(--red)'; btn.style.color='var(--red-dark)'; }
-        else if (flow === 'oferta') { btn.style.background='var(--teal-light)'; btn.style.borderColor='var(--teal)'; btn.style.color='#0E4D38'; }
+        if (flow === 'necesidad') { btn.style.background = 'var(--red-light)'; btn.style.borderColor = 'var(--red)'; btn.style.color = 'var(--red-dark)'; }
+        else if (flow === 'oferta') { btn.style.background = 'var(--teal-light)'; btn.style.borderColor = 'var(--teal)'; btn.style.color = '#0E4D38'; }
         _filtroFlow = flow;
         _aplicarFiltros();
       }
@@ -2470,10 +2573,10 @@
       var _muroFiltroFlow = 'todas';
 
       function _aplicarFiltrosMuro() {
-        document.querySelectorAll('#muroFeed .muro-item').forEach(function(item) {
+        document.querySelectorAll('#muroFeed .muro-item').forEach(function (item) {
           var okTipo = _muroFiltroTipo === 'todas' || item.dataset.tipo === _muroFiltroTipo;
-          var okPrio = _muroFiltroPrio === 'todas' || item.dataset.prio  === _muroFiltroPrio;
-          var okFlow = _muroFiltroFlow === 'todas' || item.dataset.flow  === _muroFiltroFlow;
+          var okPrio = _muroFiltroPrio === 'todas' || item.dataset.prio === _muroFiltroPrio;
+          var okFlow = _muroFiltroFlow === 'todas' || item.dataset.flow === _muroFiltroFlow;
           item.style.display = (okTipo && okPrio && okFlow) ? '' : 'none';
         });
       }
@@ -2546,17 +2649,24 @@
       var _necMarker = null;
       var _necPinsValidados = []; // guarda los pins añadidos al validar
 
-
+      
+      var TIPOS = [
+        { tipo:'emergencia',  label:'Emergencia',       color:'#E24B4A', icon:'🚨' },
+        { tipo:'encuentro',   label:'Punto encuentro',  color:'#EF9F27', icon:'P'  },
+        { tipo:'kits',        label:'Recogida kits',    color:'#1D9E75', icon:'K'  },
+        { tipo:'voluntarios', label:'Voluntarios',      color:'#7B5EA7', icon:'V'  },
+        { tipo:'refugio',     label:'Refugio',          color:'#3A7BD5', icon:'R'  }
+      ];
 
       //Función para añadir el pin al mapa:
       function _necAddPinValidado(tipo, ubicacion, coords, meta) {
         // ✅ Mismo sistema que ctx — letra + color + _necMakeIcon()
         var tipoConfig = {
-          shelter:    { color: '#3A7BD5', icon: 'R', label: '🏠 Refugio / Hospedaje' },
-          storage:    { color: '#1D9E75', icon: 'K', label: '📦 Recogida kits' },
-          volunteer:  { color: '#7B5EA7', icon: 'V', label: '🤝 Voluntarios' },
+          shelter: { color: '#3A7BD5', icon: 'R', label: '🏠 Refugio / Hospedaje' },
+          storage: { color: '#1D9E75', icon: 'K', label: '📦 Recogida kits' },
+          volunteer: { color: '#7B5EA7', icon: 'V', label: '🤝 Voluntarios' },
           checkpoint: { color: '#EF9F27', icon: 'P', label: '📍 Punto encuentro' },
-          default:    { color: '#E24B4A', icon: 'N', label: '🚨 Emergencia Activa' }
+          default: { color: '#E24B4A', icon: 'N', label: '🚨 Emergencia Activa' }
         };
 
         var cfg = tipoConfig[tipo] || tipoConfig['default'];
@@ -2584,11 +2694,11 @@
 
         var popupHtml =
           '<div style="min-width:160px;">' +
-            '<b style="font-size:12px;">' + cfg.label + '</b>' + flowBadge + '<br>' +
-            '<span style="font-size:11px;color:#555;">📍 ' + (ubicacion || '') + '</span>' +
-            metaLine +
-            descLine +
-            '<div style="margin-top:5px;font-size:10px;color:#1D9E75;font-weight:600;">✓ Validada</div>' +
+          '<b style="font-size:12px;">' + cfg.label + '</b>' + flowBadge + '<br>' +
+          '<span style="font-size:11px;color:#555;">📍 ' + (ubicacion || '') + '</span>' +
+          metaLine +
+          descLine +
+          '<div style="margin-top:5px;font-size:10px;color:#1D9E75;font-weight:600;">✓ Validada</div>' +
           '</div>';
 
         _necPinsData.push({
@@ -2613,9 +2723,9 @@
             .addTo(_necMap);
 
           pin.openPopup();
-          pin._necIcon  = cfg.icon;
+          pin._necIcon = cfg.icon;
           pin._necColor = cfg.color;
-          pin._necTipo  = tipo;
+          pin._necTipo = tipo;
           _necPinsValidados.push(pin);
           _necMap.setView([latlng.lat, latlng.lng], 16, { animate: true });
         }
@@ -2635,6 +2745,92 @@
           iconAnchor: [size / 2, size / 2],
           popupAnchor: [0, -(size / 2 + 8)]
         });
+      }
+
+      // ── Markers ──
+      var markersByTipo = {};
+      TIPOS.forEach(function (t) { markersByTipo[t.tipo] = []; });
+      var activeFilters = {};
+      TIPOS.forEach(function (t) { activeFilters[t.tipo] = true; });
+
+      var ICON_TO_TIPO = { 'K': 'kits', 'V': 'voluntarios', 'P': 'encuentro', 'R': 'refugio', '🚨': 'emergencia' };
+
+
+      function normalizarPin(m) {
+        if (!m.tipo && m.icon) m.tipo = ICON_TO_TIPO[m.icon] || 'sin_clasificar';
+        return m;
+      }
+
+      function addMarker(m) {
+        var tipo = m.tipo || 'kits';
+        var icon = (tipo === 'emergencia') ? makeEmergencyIcon(36) : makeIcon(m.color, m.icon, 26);
+        // Si tiene direccion o detalle usa makePopup, si no usa tip directamente
+        var popupContent = (m.direccion || m.detalle) ? makePopup(m) : (m.tip || m.popup || '');
+        var marker = L.marker([m.lat, m.lng], { icon: icon, zIndexOffset: tipo === 'emergencia' ? 1000 : 500 })
+          .bindPopup(popupContent, { maxWidth: 220 })
+          .addTo(_necMap);
+        if (!markersByTipo[tipo]) markersByTipo[tipo] = [];
+        markersByTipo[tipo].push(marker);
+      }
+
+      function makeEmergencyIcon(size) {
+        size = size || 36;
+        return L.divIcon({
+          className: '',
+          html: '<div class="emergency-icon-wrapper" style="width:' + size + 'px;height:' + size + 'px;">' +
+            '<div class="emergency-ripple"></div><div class="emergency-ripple"></div><div class="emergency-ripple"></div>' +
+            '<div class="emergency-core" style="width:' + (size - 10) + 'px;height:' + (size - 10) + 'px;font-size:' + Math.round(size * 0.3) + 'px;">🚨</div>' +
+            '</div>',
+          iconSize: [size, size], iconAnchor: [size / 2, size / 2], popupAnchor: [0, -(size / 2 + 8)]
+        });
+      }
+
+      function makeIcon(color, icon, size) {
+        var fs = Math.round(size * 0.42);
+        return L.divIcon({
+          className: '',
+          html: '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + color + ';display:flex;align-items:center;justify-content:center;font-size:' + fs + 'px;font-weight:700;color:#fff;box-shadow:0 3px 10px rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.35);">' + icon + '</div>',
+          iconSize: [size, size], iconAnchor: [size / 2, size / 2], popupAnchor: [0, -(size / 2 + 8)]
+        });
+      }
+
+
+      // ── Popup estilizado ──
+      var ESTADO_CFG = {
+        resuelta: { bg: '#CCFBEF', color: '#0E4D38', border: '#6EE7B7', txt: '✓ Validada' },
+        en_atencion: { bg: '#FEF3C7', color: '#78350F', border: '#FCD34D', txt: '⏳ En atención' },
+        pendiente: { bg: '#FEE2E2', color: '#7F1D1D', border: '#FCA5A5', txt: '⚠ Pendiente' }
+      };
+      var TIPO_CFG = {
+        kits: { emoji: '📦', label: 'Recogida de kits' },
+        voluntarios: { emoji: '🤝', label: 'Voluntarios' },
+        encuentro: { emoji: '📍', label: 'Punto de encuentro' },
+        refugio: { emoji: '🏠', label: 'Refugio / Hospedaje' },
+        emergencia: { emoji: '🚨', label: 'Emergencia' }
+      };
+
+      function makePopup(m) {
+        var tc = TIPO_CFG[m.tipo] || { emoji: '📌', label: m.tipo || 'Punto' };
+        var badge = '';
+        // Badge oferta (pins de contexto, sin estado)
+        if (!m.estado) {
+          badge = '<span style="font-size:10px;background:#DBEAFE;color:#1E3A5F;border:1px solid #93C5FD;border-radius:10px;padding:1px 6px;margin-left:4px;">↑ Oferta</span>';
+        }
+        // Badge demanda con estado
+        var estadoHtml = '';
+        if (m.estado) {
+          var ec = ESTADO_CFG[m.estado] || ESTADO_CFG['pendiente'];
+          estadoHtml = '<div style="margin-top:5px;font-size:10px;font-weight:600;color:' + ec.color + ';background:' + ec.bg + ';border:1px solid ' + ec.border + ';border-radius:8px;padding:2px 7px;display:inline-block;">' + ec.txt + '</div>';
+          badge = '<span style="font-size:10px;background:#FEE2E2;color:#7F1D1D;border:1px solid #FCA5A5;border-radius:10px;padding:1px 6px;margin-left:4px;">↓ Necesidad</span>';
+        }
+        var direccion = m.direccion ? '<br><span style="font-size:11px;color:#555;">📍 ' + m.direccion + '</span>' : '';
+        var detalle = m.detalle ? '<div style="font-size:10px;color:#555;margin-top:3px;line-height:1.4;">' + m.detalle + '</div>' : '';
+        var nota = m.nota ? '<div style="font-size:10px;color:#777;margin-top:4px;border-top:1px solid #eee;padding-top:4px;line-height:1.4;">' + m.nota + '</div>' : '';
+
+        return '<div style="min-width:170px;">' +
+          '<b style="font-size:12px;">' + tc.emoji + ' ' + tc.label + '</b>' + badge +
+          direccion + detalle + nota + estadoHtml +
+          '</div>';
       }
 
       function _necPinIcon(color) {
@@ -2792,17 +2988,31 @@
 
         // ✅ 2 — Tamaño 26 para ctx, coherente con _necAddPinValidado
         var ctx = [
-          { lat: 39.4641, lng: -0.3879, color: '#1D9E75', icon: 'K', tip: '<b>📦 Recogida de kits</b><br>Polideportivo Russafa' },
-          { lat: 39.4598, lng: -0.3831, color: '#7B5EA7', icon: 'V', tip: '<b>🤝 Voluntarios</b><br>12 activos' },
-          { lat: 39.4633, lng: -0.3808, color: '#EF9F27', icon: 'P', tip: '<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento' },
-          { lat: 39.4589, lng: -0.3869, color: '#3A7BD5', icon: 'R', tip: '<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas' }
+          {
+            lat: 39.4571, lng: -0.3901, color: '#1D9E75', icon: 'K', tipo: 'kits',
+            direccion: 'Polideportivo Russafa', detalle: 'Kits de emergencia · 200 unidades disponibles', nota: 'Horario: 9h–20h'
+          },
+          {
+            lat: 39.4648, lng: -0.3823, color: '#7B5EA7', icon: 'V', tipo: 'voluntarios',
+            direccion: 'C/ Cuba, 5 — Russafa', detalle: '12 voluntarios disponibles', nota: 'Coordinador: Luis M.'
+          },
+          {
+            lat: 39.4617, lng: -0.3893, tipo: 'encuentro', color: '#EF9F27', icon: 'P', estado: 'pendiente',
+            direccion: 'Pl. España', detalle: 'Grupo de 5 personas esperando', nota: 'Llegada estimada: 15 min'
+          },
+          {
+            lat: 39.4655, lng: -0.3875, color: '#3A7BD5', icon: 'R', tipo: 'refugio',
+            direccion: 'C/ Colón, 40', detalle: 'Ofrecer espacio · 30 plazas disponibles', nota: 'Acceso adaptado, planta baja'
+          }
         ];
 
-        ctx.forEach(function (m) {
+        ctx.forEach(function (m) { addMarker(normalizarPin(m)); });
+
+        /*ctx.forEach(function (m) {
           L.marker([m.lat, m.lng], { icon: _necMakeIcon(m.color, m.icon, 26) })
             .bindPopup(m.tip, { className: 'k2-popup', maxWidth: 180 })
             .addTo(_necMap);
-        });
+        });*/
 
         // ✅ 3 — Marker principal draggable
         _necMarker = L.marker([39.4617, -0.3854], {
@@ -2891,7 +3101,7 @@
 
       function _necFullscreen() {
         // Centro y zoom: usar mapa si está vivo, si no, centrar en el primer pin o Valencia
-        var lat  = 39.4617, lng = -0.3854, zoom = 15;
+        var lat = 39.4617, lng = -0.3854, zoom = 15;
         if (_necMap) {
           var ll = _necMap.getCenter();
           lat = ll.lat; lng = ll.lng;
@@ -2906,38 +3116,48 @@
           pinLat: lat, pinLng: lng,
           // Pins validados: preferir los del mapa (tienen getLatLng real), fallback a _necPinsData
           pins: _necPinsValidados.length
-            ? _necPinsValidados.map(function(p) {
-                var latlng = p.getLatLng();
-                return {
-                  lat:   latlng.lat,
-                  lng:   latlng.lng,
-                  icon:  p._necIcon   || 'N',
-                  color: p._necColor  || '#E24B4A',
-                  tipo:  p._necTipo   || 'default',
-                  popup: p.getPopup() ? p.getPopup().getContent() : ''
-                };
-              })
-            : _necPinsData.map(function(d) {
-                return { lat: d.lat, lng: d.lng, icon: d.icon, color: d.color, tipo: d.tipo, popup: d.popup };
-              }),
-         
-            ctx: [
-              { lat:39.4641, lng:-0.3879, color:'#1D9E75', icon:'K', tipo:'kits',
-                direccion:'Polideportivo Russafa', detalle:'Kits de emergencia · 200 unidades disponibles', nota:'Horario: 9h–20h',
-                tip:'<b>📦 Recogida de kits</b><br>Polideportivo Russafa' },
-              { lat:39.4598, lng:-0.3831, color:'#7B5EA7', icon:'V', tipo:'voluntarios',
-                direccion:'C/ Cuba, 5 — Russafa', detalle:'12 voluntarios disponibles', nota:'Coordinador: Luis M.',
-                tip:'<b>🤝 Voluntarios</b><br>12 activos' },
-              { lat:39.4633, lng:-0.3808, color:'#EF9F27', icon:'P', tipo:'encuentro',
-                direccion:'Pl. Ayuntamiento', detalle:'Punto de concentración principal', nota:'Capacidad: sin límite',
-                tip:'<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento' },
-              { lat:39.4589, lng:-0.3869, color:'#3A7BD5', icon:'R', tipo:'refugio',
-                direccion:'C/ Colón, 40', detalle:'Ofrecer espacio · 30 plazas disponibles', nota:'Acceso adaptado, planta baja',
-                tip:'<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas' },
-              { lat:39.4610, lng:-0.3850, color:'#E24B4A', icon:'🚨', tipo:'emergencia',
-                direccion:'Avda. del Puerto, 12', detalle:'Zona de intervención activa', nota:'Coordinado con Bomberos',
-                tip:'<b>🚨 Emergencia</b><br>Avda. del Puerto 12' }
-              ]
+            ? _necPinsValidados.map(function (p) {
+              var latlng = p.getLatLng();
+              return {
+                lat: latlng.lat,
+                lng: latlng.lng,
+                icon: p._necIcon || 'N',
+                color: p._necColor || '#E24B4A',
+                tipo: p._necTipo || 'default',
+                popup: p.getPopup() ? p.getPopup().getContent() : ''
+              };
+            })
+            : _necPinsData.map(function (d) {
+              return { lat: d.lat, lng: d.lng, icon: d.icon, color: d.color, tipo: d.tipo, popup: d.popup };
+            }),
+
+          ctx: [
+            {
+              lat: 39.4641, lng: -0.3879, color: '#1D9E75', icon: 'K', tipo: 'kits',
+              direccion: 'Polideportivo Russafa', detalle: 'Kits de emergencia · 200 unidades disponibles', nota: 'Horario: 9h–20h',
+              tip: '<b>📦 Recogida de kits</b><br>Polideportivo Russafa'
+            },
+            {
+              lat: 39.4598, lng: -0.3831, color: '#7B5EA7', icon: 'V', tipo: 'voluntarios',
+              direccion: 'C/ Cuba, 5 — Russafa', detalle: '12 voluntarios disponibles', nota: 'Coordinador: Luis M.',
+              tip: '<b>🤝 Voluntarios</b><br>12 activos'
+            },
+            {
+              lat: 39.4633, lng: -0.3808, color: '#EF9F27', icon: 'P', tipo: 'encuentro',
+              direccion: 'Pl. Ayuntamiento', detalle: 'Punto de concentración principal', nota: 'Capacidad: sin límite',
+              tip: '<b>📍 Punto de encuentro</b><br>Pl. Ayuntamiento'
+            },
+            {
+              lat: 39.4589, lng: -0.3869, color: '#3A7BD5', icon: 'R', tipo: 'refugio',
+              direccion: 'C/ Colón, 40', detalle: 'Ofrecer espacio · 30 plazas disponibles', nota: 'Acceso adaptado, planta baja',
+              tip: '<b>🏠 Refugio</b><br>C/ Colón 40 · 30 plazas'
+            },
+            {
+              lat: 39.4610, lng: -0.3850, color: '#E24B4A', icon: '🚨', tipo: 'emergencia',
+              direccion: 'Avda. del Puerto, 12', detalle: 'Zona de intervención activa', nota: 'Coordinado con Bomberos',
+              tip: '<b>🚨 Emergencia</b><br>Avda. del Puerto 12'
+            }
+          ]
 
         };
 
