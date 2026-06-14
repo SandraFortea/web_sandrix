@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-PWJN89WB');</script>
+  <!-- End Google Tag Manager -->
+  <!-- Google tag (gtag.js) -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0CGM2ND1FB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-0CGM2ND1FB');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kit2Help — Ayuda cuando más se necesita</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="demoStyle.css">
+
+</head>
+
+<body>
+
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PWJN89WB" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  
+ 
+
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-bg"></div>
+    <div style="position:relative;z-index:1;margin-bottom:24px;animation:fadeUp 0.5s ease both;">
+      <img src="logoKit2Help_reducido.png" alt="Kit2Help"
+        style="width:200px;height:200px;filter:drop-shadow(0 8px 20px rgba(29,158,117,0.18));">
+
+    </div>
+    <div class="hero-tag">
+      <div class="dot-pulse"></div>
+      La ayuda llega cuando más se necesita.
+    </div>
+    <h1 class="hero-title">
+      La próxima catástrofe no esperará. <br>
+      <span class="accent">Nosotros, <br>sí estamos listos<br></span>
+      
+    </h1>
+    <p class="hero-sub">
+     Buscamos inversores y aliados institucionales que compartan la visión de una respuesta a emergencias más eficiente, trazable y humana
+    </p>
+    <div class="hero-actions">
+      <a href="#index" class="btn-primary">Ver la plataforma</a>
+      
+    </div>
+
+  </div>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="label reveal">Video</div>
+    <h2 class="section-title reveal reveal-delay-1">Las imagenes hablan solas</h2>
+    <p class="section-sub reveal reveal-delay-2">Cuando las personas se enfrentan a una emergencia, el caos se apodera de todo</p>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon">📡</div>
+        <h3>Pendiente subir</h3>
+        <p>Video</span>
+      </div>
+      
+    </div>
+  </section>
+
+
+  <!-- CTA -->
+  <div id="cta">
+    <div class="inner">
+      <h2>Únete antes de que llegue la próxima emergencia</h2>
+      <p>Kit2Help es gratuita para ciudadanos, voluntarios. Configura tu comunidad en menos de 5 minutos.</p>
+
+      <button class="btn-white" onclick="openModal()">
+        Llevar Kit2Help a mi zona
+      </button>
+
+      <a class="btn-white" href="demo.html"> Ver Demo</a>
+    </div>
+  </div>
+
+  <div id="leadModal" class="k2-modal">
+    <div class="k2-modal-box">
+      <!-- cerrar -->
+      <div class="k2-close" onclick="closeModal()">✕</div>
+
+      <h3 class="k2-title">Llevar Kit2Help a tu zona</h3>
+      <p class="k2-sub">Déjanos tus datos y te contactamos cuando esté disponible.</p>
+
+      <div class="k2-form">
+
+        <!-- Campo Honeypot (Trampa para bots) -->
+        <input type="text" id="k2-honeypot" style="display:none" tabindex="-1" autocomplete="off">
+
+
+        <input type="text" id="k2-name" placeholder="Nombre">
+        <input type="text" id="k2-city" placeholder="Ciudad">
+
+        <!-- Campo Email Obligatorio -->
+        <input type="email" id="k2-email" placeholder="Correo electrónico (Obligatorio)" required>
+
+        <!-- Campo Teléfono Opcional -->
+        <input type="tel" id="k2-phone" placeholder="Teléfono">
+
+        <select id="k2-type">
+          <option value="">Tipo de perfil</option>
+          <option value="Voluntario">Voluntario</option>
+          <option value="Organización">Organización</option>
+          <option value="Administración">Administración</option>
+        </select>
+
+        <button onclick="submitLead()" class="k2-submit">
+          Enviar solicitud
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+
+      <div class="footer-left">
+        <strong>Kit2Help</strong>
+        <span>— Coordinación de ayuda en emergencias · 2026</span>
+      </div>
+
+      <div class="footer-right">
+        <a href="https://www.linkedin.com/in/kit2help" target="_blank" rel="noopener" class="linkedin-btn">
+
+          <!-- Icono LinkedIn -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6 1.11 6 0 4.88 0 3.5 0 2.12 1.11 1 2.49 1c1.38 0 2.49 1.12 2.49 2.5zM.21 8.98h4.56V24H.21V8.98zM7.98 8.98h4.37v2.05h.06c.61-1.16 2.11-2.38 4.35-2.38 4.65 0 5.5 3.06 5.5 7.04V24h-4.56v-6.9c0-1.64-.03-3.75-2.29-3.75-2.29 0-2.64 1.79-2.64 3.63V24H7.98V8.98z" />
+          </svg>
+
+          <span>LinkedIn</span>
+        </a>
+      </div>
+
+    </div>
+  </footer>
+
+
+
+  <!-- MODAL QUIÉNES SOMOS -->
+  <div class="qs-modal" id="qsModal">
+    <div class="qs-box">
+
+      <button class="qs-close" onclick="cerrarQuienesSomos()">×</button>
+      <div class="qs-avatar">👩‍💼</div>
+      <div class="qs-name">Sandra González</div>
+      <div class="qs-role">Fundadora &amp; Directora de Kit2Help</div>
+      <p class="qs-bio">
+        Sandra es ingeniera informática y fundadora de Kit2Help. El proyecto nace de una reflexión sencilla:
+        <i>
+          solo somos conscientes de las carencias en la gestión de ayuda cuando la emergencia ya ha llegado</i>
+        .<br><br>
+
+
+        Tras la DANA, pudo observar que la respuesta de los equipos operativos es indispensable, pero también que el
+        papel de
+        los voluntarios resulta clave para cubrir necesidades inmediatas y apoyar a la población afectada.
+        <br>Sin embargo,
+        muchas de estas personas carecen de herramientas para coordinarse de forma eficaz.<br><br>
+
+        Por eso nace Kit2Help: una plataforma diseñada para dar visibilidad, organización y conexión a
+        todos los actores que participan en una emergencia.
+      </p>
+      <a class="qs-linkedin" href="https://www.linkedin.com/in/kit2help" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+        </svg>
+        Ver perfil en LinkedIn
+      </a>
+    </div>
+  </div>
+
+
+  <script>
+
+    // ── Mobile menu ──
+    function toggleMenu() {
+      document.getElementById('mobileMenu').classList.toggle('open');
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('nav') && !e.target.closest('.mobile-menu'))
+        document.getElementById('mobileMenu').classList.remove('open');
+    });
+
+    // ── Quiénes somos modal ──
+    function abrirQuienesSomos() {
+      document.getElementById('qsModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarQuienesSomos() {
+      document.getElementById('qsModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('click', function (e) {
+      const modal = document.getElementById('qsModal');
+      if (modal && e.target === modal) cerrarQuienesSomos();
+    });
+
+
+    // -- correo form contacto --
+
+    function openModal() {
+      document.getElementById('leadModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('leadModal').style.display = 'none';
+    }
+
+
+    async function submitLead() {
+      // 1. Verificar Honeypot inmediatamente
+      const honey = document.getElementById('k2-honeypot').value;
+      if (honey !== "") {
+        console.warn("Spam detectado");
+        return; // Detiene la ejecución si un bot llenó el campo oculto
+      }
+
+      // 2. Capturar valores
+      const name = document.getElementById('k2-name').value.trim();
+      const email = document.getElementById('k2-email').value.trim();
+      const city = document.getElementById('k2-city').value.trim();
+      const phone = document.getElementById('k2-phone').value.trim();
+      const type = document.getElementById('k2-type').value;
+
+      // 3. Validaciones de formato
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!name) {
+        alert("Por favor, dinos tu nombre.");
+        return;
+      }
+      if (!emailRegex.test(email)) {
+        alert("Por favor, introduce un correo electrónico válido.");
+        return;
+      }
+
+      // 4. Envío de datos
+      const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwCNRCqioHrJOVEdKGayVEWTYB889V4aupiBpidTMHtaaJzphhcTQGtAEyXl95hDvYa/exec"; // Pega aquí la URL de la implementación
+      const btn = document.querySelector('.k2-submit');
+
+      try {
+        // Cambiamos el texto para dar feedback de carga
+        btn.textContent = "Enviando...";
+        btn.disabled = true;
+
+        await fetch(URL_APPS_SCRIPT, {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify({
+            name, city, email, phone: phone || "No proporcionado", type
+          })
+        });
+
+        // Éxito
+        btn.textContent = "✓ Enviado";
+        btn.style.background = "#085041";
+
+        setTimeout(() => {
+          closeModal();
+          btn.textContent = "Enviar solicitud";
+          btn.style.background = "";
+          btn.disabled = false;
+          // Limpiar campos
+          document.getElementById('k2-name').value = "";
+          document.getElementById('k2-email').value = "";
+          document.getElementById('k2-city').value = "";
+          document.getElementById('k2-phone').value = "";
+        }, 2000);
+
+      } catch (error) {
+        alert("Hubo un problema. Revisa tu conexión.");
+        btn.disabled = false;
+        btn.textContent = "Enviar solicitud";
+      }
+    }
+
+
+    // ── Scroll reveal ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Counter animation ──
+    function animateCounter(el, target) {
+      let cur = 0; const step = Math.ceil(target / 40);
+      const t = setInterval(() => {
+        cur = Math.min(cur + step, target); el.textContent = cur;
+        if (cur >= target) clearInterval(t);
+      }, 40);
+    }
+    const statsObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          document.querySelectorAll('[data-target]').forEach(el => animateCounter(el, parseInt(el.dataset.target)));
+          statsObs.disconnect();
+        }
+      });
+    }, { threshold: 0.5 });
+    const heroEl = document.querySelector('.hero-stats');
+    if (heroEl) statsObs.observe(heroEl);
+
+
+    // ── Live counters ──
+    setInterval(() => {
+      [['liveKits', 1], ['livePeople', 3]].forEach(([id, d]) => {
+        if (Math.random() > 0.55) {
+          const el = document.getElementById(id);
+          if (el) el.textContent = parseInt(el.textContent) + d;
+        }
+      });
+    }, 3200);
+
+  </script>
+
+
+</body>
+
+</html>
