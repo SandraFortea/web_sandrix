@@ -48,11 +48,10 @@
       <a href="#story">El problema</a>
       <a href="#features">Solución</a>
       <a href="demo.html">Demo</a>
-      <a href="mapaGlobal.html">Impacto</a>
+      <a href="mapaGlobal.html">Mapa global</a>
     </div>
 
-
-    <button class="nav-cta" onclick="abrirQuienesSomos()">¿Quiénes somos?</button>
+    <button class="nav-cta" onclick="openModal()">Contactar</button>
     <div class="nav-hamburger" onclick="toggleMenu()" id="hamburger">
       <span></span><span></span><span></span>
     </div>
@@ -61,8 +60,8 @@
     <a href="#story" onclick="toggleMenu()">El problema</a>
     <a href="#features" onclick="toggleMenu()">Solución</a>
     <a href="demo.html" onclick="toggleMenu()">Demo</a>
-    <a href="mapaGlobal.html" onclick="toggleMenu()">Impacto</a>
-    <button class="mob-cta" onclick="abrirQuienesSomos();toggleMenu()">¿Quiénes somos?</button>
+    <a href="mapaGlobal.html" onclick="toggleMenu()">Mapa global</a>
+    <button class="mob-cta" onclick="openModal();toggleMenu()">Contactar</button>
   </div>
 
   <!-- HERO -->
@@ -86,24 +85,24 @@
     </p>
     <div class="hero-actions">
       <a href="demo.html" class="btn-primary">Ver demo interactiva</a>
-      <a href="#story" class="btn-ghost">Entender el problema</a>
+      <button onclick="openModal()" class="btn-ghost">Solicitar acceso</button>
     </div>
     <div class="hero-stats">
       <div class="stat">
         <div class="stat-num" data-target="128">0</div>
-        <div class="stat-label">Kits entregados hoy</div>
+        <div class="stat-label">Kits coordinados por ciclo</div>
       </div>
       <div class="stat">
         <div class="stat-num" data-target="512">0</div>
-        <div class="stat-label">Personas ayudadas</div>
+        <div class="stat-label">Personas asistidas por evento</div>
       </div>
       <div class="stat">
         <div class="stat-num" data-target="23">0</div>
-        <div class="stat-label">Voluntarios activos</div>
+        <div class="stat-label">Voluntarios por operación</div>
       </div>
       <div class="stat">
         <div class="stat-num" data-target="7">0</div>
-        <div class="stat-label">Puntos de recogida</div>
+        <div class="stat-label">Hubs logísticos típicos</div>
       </div>
     </div>
   </div>
@@ -120,20 +119,17 @@
         <div class="story-card reveal">
           <div class="story-icon">📡</div>
           <h3>Información fragmentada</h3>
-          <p>Las necesidades se comunican por WhatsApp, llamadas y redes sociales. Nadie tiene el mapa completo de lo
-            que falta y dónde.</p>
+          <p>En la DANA de Valencia, información dispersa en 75 municipios. Voluntarios no sabían dónde ir. Necesidades comunicadas por WhatsApp, llamadas y redes sociales sin mapa centralizado.</p>
         </div>
         <div class="story-card reveal reveal-delay-1">
           <div class="story-icon">🎯</div>
           <h3>Recursos mal distribuidos</h3>
-          <p>Algunas zonas reciben más ayuda de la que pueden gestionar. Otras, a dos calles, no reciben nada. Sin
-            coordinación, la desigualdad se amplifica.</p>
+          <p>Xirivella recibió 11.681 viviendas dañadas mientras otras zonas no tenían recursos. Sin coordinación, las desigualdades en la ayuda se amplifican y el impacto se desmorona.</p>
         </div>
         <div class="story-card reveal reveal-delay-2">
           <div class="story-icon">🤝</div>
           <h3>Voluntarios sin guía</h3>
-          <p>Miles de personas quieren ayudar pero no saben cómo. Sin un sistema de coordinación, su energía se pierde o
-            se duplica con otros.</p>
+          <p>Miles de personas quisieron ayudar pero no sabían cómo. 300.000+ personas afectadas, 48.700 negocios destruidos. Sin coordinación, su energía se pierde en esfuerzos duplicados.</p>
         </div>
       </div>
       <div class="story-highlight reveal">
@@ -142,6 +138,15 @@
           necesitaban. Kit2Help nació de esa experiencia.</p>
       </div>
     </div>
+  </div>
+
+  <!-- IMPACTO BRIDGE SECTION -->
+  <div class="impacto-bridge">
+    <a href="https://kit2help.es/mapaGlobal.html" class="btn-impacto">
+      <span class="impacto-icon">🗺️</span>
+      <span class="impacto-text">Impacto en directo — Mapa de emergencia</span>
+      <span class="impacto-arrow">→</span>
+    </a>
   </div>
 
   <!-- FEATURES -->
@@ -156,6 +161,7 @@
         <h3>Activar Necesidad</h3>
         <p>Cualquier persona o entidad puede comunicar una necesidad de ayuda en pocos pasos: ubicación, categoría,
           prioridad y descripción. La solicitud entra en revisión antes de publicarse.</p>
+        <span class="g-red modulo-tag">Emergencias · Refugio · Voluntarios</span>
       </div>
       <div class="feature-card reveal reveal-delay-1">
         <div class="feature-icon">🔎</div>
@@ -189,73 +195,77 @@
     </div>
   </section>
 
+  <!-- BRIDGE CTA SECTION -->
+  <div class="bridge-cta">
+    <div class="bridge-inner">
+      <h2 class="bridge-title reveal">¿Listo para coordinar mejor?</h2>
+      <p class="bridge-sub reveal reveal-delay-1">Simplifica la gestión de emergencias. Crea mayor impacto.</p>
+      <button onclick="openModal()" class="btn-bridge reveal reveal-delay-2">Solicitar demo</button>
+    </div>
+  </div>
 
   <!-- CTA -->
   <div id="cta">
     <div class="inner">
-      <h2>Únete antes de que llegue la próxima emergencia</h2>
-      <p>Kit2Help es gratuita para ciudadanos, voluntarios. Configura tu comunidad en menos de 5 minutos.</p>
-
-      <button class="btn-white" onclick="openModal()">
-        Llevar Kit2Help a mi zona
-      </button>
-
-      <a class="btn-white" href="demo.html"> Ver Demo</a>
+      <div class="label reveal">03 — Únete</div>
+      <h2 class="section-title reveal reveal-delay-1">¿Eres municipio,<br>ONG o socio logístico?</h2>
+      <p class="section-sub reveal reveal-delay-2">Cuéntanos tu caso. Te mostraremos cómo Kit2Help encaja en tu
+        operación.</p>
+      <button onclick="openModal()" class="btn-primary reveal reveal-delay-3">Contactar con el equipo</button>
     </div>
   </div>
 
-  <div id="leadModal" class="k2-modal">
-    <div class="k2-modal-box">
-      <!-- cerrar -->
-      <div class="k2-close" onclick="closeModal()">✕</div>
-
-      <h3 class="k2-title">Llevar Kit2Help a tu zona</h3>
-      <p class="k2-sub">Déjanos tus datos y te contactamos cuando esté disponible.</p>
-
-      <div class="k2-form">
-
-        <!-- Campo Honeypot (Trampa para bots) -->
-        <input type="text" id="k2-honeypot" style="display:none" tabindex="-1" autocomplete="off">
-
-
-        <input type="text" id="k2-name" placeholder="Nombre">
-        <input type="text" id="k2-city" placeholder="Ciudad">
-
-        <!-- Campo Email Obligatorio -->
-        <input type="email" id="k2-email" placeholder="Correo electrónico (Obligatorio)" required>
-
-        <!-- Campo Teléfono Opcional -->
-        <input type="tel" id="k2-phone" placeholder="Teléfono">
-
-        <select id="k2-type">
-          <option value="">Tipo de perfil</option>
-          <option value="Voluntario">Voluntario</option>
-          <option value="Organización">Organización</option>
-          <option value="Administración">Administración</option>
+  <!-- LEAD MODAL -->
+  <div class="leadModal" id="leadModal">
+    <div class="leadModal-content">
+      <button class="leadModal-close" onclick="closeModal()">×</button>
+      <h2>Contacta con nuestro equipo</h2>
+      <p>Cuéntanos sobre tu municipio, ONG o empresa. Responderemos en 24h.</p>
+      
+      <form onsubmit="event.preventDefault(); submitLead();">
+        <input type="text" id="k2-name" placeholder="Tu nombre" required>
+        <input type="email" id="k2-email" placeholder="Email" required>
+        <input type="text" id="k2-city" placeholder="Municipio / Ciudad">
+        <input type="tel" id="k2-phone" placeholder="Teléfono (opcional)">
+        
+        <select id="k2-type" required>
+          <option value="">Selecciona tu rol</option>
+          <option value="municipality">Municipio</option>
+          <option value="ong">ONG / Entidad social</option>
+          <option value="logistics">Empresa logística</option>
+          <option value="volunteer">Voluntario</option>
+          <option value="other">Otro</option>
         </select>
 
-        <button onclick="submitLead()" class="k2-submit">
-          Enviar solicitud
-        </button>
-      </div>
+        <textarea id="k2-message" placeholder="Cuéntanos tu caso..." rows="4" style="font-family: 'DM Sans', sans-serif; padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; resize: none;"></textarea>
+
+        <input type="text" id="k2-honeypot" style="display:none;">
+        
+        <button type="submit" class="k2-submit" style="width:100%;padding:12px;background:#085041;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:16px;">Enviar solicitud</button>
+      </form>
     </div>
   </div>
 
-
   <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-
-      <div class="footer-left">
-        <strong>Kit2Help</strong>
-        <span>— Coordinación de ayuda en emergencias · 2026</span>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">Kit2Help</div>
+      <div class="footer-section">
+        <h4>Enlaces</h4>
+        <a href="#story">El problema</a>
+        <a href="#features">Solución</a>
+        <a href="demo.html">Demo</a>
+        <a href="mapaGlobal.html">Mapa global</a>
       </div>
-
-      <div class="footer-right">
-        <a href="https://www.linkedin.com/in/kit2help" target="_blank" rel="noopener" class="linkedin-btn">
-
-          <!-- Icono LinkedIn -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <div class="footer-section">
+        <h4>Contacto</h4>
+        <a href="mailto:kit2help.info@gmail.com">kit2help.info@gmail.com</a>
+        <button onclick="openModal()" style="background:none;border:none;color:#085041;font-weight:700;cursor:pointer;padding:0;font-size:14px;">Contactar</button>
+      </div>
+      <div class="footer-social">
+        <h4>Síguenos</h4>
+        <a href="https://www.linkedin.com/in/kit2help" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6 1.11 6 0 4.88 0 3.5 0 2.12 1.11 1 2.49 1c1.38 0 2.49 1.12 2.49 2.5zM.21 8.98h4.56V24H.21V8.98zM7.98 8.98h4.37v2.05h.06c.61-1.16 2.11-2.38 4.35-2.38 4.65 0 5.5 3.06 5.5 7.04V24h-4.56v-6.9c0-1.64-.03-3.75-2.29-3.75-2.29 0-2.64 1.79-2.64 3.63V24H7.98V8.98z" />
           </svg>
@@ -306,13 +316,34 @@
 
   <script>
 
-    // ── Mobile menu ──
+    // ── Mobile menu + Hamburger animation ──
     function toggleMenu() {
+      const hamburger = document.getElementById('hamburger');
       document.getElementById('mobileMenu').classList.toggle('open');
+      hamburger.classList.toggle('active');
     }
     document.addEventListener('click', e => {
-      if (!e.target.closest('nav') && !e.target.closest('.mobile-menu'))
+      if (!e.target.closest('nav') && !e.target.closest('.mobile-menu')) {
         document.getElementById('mobileMenu').classList.remove('open');
+        document.getElementById('hamburger').classList.remove('active');
+      }
+    });
+
+    // ── Lead modal ──
+    function openModal() {
+      document.getElementById('leadModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('leadModal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    // Close modal on background click
+    document.addEventListener('click', function (e) {
+      const modal = document.getElementById('leadModal');
+      if (modal && e.target === modal) closeModal();
     });
 
     // ── Quiénes somos modal ──
@@ -329,85 +360,69 @@
       if (modal && e.target === modal) cerrarQuienesSomos();
     });
 
-
-    // -- correo form contacto --
-
-    function openModal() {
-      document.getElementById('leadModal').style.display = 'flex';
+    // ── Lead form submission ──
+   async function submitLead() {
+    const honey = document.getElementById('k2-honeypot').value;
+    if (honey !== "") {
+      console.warn("Spam detectado");
+      return;
     }
 
-    function closeModal() {
-      document.getElementById('leadModal').style.display = 'none';
+    const name = document.getElementById('k2-name').value.trim();
+    const email = document.getElementById('k2-email').value.trim();
+    const city = document.getElementById('k2-city').value.trim();
+    const phone = document.getElementById('k2-phone').value.trim();
+    const type = document.getElementById('k2-type').value;
+    const message = document.getElementById('k2-message').value.trim();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name) {
+      alert("Por favor, dinos tu nombre.");
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      alert("Por favor, introduce un correo electrónico válido.");
+      return;
     }
 
+    const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwCNRCqioHrJOVEdKGayVEWTYB889V4aupiBpidTMHtaaJzphhcTQGtAEyXl95hDvYa/exec";
+    const btn = document.querySelector('.k2-submit');
 
-    async function submitLead() {
-      // 1. Verificar Honeypot inmediatamente
-      const honey = document.getElementById('k2-honeypot').value;
-      if (honey !== "") {
-        console.warn("Spam detectado");
-        return; // Detiene la ejecución si un bot llenó el campo oculto
-      }
+    try {
+      btn.textContent = "Enviando...";
+      btn.disabled = true;
 
-      // 2. Capturar valores
-      const name = document.getElementById('k2-name').value.trim();
-      const email = document.getElementById('k2-email').value.trim();
-      const city = document.getElementById('k2-city').value.trim();
-      const phone = document.getElementById('k2-phone').value.trim();
-      const type = document.getElementById('k2-type').value;
+      await fetch(URL_APPS_SCRIPT, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify({
+          name, city, email, phone: phone || "No proporcionado", type, message
+        })
+      });
 
-      // 3. Validaciones de formato
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      btn.textContent = "✓ Enviado";
+      btn.style.background = "#085041";
 
-      if (!name) {
-        alert("Por favor, dinos tu nombre.");
-        return;
-      }
-      if (!emailRegex.test(email)) {
-        alert("Por favor, introduce un correo electrónico válido.");
-        return;
-      }
-
-      // 4. Envío de datos
-      const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwCNRCqioHrJOVEdKGayVEWTYB889V4aupiBpidTMHtaaJzphhcTQGtAEyXl95hDvYa/exec"; // Pega aquí la URL de la implementación
-      const btn = document.querySelector('.k2-submit');
-
-      try {
-        // Cambiamos el texto para dar feedback de carga
-        btn.textContent = "Enviando...";
-        btn.disabled = true;
-
-        await fetch(URL_APPS_SCRIPT, {
-          method: "POST",
-          mode: "no-cors",
-          body: JSON.stringify({
-            name, city, email, phone: phone || "No proporcionado", type
-          })
-        });
-
-        // Éxito
-        btn.textContent = "✓ Enviado";
-        btn.style.background = "#085041";
-
-        setTimeout(() => {
-          closeModal();
-          btn.textContent = "Enviar solicitud";
-          btn.style.background = "";
-          btn.disabled = false;
-          // Limpiar campos
-          document.getElementById('k2-name').value = "";
-          document.getElementById('k2-email').value = "";
-          document.getElementById('k2-city').value = "";
-          document.getElementById('k2-phone').value = "";
-        }, 2000);
-
-      } catch (error) {
-        alert("Hubo un problema. Revisa tu conexión.");
-        btn.disabled = false;
+      setTimeout(() => {
+        closeModal();
         btn.textContent = "Enviar solicitud";
-      }
-    }
+        btn.style.background = "";
+        btn.disabled = false;
+        document.getElementById('k2-name').value = "";
+        document.getElementById('k2-email').value = "";
+        document.getElementById('k2-city').value = "";
+        document.getElementById('k2-phone').value = "";
+        document.getElementById('k2-type').value = "";
+        document.getElementById('k2-message').value = "";
+      }, 2000);
 
+    } catch (error) {
+      alert("Hubo un problema. Revisa tu conexión.");
+      btn.disabled = false;
+      btn.textContent = "Enviar solicitud";
+    }
+  }
 
     // ── Scroll reveal ──
     const reveals = document.querySelectorAll('.reveal');
@@ -435,7 +450,6 @@
     const heroEl = document.querySelector('.hero-stats');
     if (heroEl) statsObs.observe(heroEl);
 
-
     // ── Live counters ──
     setInterval(() => {
       [['liveKits', 1], ['livePeople', 3]].forEach(([id, d]) => {
@@ -448,6 +462,323 @@
 
   </script>
 
+  <style>
+    /* ── IMPACTO BRIDGE SECTION ── */
+    .impacto-bridge {
+      padding: 60px 20px;
+      background: linear-gradient(135deg, rgba(8, 80, 65, 0.04) 0%, rgba(8, 80, 65, 0.02) 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-impacto {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 36px;
+      background: linear-gradient(135deg, #085041 0%, #0a6b54 100%);
+      color: white;
+      border-radius: 12px;
+      text-decoration: none;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      border: 2px solid #085041;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(8, 80, 65, 0.2);
+    }
+
+    .btn-impacto::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: radial-gradient(circle, rgba(8, 80, 65, 0.5) 0%, transparent 70%);
+      border-radius: 12px;
+      opacity: 0;
+      animation: glow-pulse 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .btn-impacto:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(8, 80, 65, 0.3);
+      border-color: #0a6b54;
+    }
+
+    .btn-impacto:active {
+      transform: translateY(-1px);
+    }
+
+    .impacto-icon {
+      font-size: 20px;
+      display: inline-block;
+      animation: icon-float 3s ease-in-out infinite;
+    }
+
+    .impacto-arrow {
+      font-size: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-impacto:hover .impacto-arrow {
+      transform: translateX(4px);
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% {
+        opacity: 0;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+    }
+
+    @keyframes icon-float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
+    /* ── BRIDGE CTA SECTION ── */
+    .bridge-cta {
+      padding: 80px 20px;
+      background: linear-gradient(135deg, #f5f5f5 0%, #fafafa 100%);
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .bridge-inner {
+      max-width: 600px;
+    }
+
+    .bridge-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #085041;
+      margin-bottom: 12px;
+      font-family: 'Syne', sans-serif;
+    }
+
+    .bridge-sub {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 24px;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-bridge {
+      padding: 14px 32px;
+      background: #085041;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      font-family: 'Syne', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    .btn-bridge:hover {
+      background: #0a6b54;
+      transform: translateY(-2px);
+    }
+
+    /* ── LEAD MODAL ── */
+    .leadModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .leadModal-content {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .leadModal-content h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 24px;
+      color: #085041;
+      margin-bottom: 8px;
+    }
+
+    .leadModal-content p {
+      color: #666;
+      margin-bottom: 24px;
+      font-size: 14px;
+    }
+
+    .leadModal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 28px;
+      color: #085041;
+      cursor: pointer;
+    }
+
+    .leadModal-content form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .leadModal-content input,
+    .leadModal-content select,
+    .leadModal-content textarea {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+    }
+
+    .leadModal-content input:focus,
+    .leadModal-content select:focus,
+    .leadModal-content textarea:focus {
+      outline: none;
+      border-color: #085041;
+      box-shadow: 0 0 0 3px rgba(8, 80, 65, 0.1);
+    }
+
+    /* ── HAMBURGER ANIMATION ── */
+    .nav-hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translateY(12px);
+    }
+
+    .nav-hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translateY(-12px);
+    }
+
+    /* ── FOOTER MEJORADO ── */
+    .footer-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      color: #085041;
+    }
+
+    .footer-section h4,
+    .footer-social h4 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #085041;
+      margin-bottom: 12px;
+    }
+
+    .footer-section a,
+    .footer-social a {
+      display: block;
+      color: #666;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 8px;
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover,
+    .footer-social a:hover {
+      color: #085041;
+    }
+
+    .footer-social a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-social svg {
+      width: 20px;
+      height: 20px;
+      fill: #085041;
+    }
+
+    @media (max-width: 768px) {
+      .impacto-bridge {
+        padding: 40px 16px;
+      }
+
+      .btn-impacto {
+        padding: 16px 28px;
+        font-size: 15px;
+        gap: 10px;
+        box-shadow: 0 4px 12px rgba(8, 80, 65, 0.15);
+      }
+
+      .btn-impacto::before {
+        display: none;
+      }
+
+      .btn-impacto:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(8, 80, 65, 0.2);
+      }
+
+      .impacto-icon {
+        font-size: 18px;
+        animation: none;
+      }
+
+      .bridge-cta {
+        padding: 60px 16px;
+      }
+
+      .bridge-title {
+        font-size: 22px;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        padding: 40px 16px;
+      }
+
+      .leadModal-content {
+        padding: 32px 20px;
+      }
+    }
+  </style>
 
 </body>
 
