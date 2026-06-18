@@ -360,74 +360,61 @@
     });
 
     // ── Lead form submission ──
- async function submitLead() {
-  const honey = document.getElementById('k2-honeypot').value;
-  if (honey !== "") {
-    console.warn("Spam detectado");
-    return;
-  }
+  async function submitLead() {
+    const honey = document.getElementById('k2-honeypot').value;
+    if (honey !== "") return;
 
-  const name = document.getElementById('k2-name').value.trim();
-  const email = document.getElementById('k2-email').value.trim();
-  const city = document.getElementById('k2-city').value.trim();
-  const phone = document.getElementById('k2-phone').value.trim();
-  const type = document.getElementById('k2-type').value;
-  const message = document.getElementById('k2-message').value.trim();
+    const name = document.getElementById('k2-name').value.trim();
+    const email = document.getElementById('k2-email').value.trim();
+    const city = document.getElementById('k2-city').value.trim();
+    const phone = document.getElementById('k2-phone').value.trim();
+    const type = document.getElementById('k2-type').value;
+    const message = document.getElementById('k2-message').value.trim();
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!name) {
-    alert("Por favor, dinos tu nombre.");
-    return;
-  }
-  if (!emailRegex.test(email)) {
-    alert("Por favor, introduce un correo electrónico válido.");
-    return;
-  }
+    if (!name) {
+      alert("Por favor, dinos tu nombre.");
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      alert("Por favor, introduce un correo electrónico válido.");
+      return;
+    }
 
-  const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbx5SaIdBltKDixsQxfyTyP7nbw8UlKuPtiv4NzkQdJWx_3dLABsyNUJGQQohi6wbKF3/exec";
-  const btn = document.querySelector('.k2-submit');
+    const URL_APPS_SCRIPT = "TU_URL_AQUI";
+    const btn = document.querySelector('.k2-submit');
 
-  try {
-    btn.textContent = "Enviando...";
-    btn.disabled = true;
+    try {
+      btn.textContent = "Enviando...";
+      btn.disabled = true;
 
-    const params = new URLSearchParams();
-    params.append('name', name);
-    params.append('email', email);
-    params.append('city', city);
-    params.append('phone', phone || "No proporcionado");
-    params.append('type', type);
-    params.append('message', message);
+      const response = await fetch(URL_APPS_SCRIPT, {
+        method: "POST",
+        body: JSON.stringify({
+          name, email, city, phone, type, message
+        })
+      });
 
-    const response = await fetch(URL_APPS_SCRIPT, {
-      method: "POST",
-      body: params
-    });
+      btn.textContent = "✓ Enviado";
+      setTimeout(() => {
+        closeModal();
+        btn.textContent = "Enviar solicitud";
+        btn.disabled = false;
+        document.getElementById('k2-name').value = "";
+        document.getElementById('k2-email').value = "";
+        document.getElementById('k2-city').value = "";
+        document.getElementById('k2-phone').value = "";
+        document.getElementById('k2-type').value = "";
+        document.getElementById('k2-message').value = "";
+      }, 2000);
 
-    btn.textContent = "✓ Enviado";
-    btn.style.background = "#085041";
-
-    setTimeout(() => {
-      closeModal();
-      btn.textContent = "Enviar solicitud";
-      btn.style.background = "";
+    } catch (error) {
+      alert("Hubo un problema.");
       btn.disabled = false;
-      document.getElementById('k2-name').value = "";
-      document.getElementById('k2-email').value = "";
-      document.getElementById('k2-city').value = "";
-      document.getElementById('k2-phone').value = "";
-      document.getElementById('k2-type').value = "";
-      document.getElementById('k2-message').value = "";
-    }, 2000);
-
-  } catch (error) {
-    console.error(error);
-    alert("Hubo un problema. Revisa tu conexión.");
-    btn.disabled = false;
-    btn.textContent = "Enviar solicitud";
+      btn.textContent = "Enviar solicitud";
+    }
   }
-}
     // ── Scroll reveal ──
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(entries => {
