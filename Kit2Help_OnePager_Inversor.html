@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit2Help — Investor One-Pager</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --mint:     #2CD3A6;
+  --mint-dk:  #1faa84;
+  --mint-lt:  #e6f9f4;
+  --blue:     #4EA2E2;
+  --coral:    #FFA07A;
+  --dark:     #229175;
+  --dark2:    #1a7560;
+  --bg:       #F4F8F7;
+  --surface:  #FFFFFF;
+  --border:   #D8EDE8;
+  --text:     #0F1F1A;
+  --muted:    #5E7A72;
+  --red-soft: #FFF2F0;
+  --red-acc:  #D94F4F;
+  --r:        12px;
+  --r-sm:     7px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  width: 1100px;
+  margin: 0 auto;
+  padding: 20px 26px 26px;
+  background: var(--bg);
+}
+
+/* ══ HEADER ══ */
+.header {
+  background: linear-gradient(120deg, var(--dark) 0%, #1a7560 55%, #145f4d 100%);
+  border-radius: var(--r);
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.header::after {
+  content: '';
+  position: absolute;
+  right: -60px; top: -60px;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.header-logo {
+  flex-shrink: 0;
+  margin-right: 24px;
+  display: flex;
+  align-items: center;
+}
+.header-logo img {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.header-brand {
+  flex: 1;
+}
+.header-brand-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -1px;
+  line-height: 1;
+}
+.header-brand-name span { color: var(--mint); }
+.header-brand-tag {
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(246, 241, 241, 0.938);
+  margin-top: 5px;
+}
+.header-brand-sub {
+  font-size: 15.5px;
+  color: rgba(255,255,255,.72);
+  margin-top: 9px;
+  max-width: 450px;
+  line-height: 1.6;
+}
+
+.header-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 7px;
+  flex-shrink: 0;
+}
+.kpi-box {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: var(--r-sm);
+  padding: 10px 10px;
+  text-align: center;
+  min-width: 108px;
+}
+.kpi-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+}
+.kpi-val.c-mint  { color: var(--mint); }
+.kpi-val.c-coral { color: var(--coral); }
+.kpi-val.c-blue  { color: #8DD4FF; }
+.kpi-val.c-white { color: #fff; }
+.kpi-lbl {
+  font-size:11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+  margin-top: 4px;
+}
+
+/* ══ SECTION LABEL ══ */
+.sec-label {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 9px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.sec-label::before {
+  content: '';
+  display: block;
+  width: 3px; height: 12px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.sec-label.mint  { color: var(--mint-dk); }
+.sec-label.blue  { color: var(--blue); }
+.sec-label.coral { color: var(--coral); }
+.sec-label.red   { color: var(--red-acc); }
+
+/* ══ ROW 1: PROBLEMA + SOLUCIÓN ══ */
+.row-prob-sol {
+  display: grid;
+  grid-template-columns: 1fr 1.7fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+/* PROBLEMA */
+.card-prob {
+  background: var(--surface);
+  border: 1px solid #F0DADA;
+  border-radius: var(--r);
+  padding: 18px 18px;
+}
+.prob-items {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.prob-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: var(--red-soft);
+  border: 1px solid #FBDADA;
+  border-radius: var(--r-sm);
+  padding: 8px 10px;
+}
+.prob-icon { flex-shrink: 0; margin-top: 1px; }
+.prob-icon svg { width: 22px; height: 22px; }
+.prob-text { font-size: 13px; color: #5A2020; line-height: 1.4; }
+
+/* SOLUCIÓN */
+.card-sol {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 18px;
+}
+.sol-inner {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  gap: 14px;
+  align-items: start;
+}
+.sol-mvp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.sol-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  background: var(--mint-lt);
+  border: 1px solid rgba(44,211,166,.25);
+  border-radius: var(--r-sm);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--dark2);
+}
+.sol-img img {
+  width: 100%;
+  max-height: 210px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid var(--mint);
+  display: block;
+}
+
+/* ══ ROW 2: PRICING (4 cards) ══ */
+.row-pricing {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.price-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 14px;
+  position: relative;
+  overflow: hidden;
+}
+.price-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: var(--r) var(--r) 0 0;
+}
+.price-card.pc1::before { background: var(--mint); }
+.price-card.pc2::before { background: var(--blue); }
+.price-card.pc3::before { background: var(--coral); }
+.price-card.pc4::before { background: #9B8FE8; }
+
+.price-seg {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.price-emoji { font-size: 22px; margin-bottom: 8px; display: block; }
+.price-amount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+.price-card.pc1 .price-amount { color: var(--mint-dk); }
+.price-card.pc2 .price-amount { color: var(--blue); }
+.price-card.pc3 .price-amount { color: #d97050; }
+.price-card.pc4 .price-amount { color: #7B6FD8; }
+
+.price-period {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.price-note {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 5px;
+  line-height: 1.4;
+}
+.price-badge {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+/* ══ ROW 3: MERCADO + COMPETENCIA ══ */
+.row-mid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 18px;
+}
+
+/* Market SVG */
+.market-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.market-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+.mstat {
+  padding: 8px 12px;
+  border-radius: var(--r-sm);
+  border-left: 3px solid;
+}
+.mstat.tam  { border-color: var(--blue); background: #F0F7FF; }
+.mstat.sam  { border-color: var(--mint); background: var(--mint-lt); }
+.mstat.bh   { border-color: var(--dark); background: rgba(34,145,117,.1); }
+.mstat-val  { font-family: 'Space Grotesk',sans-serif; font-size: 18px; font-weight: 700; }
+.mstat.tam .mstat-val  { color: var(--blue); }
+.mstat.sam .mstat-val  { color: var(--mint-dk); }
+.mstat.bh  .mstat-val  { color: var(--dark); }
+.mstat-lbl  { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* Comp table */
+.comp-tbl { width: 100%; border-collapse: collapse; }
+.comp-tbl th {
+  font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--muted);
+  padding: 6px 10px; background: var(--bg);
+  text-align: left;
+}
+.comp-tbl td {
+  padding: 8px 10px; font-size: 13px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.comp-tbl tr:last-child td { border-bottom: none; }
+.cell-before { color: var(--red-acc); font-weight: 500; }
+.cell-after  { color: var(--mint-dk); font-weight: 600; }
+.cell-arrow  { color: var(--muted); font-size: 12px; text-align: center; }
+
+.comp-note {
+  margin-top: 10px;
+  padding: 9px 12px;
+  background: var(--mint-lt);
+  border: 1px solid rgba(44,211,166,.3);
+  border-radius: var(--r-sm);
+  font-size: 12px;
+  color: var(--dark2);
+  font-weight: 500;
+}
+
+/* ══ TIMELINE SVG SECTION ══ */
+.timeline-wrap {
+  background: linear-gradient(120deg, var(--dark) 0%, #1a7560 55%, #145f4d 100%);
+  border-radius: var(--r);
+  padding: 20px 28px 22px;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+.timeline-wrap::after {
+  content: '';
+  position: absolute; bottom: -40px; right: -40px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%);
+}
+
+.timeline-title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.timeline-hed {
+  font-size: 15px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: rgb(255 160 122);
+  display: flex; align-items: center; gap: 7px;
+}
+.timeline-hed::before {
+  content: ''; display: block;
+  width: 3px; height: 12px; border-radius: 2px;
+  background: var(--coral);
+}
+.timeline-totals {
+  display: flex; gap: 20px;
+}
+.ttotal {
+  text-align: right;
+}
+.ttotal-val {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px; font-weight: 700;
+}
+.ttotal-val.cm { color: var(--mint); }
+.ttotal-val.cc { color: var(--coral); }
+.ttotal-val.cb { color: #8DD4FF; }
+.ttotal-lbl { font-size: 10px; color: rgba(255,255,255,.85); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+/* ══ FOOTER: FOUNDER + VISION ══ */
+.row-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.founder-card {
+  background: var(--mint-lt);
+  border: 1px solid rgba(44,211,166,.3);
+  border-radius: var(--r);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  align-items: flex-end;
+}
+.founder-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 16px;
+  margin-right: 20px;
+
+ 
+}
+.founder-ava {
+  width: 80px; height: 80px; flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--dark), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  border: 3px solid rgba(44,211,166,.5);
+  overflow: hidden;
+}
+.founder-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px; font-weight: 700; color: var(--text);
+  line-height: 1.2;
+}
+.founder-role { font-size: 13px; color: var(--mint-dk); font-weight: 600; margin-top: 4px; }
+.founder-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.ftag {
+  font-size: 11px; font-weight: 600;
+  padding: 4px 11px; border-radius: 20px;
+  background: rgba(34,145,117,.12);
+  color: var(--dark2);
+  border: 1px solid rgba(34,145,117,.25);
+}
+.founder-quote {
+  font-size: 13px; color: #0f3328;
+  font-style: italic; line-height: 1.7;
+  padding: 14px 16px;
+  border-left: 4px solid var(--mint);
+  background: rgba(44,211,166,.08);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  margin-right: 10px;
+
+}
+.founder-extra {
+ font-size: 12px;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-content: flex-start;
+    justify-content: space-between;
+}
+.founder-extra strong { color: var(--text); font-size: 13px; }
+
+.vision-card {
+  background: linear-gradient(120deg, var(--dark) 0%, #1a7560 55%, #145f4d 100%);
+  border-radius: var(--r);
+  padding: 18px 20px;
+}
+.vision-text {
+  font-size: 13px; font-weight: 500;
+  color: rgba(255,255,255,.88);
+  line-height: 1.65; margin-bottom: 14px;
+}
+.vision-years {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 9px; margin-bottom: 14px;
+}
+.vy {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--r-sm);
+  padding: 9px 12px;
+}
+.vy-label { font-size: 9px; color: rgba(255,255,255,.4); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.vy-text  { font-size: 10.5px; color: rgba(255,255,255,.8); line-height: 1.4; }
+.contact-chips {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 7px;
+    margin-left: 50px;
+    align-items: stretch;
+    flex-direction: row-reverse;
+}
+.chip {
+  font-size: 10px; font-weight: 500;
+  padding: 4px 11px; border-radius: 20px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  color: rgba(255,255,255,.6);
+}
+.chip.hl {
+  background: rgba(44,211,166,.18);
+  border-color: rgba(44,211,166,.35);
+  color: var(--mint); font-weight: 700;
+}
+
+/* ══ PRINT ══ */
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    margin: 0;
+    padding: 0;
+  }
+
+  .page {
+    width: 277mm;
+    min-height: 190mm;
+    margin: 0 auto;
+    padding: 4mm 5mm;
+    box-sizing: border-box;
+    font-size: 7.5pt;
+  }
+
+  /* Escalar tipografías a puntos tipográficos */
+  .sec-label         { font-size: 6.5pt; }
+  .prob-text         { font-size: 7pt; }
+  .sol-item          { font-size: 7pt; }
+  .mstat-val         { font-size: 11pt; }
+  .mstat-lbl         { font-size: 6.5pt; }
+  .comp-tbl td       { font-size: 7pt; padding: 4px 6px; }
+  .comp-note         { font-size: 6.5pt; }
+  .founder-name      { font-size: 10pt; }
+  .founder-role      { font-size: 7pt; }
+  .ftag              { font-size: 6pt; padding: 2px 7px; }
+  .founder-quote     { font-size: 7pt; padding: 8px 10px; }
+  .founder-extra     { font-size: 6.5pt; }
+  .kpi-val           { font-size: 14pt; }
+  .kpi-lbl           { font-size: 5.5pt; }
+  .timeline-hed      { font-size: 7pt; }
+  .ttotal-val        { font-size: 9pt; }
+  .ttotal-lbl        { font-size: 5pt; }
+  .chip              { font-size: 6.5pt; padding: 3px 8px; }
+
+  /* Reducir gaps y paddings */
+  .header            { margin-bottom: 3mm; padding: 3mm 4mm; }
+  .row-prob-sol      { margin-bottom: 3mm; gap: 3mm; }
+  .row-footer        { gap: 3mm; }
+  .timeline-wrap     { margin-bottom: 3mm; padding: 3mm 4mm; }
+  .card              { padding: 3mm 3.5mm; }
+  .card-prob         { padding: 3mm 3.5mm; }
+  .card-sol          { padding: 3mm 3.5mm; }
+  .founder-card      { padding: 3mm 4mm; }
+  .vision-card       { padding: 3mm 4mm; }
+  .prob-items        { gap: 2mm; }
+  .sol-mvp-list      { gap: 2mm; }
+  .prob-item         { padding: 4px 8px; }
+  .sol-item          { padding: 5px 8px; }
+  .market-stats      { gap: 2mm; }
+  .mstat             { padding: 4px 8px; }
+  .founder-top       { margin-bottom: 8px; padding-bottom: 8px; }
+  .founder-tags      { gap: 3px; margin-top: 5px; }
+  .founder-quote     { margin-bottom: 8px; }
+
+  /* Evitar cortes */
+  .header, .card, .card-prob, .card-sol,
+  .prob-item, .sol-item, .timeline-wrap,
+  .founder-card, .vision-card,
+  .row-footer, .row-prob-sol { page-break-inside: avoid; }
+
+  * { page-break-inside: avoid; }
+
+  @page {
+    size: A4 landscape;
+    margin: 0mm;
+  }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════ -->
+<div class="header">
+  <div class="header-logo">
+    <img src="logo.png" alt="Logo Kit2Help" style="height:100px;width:auto;object-fit:contain;">
+  </div>
+  <div class="header-brand">
+    <div class="header-brand-name">KIT<span>2</span>HELP</div>
+    <div class="header-brand-tag">Toda la emergencia · Un solo mapa</div>
+    <div class="header-brand-sub">El primer mapa operativo compartido para coordinar ciudadanos, voluntarios, ONG y administraciones en tiempo real durante una emergencia.</div>
+  </div>
+  <div class="header-kpis">
+    <div class="kpi-box">
+      <div class="kpi-val c-coral">115K€</div>
+      <div class="kpi-lbl">Ronda Pre-Seed</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-val c-white">18m</div>
+      <div class="kpi-lbl">Runway objetivo</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-val c-blue">8.000</div>
+      <div class="kpi-lbl">Municipios TAM</div>
+    </div>
+    <div class="kpi-box">
+      <div class="kpi-val c-mint">323K€</div>
+      <div class="kpi-lbl">ARR Año 3</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ROW 1: PROBLEMA + SOLUCIÓN
+══════════════════════════════════════════════════════ -->
+<div class="row-prob-sol">
+
+  <!-- PROBLEMA -->
+  <div class="card-prob">
+    <div class="sec-label red">El Problema</div>
+    <div class="prob-items">
+
+      <div class="prob-item">
+        <div class="prob-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prob-text"><strong>45–50K voluntarios</strong> coordinados por WhatsApp y Telegram</div>
+      </div>
+
+      <div class="prob-item">
+        <div class="prob-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prob-text"><strong>Información fragmentada</strong> entre AAPP, ONGs y ciudadanos</div>
+      </div>
+
+      <div class="prob-item">
+        <div class="prob-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prob-text"><strong>Recursos sin trazabilidad</strong> — duplicados, pérdidas</div>
+      </div>
+
+      <div class="prob-item">
+        <div class="prob-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="9" x2="12" y2="13" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="17" x2="12.01" y2="17" stroke="#D94F4F" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prob-text"><strong> Decisiones tomadas con información parcial</strong> — triaje manual, sin tiempo real</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SOLUCIÓN -->
+  <div class="card-sol">
+    <div class="sec-label mint">La Solución</div>
+    <div class="sol-inner">
+      <div class="sol-mvp-list">
+        <div class="sol-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Registro de necesidades
+        </div>
+        <div class="sol-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Triaje y validación
+        </div>
+        <div class="sol-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Asignación de voluntarios
+        </div>
+        <div class="sol-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Muro operativo público
+        </div>
+        <div class="sol-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Mapa en tiempo real
+        </div>
+        <div class="sol-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Kits personalizados por requerimiento real
+        </div>
+      </div>
+      <div class="sol-img">
+        <img src="mapaglobal.png" alt="Mapa Operativo Global" style="width:100%;height:90%;object-fit:cover;border-radius:10px;border:2px solid #2CD3A6;">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     VALIDACIÓN DEL PROBLEMA — VOCES DEL ECOSISTEMA
+══════════════════════════════════════════════════════ -->
+<div style="background:#ffffff;border:1px solid var(--border);border-radius:var(--r);padding:16px 22px;margin-bottom:14px;">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="width:3px;height:14px;background:var(--mint-dk);border-radius:2px;"></div>
+      <span style="font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mint-dk);">Validación del Problema</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);font-style:italic;background:var(--mint-lt);border:1px solid rgba(44,211,166,.25);border-radius:20px;padding:4px 14px;">
+      Entrevistas de descubrimiento con actores clave del ecosistema de emergencias
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+
+    <!-- Manuel DeRonde -->
+    <div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--mint);border-radius:var(--r-sm);padding:13px 14px;">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--dark),var(--mint-dk));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#fff" stroke-width="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;">Manuel DeRonde</div>
+          <div style="font-size:11px;color:var(--mint-dk);font-weight:600;margin-top:2px;">Coordinador Voluntarios DANA</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-bottom:8px;">Fundador <strong style="color:var(--text);">@voluntariosdanavalencia</strong> — coordinó decenas de miles de voluntarios por Telegram durante la emergencia.</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(44,211,166,.1);border:1px solid rgba(44,211,166,.25);border-radius:20px;padding:3px 10px;">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size:11px;font-weight:600;color:var(--mint-dk);">Valida caos coordinación</span>
+      </div>
+    </div>
+
+    <!-- Miguel Calderón -->
+    <div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--blue);border-radius:var(--r-sm);padding:13px 14px;">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a5f7a,var(--blue));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;">Miguel Calderón</div>
+          <div style="font-size:11px;color:var(--blue);font-weight:600;margin-top:2px;">Protección Civil Utebo</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-bottom:8px;">Presidente Agrupación Voluntarios PC Utebo. Ejecutó simulacro en <strong style="color:var(--text);">Estación Zaragoza Delicias</strong> — contexto ideal para piloto.</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(78,162,226,.1);border:1px solid rgba(78,162,226,.25);border-radius:20px;padding:3px 10px;">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#4EA2E2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size:11px;font-weight:600;color:var(--blue);">Perfil piloto real</span>
+      </div>
+    </div>
+
+    <!-- Daniel Mossos -->
+    <div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid #9B8FE8;border-radius:var(--r-sm);padding:13px 14px;">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#3d3570,#9B8FE8);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;">Daniel</div>
+          <div style="font-size:11px;color:#7B6FD8;font-weight:600;margin-top:2px;">Mossos d'Esquadra · Jurista</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-bottom:8px;">Participó en <strong style="color:var(--text);">DANA, incendios León y Volcán La Palma</strong>. Profesor de derecho. Entrevista publicada en LinkedIn.</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(155,143,232,.1);border:1px solid rgba(155,143,232,.25);border-radius:20px;padding:3px 10px;">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#9B8FE8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size:11px;font-weight:600;color:#7B6FD8;">Valida marco legal</span>
+      </div>
+    </div>
+
+    <!-- Marcos Soler -->
+    <div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--coral);border-radius:var(--r-sm);padding:13px 14px;">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7a4a1a,var(--coral));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="9,22 9,12 15,12 15,22" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;">Marcos Soler Giménez</div>
+          <div style="font-size:11px;color:#d97050;font-weight:600;margin-top:2px;">Regidor PC · Castelldefels</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-bottom:8px;">Regidor de Platges i Protecció Civil del <strong style="color:var(--text);">Ayuntamiento de Castelldefels</strong> — perfil con capacidad de firma de contrato.</div>
+      <div style="display:inline-flex;align-items:center;gap:5px;background:rgba(255,160,122,.1);border:1px solid rgba(255,160,122,.25);border-radius:20px;padding:3px 10px;">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17l-5-5" stroke="#d97050" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-size:11px;font-weight:600;color:#d97050;">Decisor institucional</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     ECOSISTEMA + INGRESOS + MERCADO + COMPETENCIA
+══════════════════════════════════════════════════════ -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;align-items:start;">
+
+  <!-- ── COLUMNA IZQUIERDA: ECOSISTEMA + MERCADO ── -->
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <!-- ECOSISTEMA -->
+    <div class="card">
+      <div class="sec-label mint">Ecosistema Kit2Help</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px;margin-top:-4px;">Kit2Help une necesidades reales con ayuda útil, en el momento y lugar adecuado.</div>
+
+      <svg width="82%" viewBox="0 0 340 260" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+        <!-- Líneas de conexión al centro -->
+        <line x1="170" y1="95"  x2="170" y2="62"  stroke="#2CD3A6" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <line x1="198" y1="103" x2="268" y2="68"  stroke="#4EA2E2" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <line x1="210" y1="130" x2="288" y2="130" stroke="#4EA2E2" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <line x1="198" y1="157" x2="268" y2="192" stroke="#9B8FE8" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <line x1="170" y1="165" x2="170" y2="198" stroke="#FFA07A" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <line x1="142" y1="157" x2="72"  y2="192" stroke="#D94F4F" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <line x1="130" y1="130" x2="52"  y2="130" stroke="#FFA07A" stroke-width="1.2" stroke-dasharray="3,2"/>
+        <line x1="142" y1="103" x2="72"  y2="68"  stroke="#2CD3A6" stroke-width="1.2" stroke-dasharray="3,2"/>
+
+        <!-- Nodo central con logo -->
+        <circle cx="170" cy="130" r="44" fill="#229175" stroke="#2CD3A6" stroke-width="2.5"/>
+        <image href="logo.png" x="136" y="96" width="68" height="68" clip-path="circle(34px at 34px 34px)"/>
+
+        <!-- NODO: Ciudadanos (arriba) -->
+        <circle cx="170" cy="44" r="26" fill="#E6F9F4" stroke="#2CD3A6" stroke-width="1.5"/>
+        <text x="170" y="40" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#1faa84">👥</text>
+        <text x="170" y="52" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">Ciudadanos</text>
+
+        <!-- NODO: AAPP (arriba-izq) -->
+        <circle cx="56" cy="54" r="26" fill="#E6F9F4" stroke="#2CD3A6" stroke-width="1.5"/>
+        <text x="56" y="50" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#1faa84">🏛️</text>
+        <text x="56" y="62" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">AAPP</text>
+
+        <!-- NODO: ONG (izquierda) -->
+        <circle cx="32" cy="130" r="26" fill="#FFF5F0" stroke="#FFA07A" stroke-width="1.5"/>
+        <text x="32" y="126" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#d97050">🤝</text>
+        <text x="32" y="138" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#d97050">ONGs</text>
+
+        <!-- NODO: Servicios (abajo-izq) -->
+        <circle cx="56" cy="206" r="26" fill="#FFF0F0" stroke="#D94F4F" stroke-width="1.5"/>
+        <text x="56" y="202" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#D94F4F">🚒</text>
+        <text x="56" y="214" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#D94F4F">Servicios</text>
+
+        <!-- NODO: Puntos físicos (abajo) -->
+        <circle cx="170" cy="216" r="26" fill="#FFF5F0" stroke="#FFA07A" stroke-width="1.5"/>
+        <text x="170" y="212" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#d97050">📦</text>
+        <text x="170" y="224" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#d97050">Puntos</text>
+
+        <!-- NODO: Medios (abajo-der) -->
+        <circle cx="284" cy="206" r="26" fill="#F0F4FF" stroke="#9B8FE8" stroke-width="1.5"/>
+        <text x="284" y="202" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#7B6FD8">📡</text>
+        <text x="284" y="214" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#7B6FD8">Medios</text>
+
+        <!-- NODO: Logística (derecha) -->
+        <circle cx="308" cy="130" r="26" fill="#F0F7FF" stroke="#4EA2E2" stroke-width="1.5"/>
+        <text x="308" y="126" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#3a8fc7">🚛</text>
+        <text x="308" y="138" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#3a8fc7">Logística</text>
+
+        <!-- NODO: Empresas (arriba-der) -->
+        <circle cx="284" cy="54" r="26" fill="#F0F7FF" stroke="#4EA2E2" stroke-width="1.5"/>
+        <text x="284" y="50" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" fill="#3a8fc7">🏪</text>
+        <text x="284" y="62" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#3a8fc7">Empresas</text>
+
+      </svg>
+    </div>
+
+   
+   <!-- MERCADO -->
+<div class="card" style="padding:14px 16px;">
+  <div class="sec-label blue">Mercado Objetivo</div>
+
+  <div style="display:flex;align-items:center;">
+
+
+    <!-- Mapa España como imagen -->
+<div style="position:relative;width:190px;flex-shrink:0;">
+ <div style="
+  width: 190px;
+  height: 148px;
+  flex-shrink: 0;
+  background-image: url('espana.svg');
+  background-repeat: no-repeat;
+  background-size: 320px auto;
+  background-position: -100px 1px;
+  opacity: .3;
+  filter: sepia(1) hue-rotate(17deg) saturate(3);
+  position: relative;
+"></div>
+  <!-- Capa SAM encima con SVG posicionado absoluto -->
+ <svg style="position:absolute;top:0;left:0;width:100%;height:100%;" viewBox="0 0 190 148">
+
+  <!-- CAPA TAM: puntos azules grandes dispersos por toda España -->
+  
+  <circle cx="70"  cy="38"  r="5" fill="rgba(78,162,226,.35)" stroke="#4EA2E2" stroke-width="1.2"/>
+  <circle cx="100" cy="35"  r="5" fill="rgba(78,162,226,.35)" stroke="#4EA2E2" stroke-width="1.2"/>
+  <circle cx="130" cy="60"  r="5" fill="rgba(78,162,226,.35)" stroke="#4EA2E2" stroke-width="1.2"/>
+  <circle cx="160" cy="58"  r="5" fill="rgba(78,162,226,.35)" stroke="#4EA2E2" stroke-width="1.2"/>
+  <circle cx="140" cy="89"  r="5" fill="rgba(78,162,226,.35)" stroke="#4EA2E2" stroke-width="1.2"/>
+  <circle cx="105" cy="80"  r="5" fill="rgba(78,162,226,.35)" stroke="#4EA2E2" stroke-width="1.2"/>
+
+
+  <!-- CAPA SAM: puntos verdes medianos en interior peninsular -->
+  <circle cx="90"  cy="55"  r="4" fill="rgba(44,211,166,.5)" stroke="#2CD3A6" stroke-width="1.2"/>
+  <circle cx="120"  cy="80"  r="4" fill="rgba(44,211,166,.5)" stroke="#2CD3A6" stroke-width="1.2"/>  
+  <circle cx="170" cy="50"  r="4" fill="rgba(44,211,166,.5)" stroke="#2CD3A6" stroke-width="1.2"/>
+  <circle cx="75"  cy="68"  r="4" fill="rgba(44,211,166,.5)" stroke="#2CD3A6" stroke-width="1.2"/>
+  <circle cx="101"  cy="62"  r="4" fill="rgba(44,211,166,.5)" stroke="#2CD3A6" stroke-width="1.2"/>
+  <circle cx="145" cy="65"  r="4" fill="rgba(44,211,166,.5)" stroke="#2CD3A6" stroke-width="1.2"/>
+  <circle cx="110"  cy="100"  r="4" fill="rgba(44,211,166,.5)" stroke="#2CD3A6" stroke-width="1.2"/>
+  <circle cx="155" cy="70"  r="4" fill="rgba(44,211,166,.5)" stroke="#2CD3A6" stroke-width="1.2"/>
+
+  <!-- CAPA SOM: puntos verde oscuro pequeños y densos — municipios <20k -->
+  <circle cx="110"  cy="40"  r="2" fill="#229175"/>
+  <circle cx="80"  cy="54"  r="2"   fill="#229175"/>
+  <circle cx="140"  cy="80"  r="2" fill="#229175"/>
+  <circle cx="155"  cy="56"  r="2"   fill="#229175"/>
+  <circle cx="104" cy="60"  r="2" fill="#229175"/>
+  <circle cx="78"  cy="110"  r="2"   fill="#229175"/>
+  <circle cx="100"  cy="70"  r="2" fill="#229175"/>
+  <circle cx="130"  cy="66"  r="2"   fill="#229175"/>
+  <circle cx="102" cy="68"  r="2" fill="#229175"/>
+  <circle cx="155" cy="40"  r="2"   fill="#229175"/>
+  <circle cx="68"  cy="68"  r="2"   fill="#229175"/>
+  <circle cx="130"  cy="74"  r="2" fill="#229175"/>
+  <circle cx="84"  cy="76"  r="2"   fill="#229175"/>
+  <circle cx="145"  cy="74"  r="2" fill="#229175"/>
+  <circle cx="100" cy="76"  r="2"   fill="#229175"/>
+  <circle cx="150" cy="80"  r="2"   fill="#229175"/>
+ 
+
+</svg>
+</div>
+
+    <!-- BURBUJAS CONCÉNTRICAS + STATS -->
+    <div style="display:flex;flex-direction:column;gap:0;align-items:center;flex:1;">
+
+
+      <!-- Stats compactos -->
+      <div style="display:flex;flex-direction:column;gap:5px;width:60%;margin-top:4px;">
+        <div class="mstat tam" style="padding:4px 8px;">
+          <div class="mstat-val" style="font-size:14px;">8.000  — TAM </div>
+          <div class="mstat-lbl">Municipios España</div>
+        </div>
+        <div class="mstat sam" style="padding:4px 8px;">
+          <div class="mstat-val" style="font-size:14px;">~2.500  — SAM</div>
+          <div class="mstat-lbl">Municipios &lt;50k hab.</div>
+        </div>
+        <div class="mstat bh" style="padding:4px 8px;">
+          <div class="mstat-val" style="font-size:14px;">~4.900 — SOM</div>
+          <div class="mstat-lbl">sin licitación &lt;20k</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+  </div><!-- /columna izquierda -->
+
+  <!-- ── COLUMNA DERECHA: INGRESOS + COMPETENCIA ── -->
+  <div style="display:flex;flex-direction:column;gap:10px;">
+
+    <!-- MODELO DE INGRESOS -->
+    <div class="card">
+      <div class="sec-label mint">Modelo de Ingresos — Cobros por Año</div>
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:var(--bg);">
+            <th style="font-size:11px;font-weight:700;color:var(--muted);padding:6px 8px;text-align:left;">Línea de ingreso</th>
+            <th style="font-size:11px;font-weight:700;color:var(--mint-dk);padding:6px 8px;text-align:center;">Año 1</th>
+            <th style="font-size:11px;font-weight:700;color:var(--blue);padding:6px 8px;text-align:center;">Año 2</th>
+            <th style="font-size:11px;font-weight:700;color:#d97050;padding:6px 8px;text-align:center;">Año 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:7px 8px;">
+              <div style="font-size:12px;font-weight:600;color:var(--text);">🏛️ SaaS municipios</div>
+              <div style="font-size:10px;color:var(--muted);">Pequeños 1.250€ · Medianos 2.500€/mes</div>
+            </td>
+            <td style="padding:7px 8px;text-align:center;"><div style="font-size:13px;font-weight:700;color:var(--mint-dk);">3.125€</div></td>
+            <td style="padding:7px 8px;text-align:center;"><div style="font-size:13px;font-weight:700;color:var(--blue);">55.000€</div></td>
+            <td style="padding:7px 8px;text-align:center;"><div style="font-size:13px;font-weight:700;color:#d97050;">125.000€</div></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:7px 8px;">
+              <div style="font-size:12px;font-weight:600;color:var(--text);">🤝 Privados</div>
+              <div style="font-size:10px;color:var(--muted);">ONGs 400€ · Partners logísticos 500€/mes</div>
+            </td>
+            <td style="padding:7px 8px;text-align:center;"><div style="font-size:13px;font-weight:700;color:var(--muted);">—</div></td>
+            <td style="padding:7px 8px;text-align:center;"><div style="font-size:13px;font-weight:700;color:var(--blue);">16.500€</div></td>
+            <td style="padding:7px 8px;text-align:center;"><div style="font-size:13px;font-weight:700;color:#d97050;">129.800€</div></td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:7px 8px;">
+              <div style="font-size:12px;font-weight:600;color:var(--text);">📣 Campañas solidarias</div>
+              <div style="font-size:10px;color:var(--muted);">Partners ecosistema · RSC</div>
+            </td>
+            <td style="padding:7px 8px;text-align:center;"><div style="font-size:13px;font-weight:700;color:var(--muted);">—</div></td>
+            <td style="padding:7px 8px;text-align:center;"><div style="font-size:13px;font-weight:700;color:var(--blue);">9.000€</div></td>
+            <td style="padding:7px 8px;text-align:center;"><div style="font-size:13px;font-weight:700;color:#d97050;">20.000€</div></td>
+          </tr>
+          <tr style="background:var(--bg);">
+            <td style="padding:8px 8px;font-size:12px;font-weight:700;color:var(--text);">TOTAL COBROS</td>
+            <td style="padding:8px 8px;text-align:center;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--mint-dk);">3.125€</div>
+              <div style="font-size:11px;color:var(--mint-dk);font-weight:600;">1 cliente</div>
+            </td>
+            <td style="padding:8px 8px;text-align:center;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--blue);">80.500€</div>
+              <div style="font-size:11px;color:var(--blue);font-weight:600;">7 clientes</div>
+            </td>
+            <td style="padding:8px 8px;text-align:center;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:#d97050;">274.800€</div>
+              <div style="font-size:11px;color:#d97050;font-weight:600;">15 clientes</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- HOY VS KIT2HELP -->
+<div class="card">
+  <div class="sec-label mint">Hoy vs Kit2Help</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+
+    <!-- 1: WhatsApp → Plataforma única -->
+ <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 8px;text-align:center;position:relative;">
+  <div style="position:absolute;top:-1px;right:-1px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.3);border-radius:0 var(--r-sm) 0 var(--r-sm);padding:2px 7px;font-size:9px;font-weight:700;color:var(--mint-dk);">Plataforma única</div>
+  <div style="font-size:26px;margin-bottom:6px;margin-top:8px;">💬</div>
+  <div style="font-size:11px;color:#9BAAB8;border-left:2px solid rgba(217,79,79,.4);padding-left:6px;text-align:left;margin-top:4px;">WhatsApp / Telegram</div>
+    </div>
+
+    <!-- 2: Excel → Trazabilidad QR -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 8px;text-align:center;position:relative;">
+      <div style="position:absolute;top:-1px;right:-1px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.3);border-radius:0 var(--r-sm) 0 var(--r-sm);padding:2px 7px;font-size:9px;font-weight:700;color:var(--mint-dk);">Trazabilidad QR</div>
+      <div style="font-size:26px;margin-bottom:6px;margin-top:8px;">📊</div>
+      <div style="font-size:11px;color:#9BAAB8;border-left:2px solid rgba(217,79,79,.4);padding-left:6px;text-align:left;margin-top:4px;">Excel / papel</div>
+    </div>
+
+    <!-- 3: Llamadas → Tiempo real -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 8px;text-align:center;position:relative;">
+      <div style="position:absolute;top:-1px;right:-1px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.3);border-radius:0 var(--r-sm) 0 var(--r-sm);padding:2px 7px;font-size:9px;font-weight:700;color:var(--mint-dk);">Estado en tiempo real</div>
+      <div style="font-size:26px;margin-bottom:6px;margin-top:8px;">📞</div>
+      <div style="font-size:11px;color:#9BAAB8;border-left:2px solid rgba(217,79,79,.4);padding-left:6px;text-align:left;margin-top:4px;">Llamadas sin registro</div>
+    </div>
+
+    <!-- 4: Info dispersa → Mapa compartido -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 8px;text-align:center;position:relative;">
+      <div style="position:absolute;top:-1px;right:-1px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.3);border-radius:0 var(--r-sm) 0 var(--r-sm);padding:2px 7px;font-size:9px;font-weight:700;color:var(--mint-dk);">Mapa compartido</div>
+      <div style="font-size:26px;margin-bottom:6px;margin-top:8px;">🗺️</div>
+      <div style="font-size:11px;color:#9BAAB8;border-left:2px solid rgba(217,79,79,.4);padding-left:6px;text-align:left;margin-top:4px;">Información dispersa</div>
+    </div>
+
+    <!-- 5: Sin evidencia → Datos para AAPP -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 8px;text-align:center;position:relative;">
+      <div style="position:absolute;top:-1px;right:-1px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.3);border-radius:0 var(--r-sm) 0 var(--r-sm);padding:2px 7px;font-size:9px;font-weight:700;color:var(--mint-dk);">Datos para AAPP</div>
+      <div style="font-size:26px;margin-bottom:6px;margin-top:8px;">📋</div>
+      <div style="font-size:11px;color:#9BAAB8;border-left:2px solid rgba(217,79,79,.4);padding-left:6px;text-align:left;margin-top:4px;">Sin evidencia de impacto</div>
+    </div>
+
+    <!-- 6: Donación aleatoria → Kits trazables -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 8px;text-align:center;position:relative;">
+      <div style="position:absolute;top:-1px;right:-1px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.3);border-radius:0 var(--r-sm) 0 var(--r-sm);padding:2px 7px;font-size:9px;font-weight:700;color:var(--mint-dk);">Kits esenciales</div>
+      <div style="font-size:26px;margin-bottom:6px;margin-top:8px;">📦</div>
+      <div style="font-size:11px;color:#9BAAB8;border-left:2px solid rgba(217,79,79,.4);padding-left:6px;text-align:left;margin-top:4px;">Donación aleatoria</div>
+    </div>
+
+  </div>
+
+  <!-- Nota competencia -->
+  <div class="comp-note" style="font-size:11px;margin-top:10px;">
+    Sin competidor directo B2G SaaS integrado en España.
+  </div>
+
+</div>
+
+  </div><!-- /columna derecha -->
+
+</div><!-- /grid principal -->
+
+
+
+<!-- ══════════════════════════════════════════════════════
+     FINANCIACIÓN POR HITOS
+══════════════════════════════════════════════════════ -->
+<div class="timeline-wrap">
+  <div class="timeline-title-bar">
+    <div class="timeline-hed">Inversión: 115.000€ en 4 Tramos por Hitos</div>
+    <div class="timeline-totals">
+      <div class="ttotal">
+        <div class="ttotal-val cm">115.000€</div>
+        <div class="ttotal-lbl">Inversión total</div>
+      </div>
+      <div class="ttotal">
+        <div class="ttotal-val cc">+114.620€</div>
+        <div class="ttotal-lbl">EBITDA Año 3</div>
+      </div>
+      <div class="ttotal">
+        <div class="ttotal-val cb">323.550€</div>
+        <div class="ttotal-lbl">ARR Año 3</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 tramos en grid -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
+
+    <!-- T1 -->
+    <div style="background:rgba(255,255,255,.06);border:1px solid rgba(44,211,166,.3);border-top:3px solid #2CD3A6;border-radius:8px;padding:12px 14px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div style="width:38px;height:38px;border-radius:50%;background:#229175;border:2px solid #2CD3A6;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;">T1</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#2CD3A6;line-height:1;">25.000€</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.5px;">Año 1 · Mes 1</div>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:5px;">Constitución SL + arranque MVP</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.55;">Cubre gestoría, herramientas y primeros meses de operación.</div>
+    </div>
+
+    <!-- T2 -->
+    <div style="background:rgba(255,255,255,.06);border:1px solid rgba(78,162,226,.3);border-top:3px solid #4EA2E2;border-radius:8px;padding:12px 14px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div style="width:38px;height:38px;border-radius:50%;background:#1a5f7a;border:2px solid #4EA2E2;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;">T2</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#4EA2E2;line-height:1;">25.000€</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.5px;">Año 1 · Mes 4</div>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:5px;">MVP funcional y demostrable</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.55;">El producto puede enseñarse a un ayuntamiento.</div>
+    </div>
+
+    <!-- T3 -->
+    <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,160,122,.3);border-top:3px solid #FFA07A;border-radius:8px;padding:12px 14px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div style="width:38px;height:38px;border-radius:50%;background:#7a4a1a;border:2px solid #FFA07A;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;">T3</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#FFA07A;line-height:1;">55.000€</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.5px;">Año 2</div>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:5px;">Primer piloto firmado</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.55;">Al menos 1 ayuntamiento con contrato. Financia Junior y escala comercial.</div>
+    </div>
+
+    <!-- T4 -->
+    <div style="background:rgba(255,255,255,.06);border:1px solid rgba(155,143,232,.3);border-top:3px solid #9B8FE8;border-radius:8px;padding:12px 14px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <div style="width:38px;height:38px;border-radius:50%;background:#3d3570;border:2px solid #9B8FE8;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;">T4</div>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:#9B8FE8;line-height:1;">10.000€</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.4);letter-spacing:.5px;">Año 3</div>
+        </div>
+      </div>
+      <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:5px;">5+ clientes activos</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.55;">Colchón de escalado. En Año 3 el EBITDA ya es positivo; este tramo es seguridad adicional.</div>
+    </div>
+
+  </div>
+
+  <!-- Nota lógica inversora -->
+  <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-left:3px solid #FFA07A;border-radius:8px;padding:10px 14px;display:flex;align-items:flex-start;gap:10px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10" stroke="#FFA07A" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#FFA07A" stroke-width="2" stroke-linecap="round"/></svg>
+    <div style="font-size:12px;color:rgba(255,255,255,.65);line-height:1.6;">
+      <strong style="color:rgba(255,255,255,.85);">Por qué esta estructura:</strong> cada tramo se libera solo si se cumple el hito anterior. Reduce el riesgo del inversor: si el MVP no funciona, solo ha perdido el Tramo 1.
+       <br/>Los tramos grandes van donde de verdad se necesita el capital — Año 2 es el burn más alto con el equipo creciendo.
+       <span style="display:inline-block;margin-top:4px;color:rgba(255,255,255,.5);">Upside no incluido en el modelo base: <strong style="color:#2CD3A6;">subvención ACCIÓ 2027</strong> — hasta 74.000€ si se aprueba. Acelerador, no pilar.</span>
+    </div>
+  </div>
+
+</div>
+
+ <!-- VISIÓN & ROADMAP HORIZONTAL -->
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px;margin-bottom: 14px;">
+
+    <!-- Título + visión -->
+    <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:2px"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#229175" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mint-dk);margin-bottom:4px;">Visión &amp; Roadmap</div>
+        <div style="font-size:13px;font-weight:600;color:var(--text);line-height:1.5;">Construir el <strong style="color:var(--dark);">nuevo flujo operativo de las emergencias</strong> — de municipio a estándar nacional de coordinación para administraciones públicas.</div>
+      </div>
+    </div>
+
+    <!-- AÑO 1: 3 segmentos horizontales -->
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Año 1 — Desglose mensual</div>
+
+    <div style="display:grid;grid-template-columns:4fr 3fr 5fr;gap:6px;margin-bottom:6px;">
+
+      <!-- Construcción -->
+      <div style="background:#EBF9F5;border:1px solid rgba(44,211,166,.35);border-top:3px solid #2CD3A6;border-radius:6px;padding:10px 12px;">
+        <div style="font-size:10px;color:var(--mint-dk);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Meses 1–4 · 50.000€</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">Construcción MVP</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.4;">CTO sola · SL constituida · Producto demostrable</div>
+      </div>
+
+      <!-- Validación -->
+      <div style="background:#EEF6FF;border:1px solid rgba(78,162,226,.35);border-top:3px solid #4EA2E2;border-radius:6px;padding:10px 12px;">
+        <div style="font-size:10px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Meses 5–7 · Piloto</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">Validación real</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.4;">1 ayuntamiento · ONG observadora · Simulacro</div>
+      </div>
+
+      <!-- Primer ingreso -->
+      <div style="background:#FFF5F0;border:1px solid rgba(255,160,122,.35);border-top:3px solid #FFA07A;border-radius:6px;padding:10px 12px;">
+        <div style="font-size:10px;color:#d97050;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Meses 8–12 · 1 cliente</div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">Primer ingreso real</div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.4;">Early Adopter al 50% · ARR: 3.125€ · Caja: 11.285€</div>
+      </div>
+
+    </div>
+
+    <!-- Barra de progreso -->
+    <div style="display:grid;grid-template-columns:4fr 3fr 5fr;gap:6px;margin-bottom:14px;">
+      <div style="height:4px;background:#2CD3A6;border-radius:3px;"></div>
+      <div style="height:4px;background:#4EA2E2;border-radius:3px;"></div>
+      <div style="height:4px;background:#FFA07A;border-radius:3px;"></div>
+    </div>
+
+    <!-- KPIs ARR 3 años -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+
+      <div style="background:#EBF9F5;border:1px solid rgba(44,211,166,.3);border-radius:7px;padding:10px 12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Año 1 · ARR</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--mint-dk);line-height:1;">3.125€</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;">1 cliente · Early Adopter</div>
+      </div>
+
+      <div style="background:#EEF6FF;border:1px solid rgba(78,162,226,.3);border-radius:7px;padding:10px 12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Año 2 · ARR</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--blue);line-height:1;">97.000€</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px;">7 clientes · T3 liberado</div>
+      </div>
+
+      <div style="background:#FFF5F0;border:1px solid rgba(255,160,122,.3);border-radius:7px;padding:10px 12px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Año 3 · ARR</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#d97050;line-height:1;">323.550€</div>
+        <div style="font-size:11px;color:#d97050;margin-top:3px;font-weight:700;">EBITDA +114.620€ ✓</div>
+      </div>
+
+    </div>
+
+    <!-- Chips contacto -->
+    <div class="contact-chips">
+      <span class="chip hl">Pre-Seed abierta</span>
+      <span class="chip">kit2help.info@gmail.com</span>
+      <span class="chip">Barcelona · Cataluña</span>
+    </div>
+
+  </div><!-- /vision-roadmap -->
+
+<!-- ══════════════════════════════════════════════════════
+     FOOTER: FOUNDER + VISIÓN
+══════════════════════════════════════════════════════ -->
+
+
+ <div class="founder-card">
+
+    <!-- FILA SUPERIOR: foto + nombre + tags -->
+    <div class="founder-top">
+      <div class="founder-ava">
+        <img src="fotopersonal.jpg" alt="Sandra González Fortea" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+      </div>
+      <div>
+        <div class="founder-name">Sandra González Fortea</div>
+        <div class="founder-role">CTO &amp; Fundadora</div>
+        <div class="founder-tags">
+          <span class="ftag">Ing. Informática</span>
+           
+        </div>
+      </div>
+    </div>
+
+    <!-- CITA: ancho completo -->
+    <div class="founder-quote">
+      "He identificado un problema que se repite en todas las emergencias: nadie dispone de una visión unificada en tiempo real. <br/>  <br/>Como <strong>Ingeniera Informática</strong> puedo construir la solución. 
+      <br/> Como <strong>CTO & fundadora</strong>, estoy comprometida a convertir kit2help en el nuevo flujo operativo de las emergencias."
+    </div>
+
+    <!-- BÚSQUEDA -->
+    <div class="founder-extra">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#229175" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#229175" stroke-width="2"/><line x1="23" y1="11" x2="17" y2="11" stroke="#229175" stroke-width="2" stroke-linecap="round"/><line x1="20" y1="8" x2="20" y2="14" stroke="#229175" stroke-width="2" stroke-linecap="round"/></svg>
+      Busca <strong>Socio Empresarial</strong> con red B2G — equity, no nómina
+    </div>
+    
+  </div>
+
+
+</div>
+
+</div><!-- /page -->
+</body>
+</html>
