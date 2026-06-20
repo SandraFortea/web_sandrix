@@ -687,7 +687,7 @@
     }
 
     .ftag {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       padding: 4px 11px;
       border-radius: 20px;
@@ -697,10 +697,9 @@
     }
 
     .founder-quote {
-      font-size: 13px;
+      font-size: 10px;
       color: #0f3328;
-      font-style: italic;
-      line-height: 1.7;
+      font-style: italic;   
       padding: 14px 16px;
       border-left: 4px solid var(--mint);
       background: rgba(44, 211, 166, .08);
@@ -710,11 +709,11 @@
     }
 
     .founder-extra {
-      font-size: 12px;
+      font-size: 10px;
       color: var(--muted);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 1px;
       flex-wrap: nowrap;
       flex-direction: column;
       align-content: flex-start;
@@ -938,15 +937,15 @@
           <div class="kpi-lbl">Ronda Pre-Seed</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-val c-white">18m</div>
-          <div class="kpi-lbl">Runway objetivo</div>
+          <div class="kpi-val c-white">~3,2K€</div>
+          <div class="kpi-lbl">Burn Rate A1 Mensual</div>
         </div>
         <div class="kpi-box">
           <div class="kpi-val c-blue">8.000</div>
           <div class="kpi-lbl">Municipios TAM</div>
         </div>
         <div class="kpi-box">
-          <div class="kpi-val c-mint">323K€</div>
+          <div class="kpi-val c-mint">255K€</div>
           <div class="kpi-lbl">ARR Año 3</div>
         </div>
       </div>
@@ -1075,6 +1074,7 @@
     <!-- ══════════════════════════════════════════════════════
      VALIDACIÓN DEL PROBLEMA — VOCES DEL ECOSISTEMA
 ══════════════════════════════════════════════════════ -->
+
     <div class="section-validacion"
       style="background:#ffffff;border:1px solid var(--border);border-radius:var(--r);padding:16px 22px;margin-bottom:14px;">
 
@@ -1095,7 +1095,7 @@
 
         <!-- Manuel DeRonde -->
         <div
-          style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--dark);border-radius:var(--r-sm);padding:13px 14px;">
+          style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--dark);border-radius:var(--r-sm);padding:10px 12px;">
           <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
             <div
               style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a5f7a,var(--dark));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -1107,28 +1107,38 @@
                   stroke-linecap="round" />
               </svg>
             </div>
-            <div>
+            <!--<div>
               <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;">Manuel DeRonde</div>
               <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;">Coordinador Voluntarios DANA
               </div>
+            </div> -->
+            <div style="min-height:42px;display:flex;flex-direction:column;justify-content:center;">
+              <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                Manuel DeRonde
+              </div>
+
+              <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                Coordinador Voluntarios DANA
+              </div>
             </div>
+
           </div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-bottom:8px;">Fundador <strong
-              style="color:var(--text);">@voluntariosdanavalencia</strong> — coordinó decenas de miles de voluntarios
-            por Telegram durante la emergencia.</div>
-          <div
+          <div style="font-size:11px;color:var(--muted);line-height:1.35;margin-bottom:5px;">Fundador <strong
+              style="color:var(--text);">@voluntariosdanavalencia</strong> <br/><br/><i> <strong>"Todo lo que aprendimos durante la DANA nos sirve aquí. En otro lugar, empezaríamos de nuevo."</strong></i>
+              
+          </div>
+          <!--<div
             style="display:inline-flex;align-items:center;gap:5px;background:rgba(44,211,166,.1);border:1px solid rgba(44,211,166,.25);border-radius:20px;padding:3px 10px;">
             <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
               <path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round"
                 stroke-linejoin="round" />
             </svg>
             <span style="font-size:11px;font-weight:600;color:var(--dark);">Valida caos coordinación</span>
-          </div>
-        </div>
-
+          </div> -->
+        </div> 
         <!-- Miguel Calderón -->
         <div
-          style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--dark);border-radius:var(--r-sm);padding:13px 14px;">
+          style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--dark);border-radius:var(--r-sm);padding:10px 12px;">
           <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
             <div
               style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a5f7a,var(--dark));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -1137,27 +1147,33 @@
                   stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </div>
-            <div>
+            <!--<div>
               <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;">Miguel Calderón</div>
               <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;">Protección Civil Utebo</div>
+            </div> -->
+
+            <div style="min-height:42px;display:flex;flex-direction:column;justify-content:center;">
+              <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                Miguel Calderón
+              </div>
+
+              <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+               Protección Civil Utebo
+              </div>
             </div>
           </div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-bottom:8px;">Presidente Agrupación
-            Voluntarios PC Utebo. Ejecutó simulacro en <strong style="color:var(--text);">Estación Zaragoza
-              Delicias</strong> — contexto ideal para piloto.</div>
-          <div
-            style="display:inline-flex;align-items:center;gap:5px;background:rgba(44,211,166,.1);border:1px solid rgba(44,211,166,.25);border-radius:20px;padding:3px 10px;">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-              <path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-            <span style="font-size:11px;font-weight:600;color:var(--dark);">Perfil piloto real</span>
-          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.35;margin-bottom:5px;">Presidente <strong
+              style="color:var(--text);"> Agrupación Voluntarios. </strong><br/><br/><i> <strong>"Sin coordinación, la ayuda espontánea se convierte en un obstáculo para los profesionales."
+
+              </strong></i>
+            
+            </div>
+         
         </div>
 
         <!-- Daniel Mossos -->
         <div
-          style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--dark);border-radius:var(--r-sm);padding:13px 14px;">
+          style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--dark);border-radius:var(--r-sm);padding:10px 12px;">
           <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
             <div
               style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a5f7a,var(--dark));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -1166,28 +1182,32 @@
                   stroke-linecap="round" stroke-linejoin="round" />
               </svg>
             </div>
-            <div>
+            <!--<div>
               <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;">Daniel</div>
-              <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;">Mossos d'Esquadra · Jurista
+              <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;">Mossos d'Esquadra · Profesor de derecho.
               </div>
+            </div>-->
+            <div style="min-height:42px;display:flex;flex-direction:column;justify-content:center;">
+  <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+    Daniel
+  </div>
+
+  <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+    Mossos d'Esquadra · Profesor de derecho
+  </div>
+</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.35;margin-bottom:5px;">Participó en <strong
+              style="color:var(--text);">DANA, incendios León y Volcán La Palma</strong> <br/><br/><i> <strong>"Puedes ser un gran profesional, pero cada terreno es diferente. Si no sabes cómo acceder, no puedes actuar."
+
+              </strong></i>
             </div>
-          </div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-bottom:8px;">Participó en <strong
-              style="color:var(--text);">DANA, incendios León y Volcán La Palma</strong>. Profesor de derecho.
-            Entrevista publicada en LinkedIn.</div>
-          <div
-            style="display:inline-flex;align-items:center;gap:5px;background:rgba(44,211,166,.1);border:1px solid rgba(44,211,166,.25);border-radius:20px;padding:3px 10px;">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-              <path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-            <span style="font-size:11px;font-weight:600;color:var(--dark);">Validación operativa</span>
-          </div>
+         
         </div>
 
         <!-- Marcos Soler -->
         <div
-          style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--dark);border-radius:var(--r-sm);padding:13px 14px;">
+          style="background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--dark);border-radius:var(--r-sm);padding:10px 12px;">
           <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px;">
             <div
               style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a5f7a,var(--dark));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -1198,23 +1218,26 @@
                   stroke-linejoin="round" />
               </svg>
             </div>
-            <div>
+            <!--<div>
               <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;">Marcos Soler Giménez</div>
-              <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;">Regidor PC · Castelldefels
+              <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;">Regidor  · Castelldefels
               </div>
-            </div>
+            </div>-->
+            <div style="min-height:42px;display:flex;flex-direction:column;justify-content:center;">
+  <div style="font-size:12px;font-weight:700;color:var(--text);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+    Marcos Soler Giménez
+  </div>
+
+  <div style="font-size:11px;color:var(--dark);font-weight:600;margin-top:2px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+    Regidor  · Castelldefels
+  </div>
+</div>
+
           </div>
-          <div style="font-size:11px;color:var(--muted);line-height:1.55;margin-bottom:8px;">Regidor de Platges i
-            Protecció Civil del <strong style="color:var(--text);">Ayuntamiento de Castelldefels</strong> — perfil con
-            capacidad de firma de contrato.</div>
-          <div
-            style="display:inline-flex;align-items:center;gap:5px;background:rgba(44,211,166,.1);;border:1px solid rgba(44,211,166,.25);border-radius:20px;padding:3px 10px;">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
-              <path d="M20 6L9 17l-5-5" stroke="#1faa84" stroke-width="2.5" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-            <span style="font-size:11px;font-weight:600;color:var(--dark);">Decisor institucional</span>
-          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.35;margin-bottom:5px;">Regidor <strong style="color:var(--text);">(Playas y PC) · Castelldefels</strong>  <br/><br/><i> <strong>"La comunicación a la ciudadanía se realiza a través de redes sociales, mensajería y contactos manuales según la urgencia."
+
+              </strong></i></div>
+  
         </div>
 
       </div>
@@ -1433,10 +1456,10 @@
                   <div style="font-size:13px;font-weight:700;color:var(--muted);">3.125€</div>
                 </td>
                 <td style="padding:7px 8px;text-align:center;">
-                  <div style="font-size:13px;font-weight:700;color:var(--muted);">55.000€</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--muted);">67.500€</div>
                 </td>
                 <td style="padding:7px 8px;text-align:center;">
-                  <div style="font-size:13px;font-weight:700;color:var(--muted);">125.000€</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--muted);">250.000€</div>
                 </td>
               </tr>
               <tr style="border-bottom:1px solid var(--border);">
@@ -1448,13 +1471,13 @@
                   <div style="font-size:13px;font-weight:700;color:var(--muted);">—</div>
                 </td>
                 <td style="padding:7px 8px;text-align:center;">
-                  <div style="font-size:13px;font-weight:700;color:var(--muted);">16.500€</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--muted);">13.000€</div>
                 </td>
                 <td style="padding:7px 8px;text-align:center;">
-                  <div style="font-size:13px;font-weight:700;color:var(--muted);">129.800€</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--muted);">24.800€</div>
                 </td>
               </tr>
-              <tr style="border-bottom:1px solid var(--border);">
+              <!--<tr style="border-bottom:1px solid var(--border);">
                 <td style="padding:7px 8px;">
                   <div style="font-size:12px;font-weight:600;color:var(--text);">📣 Campañas solidarias</div>
                   <div style="font-size:10px;color:var(--muted);">Partners ecosistema · RSC</div>
@@ -1468,7 +1491,7 @@
                 <td style="padding:7px 8px;text-align:center;">
                   <div style="font-size:13px;font-weight:700;color:var(--muted);">20.000€</div>
                 </td>
-              </tr>
+              </tr>-->
               <tr style="background:var(--bg);">
                 <td style="padding:8px 8px;font-size:12px;font-weight:700;color:var(--text);">TOTAL COBROS</td>
                 <td style="padding:8px 8px;text-align:center;">
@@ -1486,7 +1509,7 @@
                 <td style="padding:8px 8px;text-align:center;">
                   <div
                     style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--mint-dk);">
-                    274.800€</div>
+                    254.800€</div>
                   <div style="font-size:11px;color:var(--text);font-weight:600;">15 clientes</div>
                 </td>
               </tr>
@@ -1605,11 +1628,11 @@
             <div class="ttotal-lbl">Inversión total</div>
           </div>
           <div class="ttotal">
-            <div class="ttotal-val cc">+114.620€</div>
+            <div class="ttotal-val cc">+65.870€</div>
             <div class="ttotal-lbl">EBITDA Año 3</div>
           </div>
           <div class="ttotal">
-            <div class="ttotal-val cb">323.550€</div>
+            <div class="ttotal-val cb">254.800€</div>
             <div class="ttotal-lbl">ARR Año 3</div>
           </div>
         </div>
@@ -1812,7 +1835,7 @@
             Año 2 · ARR</div>
           <div
             style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#229175;line-height:1;">
-            97.000€</div>
+            70.500€</div>
           <div style="font-size:11px;color:#229175;margin-top:3px;">7 clientes · T3 liberado</div>
         </div>
 
@@ -1822,8 +1845,8 @@
             Año 3 · ARR</div>
           <div
             style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#145f4d;line-height:1;">
-            323.550€</div>
-          <div style="font-size:11px;color:#145f4d;margin-top:3px;font-weight:700;">EBITDA +114.620€ ✓</div>
+            254.800€</div>
+          <div style="font-size:11px;color:#145f4d;margin-top:3px;font-weight:700;">EBITDA +65.870€ ✓</div>
         </div>
 
       </div>
@@ -1862,9 +1885,9 @@
 
       <!-- CITA: ancho completo -->
       <div class="founder-quote">
-        "He identificado un problema que se repite en todas las emergencias: nadie dispone de una visión unificada en
-        tiempo real. <br /> <br />Como <strong>Ingeniera Informática</strong> puedo construir la solución.
-        <br /> Como <strong>CTO & fundadora</strong>, estoy comprometida a convertir kit2help en el nuevo flujo
+        "He identificado un problema que se repite en todas las emergencias: <strong>nadie dispone de una visión unificada en
+        tiempo real. </strong><br /> <br />Como <strong>Ingeniera Informática</strong> puedo construir la solución.
+        <br /> Como <strong>CTO & fundadora</strong>, estoy comprometida a convertir <strong>kit2help</strong> en el nuevo flujo
         operativo de las emergencias."
       </div>
 
@@ -1876,7 +1899,8 @@
           <line x1="23" y1="11" x2="17" y2="11" stroke="#229175" stroke-width="2" stroke-linecap="round" />
           <line x1="20" y1="8" x2="20" y2="14" stroke="#229175" stroke-width="2" stroke-linecap="round" />
         </svg>
-        Busca <strong>Socio Empresarial</strong> con red B2G — equity, no nómina
+        Busca <strong>Socio Empresarial</strong> con red B2G — equity, no nómina 
+         Busca <strong>Talento</strong> con compromiso, mentalidad operativa y vocación de impacto
       </div>
 
     </div>
