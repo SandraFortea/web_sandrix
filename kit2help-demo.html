@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit2Help · Demo Interactiva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#E24B4A;--red-light:#FCEBEB;--red-dark:#922B21;
+  --orange:#EF9F27;--orange-light:#FEF5EC;
+  --teal:#1D9E75;--teal-light:#E1F5EE;--teal-dark:#0E4D38;
+  --purple:#7B5EA7;--purple-light:#F5F0FB;
+  --blue:#3A7BD5;--blue-light:#EEF4FC;
+  --green:#639922;--green-light:#EAF3DE;
+  --dark:#1a1a2e;--muted:#6B7280;--bg:#F7F8FA;
+  --white:#ffffff;--border:#E5E7EB;
+  --radius:12px;--radius-sm:8px;
+}
+
+html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#111;overflow:hidden}
+
+/* ── CHROME WRAPPER ── */
+.demo-chrome{
+  display:flex;flex-direction:column;
+  height:100vh;width:100vw;
+  max-width:1300px;margin:0 auto;
+}
+
+/* ── TOPBAR ── */
+.topbar{
+  background:#111827;
+  border-radius:var(--radius) var(--radius) 0 0;
+  padding:8px 16px;
+  display:flex;align-items:center;gap:8px;
+  flex-shrink:0;
+}
+.dots{display:flex;gap:5px}
+.dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
+.url-bar{flex:1;text-align:center;font-size:11px;color:rgba(255,255,255,0.4)}
+.badge-live{font-size:10px;background:rgba(226,75,74,.2);color:#F7A8A7;border:1px solid rgba(226,75,74,.3);border-radius:20px;padding:2px 8px;font-weight:600}
+
+/* ── PROGRESS BAR ── */
+.progress-bar{
+  background:#111827;padding:8px 16px;
+  flex-shrink:0;display:flex;align-items:center;gap:10px;
+}
+.progress-steps{display:flex;gap:3px;flex:1}
+.progress-step{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);transition:background .4s}
+.progress-step.done{background:var(--teal)}
+.progress-step.active{background:var(--red)}
+.progress-label{font-size:11px;color:rgba(255,255,255,.45);white-space:nowrap;min-width:110px;text-align:right}
+
+/* ── SCREEN ── */
+.screen{
+  flex:1;
+  background:var(--bg);
+  overflow:hidden;
+  position:relative;
+  display:flex;flex-direction:column;
+  min-height:0;
+}
+
+/* ── NARRATIVE STRIP ── */
+.narrative{
+  position:absolute;bottom:0;left:0;right:0;
+  z-index:100;padding:0 12px 8px;
+  pointer-events:none;display:flex;justify-content:center;
+}
+.narrative-inner{
+  background:rgba(17,24,39,.9);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.18);
+  border-left:4px solid #FBBF24;
+  border-radius:var(--radius);
+  padding:11px 22px;
+  font-size:15px;color:#fff;
+  font-style:italic;text-align:center;
+  max-width:860px;line-height:1.6;font-weight:500;
+  animation:narrativeIn .55s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 6px 28px rgba(0,0,0,.4);
+}
+@keyframes narrativeIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none scale(1)}}
+
+/* ── CONTROLS ── */
+.controls{
+  background:var(--white);
+  border-top:1px solid var(--border);
+  padding:8px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+  z-index:200;
+}
+.btn-restart{padding:6px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .18s}
+.btn-restart:hover{border-color:var(--dark);color:var(--dark)}
+.btn-next{padding:8px 20px;border:1.5px solid rgba(255,255,255,.15);border-radius:var(--radius-sm);background:rgba(107,114,128,.25);color:rgba(255,255,255,.55);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:default;transition:all .25s;display:flex;align-items:center;gap:6px;backdrop-filter:blur(4px)}
+.btn-next:hover{background:rgba(107,114,128,.25);color:rgba(255,255,255,.55)}
+.btn-next.active-btn{background:var(--red);color:#fff;cursor:pointer;border-color:transparent}
+.btn-next.active-btn:hover{background:#c83a39}
+.btn-next.final-btn{background:var(--teal);color:#fff;cursor:pointer;border-color:transparent}
+.btn-next.final-btn:hover{background:#17835f}
+.step-indicator{font-size:13px;color:var(--muted)}
+
+/* ── PANELS ── */
+.panel{display:none!important;flex:1;min-height:0;overflow-y:auto;animation:fadeIn .3s ease;flex-direction:column;position:relative}
+.panel.active{display:flex!important}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ══ ATENCIÓN / SPOTLIGHT ══ */
+@keyframes spotlight{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}50%{box-shadow:0 0 0 8px rgba(251,191,36,.7),0 0 20px rgba(251,191,36,.3)}}
+@keyframes clockGlow{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}50%{box-shadow:0 0 0 10px rgba(251,191,36,.6),0 0 24px rgba(251,191,36,.25)}}
+@keyframes badgePulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(226,75,74,0)}50%{transform:scale(1.15);box-shadow:0 0 0 5px rgba(226,75,74,.35)}}
+@keyframes btnSpotlight{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}40%{box-shadow:0 0 0 10px rgba(251,191,36,.75),0 0 0 18px rgba(251,191,36,.25)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}60%{transform:translateY(-2px)}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+@keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+
+.spotlight{animation:spotlight 1s ease-in-out 3}
+.btn-spotlight{animation:btnSpotlight 1s ease-in-out 3!important}
+.clock-glow{animation:clockGlow 1.2s ease-in-out infinite}
+
+/* ══ PANEL 1: MAPA VACÍO ══ */
+@keyframes introFadeOut{0%{opacity:1;transform:scale(1)}80%{opacity:0;transform:scale(1.04)}100%{opacity:0;transform:scale(1.04);display:none}}
+.intro-hiding{animation:introFadeOut .6s ease forwards!important;pointer-events:none}
+#p1{overflow:hidden;flex-direction:column}
+#map1{flex:1;min-height:0}
+.map-overlay-time{
+  position:absolute;top:12px;right:12px;
+  background:rgba(17,24,39,.88);backdrop-filter:blur(6px);
+  border:2px solid rgba(29,158,117,.4);
+  border-radius:var(--radius-sm);padding:7px 14px;
+  color:#fff;font-family:'Syne',sans-serif;font-size:23px;font-weight:800;
+  z-index:500;letter-spacing:2px;
+  transition:border-color .3s;
+}
+.map-overlay-ctx{
+  position:absolute;top:12px;left:12px;
+  background:rgba(17,24,39,.85);backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--radius-sm);padding:6px 12px;
+  color:rgba(255,255,255,.95);font-size:13px;font-weight:600;
+  z-index:500;letter-spacing:.5px;
+}
+.toast-container{
+  position:absolute;top:54px;left:50%;transform:translateX(-50%);
+  z-index:600;display:flex;flex-direction:column;gap:7px;
+  align-items:center;pointer-events:none;min-width:340px;
+}
+.toast{
+  background:rgba(17,24,39,.94);
+  border:1.5px solid rgba(239,159,39,.5);
+  border-left:5px solid var(--orange);
+  border-radius:var(--radius);padding:11px 16px;
+  font-size:15px;color:#fff;font-weight:500;
+  box-shadow:0 8px 28px rgba(0,0,0,.45);
+  backdrop-filter:blur(8px);
+  opacity:0;transform:translateY(-12px) scale(.93);
+  transition:all .42s cubic-bezier(.16,1,.3,1);
+  display:flex;align-items:center;gap:10px;white-space:nowrap;
+  animation-fill-mode:both;
+}
+.toast.show{opacity:1;transform:none;animation:toastPop .42s cubic-bezier(.16,1,.3,1)}
+@keyframes toastPop{0%{opacity:0;transform:translateY(-12px) scale(.93)}60%{transform:translateY(2px) scale(1.02)}100%{opacity:1;transform:none}}
+.toast-dot{width:9px;height:9px;border-radius:50%;background:var(--orange);flex-shrink:0;animation:badgePulse 1.1s infinite}
+.toast-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.5px;margin-left:auto;padding:2px 8px;background:rgba(239,159,39,.18);border:1px solid rgba(239,159,39,.4);border-radius:20px}
+
+/* ══ PANEL 1b: ALTA CIUDADANO ══ */
+.panel-inner{padding:16px;flex:1;overflow-y:auto}
+.panel-header{margin-bottom:14px}
+.panel-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:3px}
+.panel-sub{font-size:12px;color:var(--muted);line-height:1.5}
+.role-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;margin-bottom:12px}
+.form-field{margin-bottom:12px}
+.form-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;display:block}
+.form-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--dark);background:var(--white);outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--teal)}
+.cat-grid{display:flex;gap:7px;flex-wrap:wrap}
+.cat-btn{padding:7px 13px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:12px;font-weight:600;cursor:pointer;background:var(--white);color:var(--muted);font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:all .18s}
+.cat-btn.active{border-color:var(--red);background:var(--red-light);color:var(--red-dark)}
+.prio-grid{display:flex;gap:7px}
+.prio-btn{flex:1;padding:7px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:11px;font-weight:700;cursor:pointer;background:var(--white);color:var(--muted);font-family:'DM Sans',sans-serif;text-align:center;transition:all .18s}
+.prio-btn.active-alta{border-color:var(--red);background:var(--red-light);color:var(--red-dark)}
+.btn-send{width:100%;padding:11px;border:none;border-radius:var(--radius);background:var(--red);color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;margin-top:6px}
+.btn-send:hover{background:#c83a39}
+.confirm-card{display:none;margin-top:12px;padding:12px 14px;border-radius:var(--radius);background:var(--teal-light);border:1.5px solid rgba(29,158,117,.4);animation:popIn .4s ease}
+.confirm-card.show{display:block}
+.confirm-title{font-size:13px;font-weight:700;color:var(--teal-dark);margin-bottom:4px}
+.confirm-sub{font-size:11px;color:var(--teal-dark);opacity:.8;line-height:1.5}
+.confirm-status{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:3px 10px;border-radius:20px;background:rgba(239,159,39,.15);border:1px solid var(--orange);font-size:11px;font-weight:700;color:#7D5200}
+
+/* ══ TRIAJE ══ */
+.triaje-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.triaje-tab{padding:6px 13px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;cursor:default;background:var(--bg);color:var(--muted);font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:5px;transition:all .2s}
+.triaje-tab.active{background:var(--dark);border-color:var(--dark);color:#fff}
+.tab-badge{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--red);color:#fff;
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  animation:badgePulse 1.1s infinite;
+}
+.tab-badge.zero{background:var(--green);animation:none}
+.subfilters{display:flex;gap:6px;flex-wrap:wrap;padding:8px 10px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:12px}
+.subfilter-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;align-self:center;margin-right:4px}
+.subfilter-btn{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;border:1.5px solid var(--border);background:var(--white);color:var(--muted);font-family:'DM Sans',sans-serif}
+.subfilter-btn.active{background:var(--dark);border-color:var(--dark);color:#fff}
+.sep{width:1px;height:18px;background:var(--border)}
+.val-card{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden;background:var(--white)}
+.val-card.entering{animation:slideIn .4s ease}
+.val-header{padding:11px 13px;display:flex;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.val-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.val-info{flex:1;min-width:0}
+.val-title-txt{font-size:14px;font-weight:600;color:var(--dark)}
+.val-meta{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45}
+.val-actions{display:flex;gap:5px;flex-shrink:0}
+.val-btn{padding:5px 11px;border-radius:var(--radius-sm);font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid;font-family:'DM Sans',sans-serif;transition:all .18s;white-space:nowrap}
+.val-btn-ok{background:#EAF3DE;border-color:#639922;color:#3B6D11}
+.val-btn-ok:hover{background:#639922;color:#fff}
+.val-btn-rej{background:var(--red-light);border-color:var(--red);color:var(--red-dark)}
+.val-btn-rej:hover{background:var(--red);color:#fff}
+.val-btn-more{background:var(--bg);border-color:var(--border);color:var(--muted)}
+.val-done{font-size:12px;padding:8px 13px;display:none}
+.val-done.ok{background:#EAF3DE;color:#3B6D11;border-top:1px solid #C0DD97;display:block}
+.val-done.rej{background:var(--red-light);color:var(--red-dark);border-top:1px solid #F7C1C1;display:block}
+.prio-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;display:inline-flex;align-items:center;gap:3px}
+.prio-alta{background:var(--red-light);color:var(--red-dark)}
+.prio-media{background:var(--orange-light);color:#7D5200}
+.tipo-oferta{background:var(--teal-light);color:var(--teal-dark);font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+.tipo-nec{background:var(--red-light);color:var(--red-dark);font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px}
+
+/* ══ MURO + MAPA SPLIT ══ */
+.split-view{display:flex;flex:1;overflow:hidden;min-height:0;width:100%}
+.split-left{width:48%;border-right:1px solid var(--border);overflow-y:auto;padding:14px}
+.split-right{width:52%;display:flex;flex-direction:column;position:relative;min-height:0}
+.muro-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.muro-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--dark)}
+.muro-live{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--teal);font-weight:600}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.muro-filters{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.mf-btn{padding:5px 9px;border:1.5px solid var(--border);border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;background:var(--bg);color:var(--muted);font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:4px;transition:all .18s}
+.mf-btn.active{background:var(--dark);border-color:var(--dark);color:#fff}
+.mf-dot{width:6px;height:6px;border-radius:50%}
+.muro-item{display:flex;gap:9px;padding:11px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:7px;background:var(--white);animation:popIn .4s ease}
+.muro-dot-side{width:9px;height:9px;border-radius:50%;margin-top:3px;flex-shrink:0}
+.muro-item-title{font-size:13px;font-weight:600;color:var(--dark)}
+.muro-item-sub{font-size:12px;color:var(--muted);margin:2px 0 6px;line-height:1.45}
+.muro-item-footer{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.muro-new-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--orange-light);color:#7D5200;border:1px solid var(--orange)}
+.muro-cat-tag{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px}
+.map-legend{position:absolute;top:10px;right:10px;background:rgba(17,24,39,.88);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-sm);padding:10px 13px;z-index:500;min-width:150px}
+.map-legend-title{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.map-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.82);margin-bottom:4px}
+.map-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* ══ MAPA 5 GLOBAL ══ */
+#p5{overflow:hidden}
+#map5{flex:1;min-height:0}
+.map5-filters{display:flex;gap:6px;flex-wrap:wrap}
+.map5-filter{padding:6px 13px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;border:2px solid rgba(255,255,255,.55);background:rgba(17,24,39,.92);color:#fff;backdrop-filter:blur(10px);font-family:'DM Sans',sans-serif;transition:all .18s;box-shadow:0 2px 10px rgba(0,0,0,.3)}
+.map5-filter.on{border-color:#fff;background:rgba(255,255,255,.95);color:var(--dark);box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.map5-dot{width:8px;height:8px;border-radius:50%}
+.map5-panel{background:rgba(17,24,39,.92);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:14px 16px;min-width:200px}
+.map5-panel-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.map5-panel-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.map5-panel-label{font-size:12px;color:rgba(255,255,255,.8);flex:1}
+.map5-panel-val{font-size:12px;font-weight:700}
+.map5-bar-wrap{position:relative;height:4px;background:rgba(255,255,255,.12);border-radius:2px;flex:1}
+.map5-bar-fill{height:100%;border-radius:2px}
+.map5-metrics{background:rgba(17,24,39,.95);backdrop-filter:blur(8px);padding:10px 20px;display:flex;gap:0;border-top:1px solid rgba(255,255,255,.08);flex-shrink:0}
+.map5-metric{flex:1;text-align:center;border-right:1px solid rgba(255,255,255,.08)}
+.map5-metric:last-child{border-right:none}
+.map5-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;display:block}
+.map5-lbl{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.5px}
+
+/* ══ TRANSICIÓN KITS ══ */
+#p7{background:var(--dark);justify-content:center;align-items:center}
+#p6{overflow:hidden}
+.trans-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;height:100%;gap:20px}
+.trans-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--teal)}
+.trans-headline{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;text-align:center;line-height:1.3}
+.trans-grid{display:flex;gap:0;max-width:780px;width:100%;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);overflow:hidden}
+.trans-left{flex:1;padding:24px;border-right:1px solid rgba(255,255,255,.1)}
+.trans-right{flex:1;padding:24px;background:rgba(29,158,117,.07)}
+.trans-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:block}
+.trans-label.done{color:var(--teal)}
+.trans-label.next{color:var(--orange)}
+.trans-item{display:flex;align-items:flex-start;gap:9px;margin-bottom:10px}
+.trans-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.trans-text{font-size:12px;color:rgba(255,255,255,.75);line-height:1.4}
+.trans-headline2{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:6px}
+.trans-desc{font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:16px}
+.btn-trans{padding:10px 22px;border:none;border-radius:var(--radius);background:var(--teal);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s}
+.btn-trans:hover{background:#17835f}
+
+/* ══ KITS COORDINADOR ══ */
+.kit-mode-toggle{display:flex;gap:4px;background:rgba(0,0,0,.06);border-radius:var(--radius);padding:4px;margin-bottom:16px}
+.kit-mode-btn{flex:1;padding:8px 12px;border:none;border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;color:var(--muted);background:transparent;display:flex;align-items:center;justify-content:center;gap:6px}
+.kit-mode-btn.active{background:var(--white);color:var(--dark);box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.kit-types{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap}
+.kit-type-card{padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;text-align:center;min-width:85px;transition:all .18s;background:var(--white)}
+.kit-type-card.active{border-color:var(--teal);background:var(--teal-light)}
+.kit-type-icon{font-size:20px;display:block;margin-bottom:3px}
+.kit-type-name{font-size:11px;font-weight:600;color:var(--dark)}
+.kit-type-sub{font-size:10px;color:var(--muted)}
+.kit-section-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.kit-item-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.kit-item-row:last-child{border-bottom:none}
+.kit-item-emoji{font-size:15px;flex-shrink:0}
+.kit-item-name{flex:1;font-size:12px;color:var(--dark)}
+.kit-qty{display:flex;align-items:center;gap:5px}
+.qty-btn{width:22px;height:22px;border:1.5px solid var(--border);border-radius:6px;background:var(--bg);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .18s}
+.qty-btn:hover{border-color:var(--dark);color:var(--dark)}
+.qty-val{font-size:12px;font-weight:600;width:18px;text-align:center;color:var(--dark)}
+.kit-total{font-size:12px;color:var(--muted);padding:8px 0 0}
+.kit-total strong{color:var(--teal);font-family:'Syne',sans-serif;font-size:17px}
+.btn-crear-kit{width:100%;padding:10px;border:none;border-radius:var(--radius);background:var(--teal);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s;margin:10px 0}
+.btn-crear-kit:hover:not(:disabled){background:#17835f}
+.btn-crear-kit:disabled{background:var(--teal);opacity:.7;cursor:default}
+.kit-created-list{display:flex;flex-direction:column;gap:5px}
+.kit-created-item{display:flex;align-items:center;gap:9px;padding:8px 11px;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--white);animation:popIn .4s ease}
+.kit-created-icon{font-size:17px}
+.kit-created-info{flex:1}
+.kit-created-name{font-size:12px;font-weight:600;color:var(--dark)}
+.kit-created-meta{font-size:11px;color:var(--muted)}
+.kit-code{font-family:monospace;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;background:var(--teal-light);color:var(--teal-dark)}
+.kit-status-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--green-light);color:#3B6D11}
+.puntos-section{margin-top:14px;padding:12px;background:var(--orange-light);border-radius:var(--radius);border:1px solid rgba(239,159,39,.3);animation:popIn .5s ease}
+.puntos-title{font-size:11px;font-weight:700;color:#7D5200;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.punto-row{display:flex;align-items:flex-start;gap:7px;padding:6px 0;border-bottom:1px solid rgba(239,159,39,.2);font-size:12px;color:var(--dark)}
+.punto-row:last-child{border-bottom:none}
+
+/* ══ DONANTE + TRAZABILIDAD ══ */
+.puntos-recogida{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.punto-card{display:flex;align-items:center;gap:9px;padding:9px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);transition:all .18s}
+.punto-card.admite{border-color:var(--teal)}
+.punto-card-icon{font-size:19px}
+.punto-card-info{flex:1}
+.punto-card-name{font-size:12px;font-weight:600;color:var(--dark)}
+.punto-card-addr{font-size:11px;color:var(--muted)}
+.punto-card-dist{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+.admite-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--teal-light);color:var(--teal-dark);white-space:nowrap}
+.no-admite{font-size:10px;color:var(--muted);white-space:nowrap}
+.qr-section{padding:14px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:14px;text-align:center}
+.qr-donor-name{display:flex;align-items:center;gap:7px;padding:8px 11px;border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px;font-size:13px;color:var(--dark);background:var(--bg);text-align:left}
+#qrcode{display:flex;justify-content:center;margin:10px 0 7px}
+.qr-kit-code{font-family:monospace;font-size:12px;font-weight:700;color:var(--teal-dark);padding:3px 9px;background:var(--teal-light);border-radius:6px}
+.qr-instrucciones{padding:11px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:14px;animation:popIn .4s ease}
+.qr-instruc-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.qr-instruc-item{font-size:12px;color:var(--dark);line-height:1.6;padding-left:14px;position:relative;margin-bottom:3px}
+.qr-instruc-item::before{content:'•';position:absolute;left:3px;color:var(--teal)}
+.qr-color-badge{display:inline-flex;align-items:center;gap:4px;font-weight:700}
+.color-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.traz-section{margin-top:4px}
+.traz-header{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.traz-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--dark);flex:1}
+.traz-item{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:7px;background:var(--white)}
+.traz-item-header{padding:9px 11px;display:flex;align-items:center;gap:9px}
+.traz-item-icon{font-size:17px}
+.traz-item-info{flex:1}
+.traz-item-name{font-size:12px;font-weight:600;color:var(--dark)}
+.traz-item-meta{font-size:11px;color:var(--muted)}
+.traz-item-status{font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.status-prep{background:var(--orange-light);color:#7D5200}
+.status-camino{background:var(--blue-light);color:#1C3F7A}
+.status-recibido{background:var(--green-light);color:#3B6D11}
+.traz-progress{height:4px;background:var(--bg)}
+.traz-bar{height:100%;background:var(--teal);border-radius:2px;transition:width 1s ease}
+.btn-avanzar{margin-left:6px;padding:4px 9px;border:1.5px solid var(--teal);border-radius:var(--radius-sm);background:var(--teal-light);color:var(--teal-dark);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s}
+.btn-avanzar:hover{background:var(--teal);color:#fff}
+.kit-final-note{margin-top:10px;padding:11px;background:var(--teal-light);border-radius:var(--radius-sm);border:1px solid rgba(29,158,117,.3);font-size:12px;color:var(--teal-dark);line-height:1.6}
+
+/* ── TYPEWRITER ── */
+@keyframes typeCursor{0%,100%{opacity:1}50%{opacity:0}}
+.typing-cursor::after{content:'|';animation:typeCursor .7s infinite;color:var(--teal);font-weight:300}
+@keyframes inputHighlight{0%{box-shadow:0 0 0 0 rgba(29,158,117,0)}50%{box-shadow:0 0 0 4px rgba(29,158,117,.35)}100%{box-shadow:0 0 0 0 rgba(29,158,117,0)}}
+.input-typing{border-color:var(--teal)!important;animation:inputHighlight 1s ease-in-out infinite}
+@keyframes btnAutoClick{0%{transform:scale(1);background:var(--red)}40%{transform:scale(1.06);background:#c83a39;box-shadow:0 0 0 8px rgba(226,75,74,.3)}100%{transform:scale(1);background:var(--teal)}}
+.btn-auto-click{animation:btnAutoClick .6s ease forwards}
+
+
+@keyframes itemGlow{0%{box-shadow:0 0 0 0 rgba(29,158,117,0);background:transparent}40%{box-shadow:0 0 0 6px rgba(29,158,117,.25);background:rgba(29,158,117,.08)}100%{box-shadow:0 0 0 0 rgba(29,158,117,0);background:transparent}}
+.trans-item-glow{animation:itemGlow .8s ease;border-radius:8px;padding:4px 6px;margin:-4px -6px}
+@keyframes btnReadyPulse{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}50%{box-shadow:0 0 0 12px rgba(251,191,36,.65)}}
+.btn-trans-ready{animation:btnReadyPulse 1.2s ease-in-out 3}
+
+
+/* ── ZOOM / FOCO AUTOMÁTICO ── */
+@keyframes zoomPop{0%{transform:scale(1)}40%{transform:scale(1.08)}70%{transform:scale(.98)}100%{transform:scale(1)}}
+@keyframes zoomIn{0%{transform:scale(0.88);opacity:0}60%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}50%{box-shadow:0 0 0 10px rgba(251,191,36,.65),0 4px 24px rgba(251,191,36,.3)}}
+@keyframes highlightRow{0%,100%{background:transparent}40%{background:rgba(29,158,117,.1)}}
+@keyframes badgeZoom{0%{transform:scale(0)}50%{transform:scale(1.35)}80%{transform:scale(.92)}100%{transform:scale(1)}}
+@keyframes panelGlow{0%,100%{box-shadow:0 2px 10px rgba(0,0,0,.3)}50%{box-shadow:0 0 0 5px rgba(251,191,36,.8),0 8px 32px rgba(0,0,0,.5)}}
+@keyframes qrReveal{0%{transform:scale(0) rotate(-8deg);opacity:0}60%{transform:scale(1.12) rotate(2deg)}100%{transform:scale(1) rotate(0);opacity:1}}
+@keyframes barPulse{0%,100%{opacity:1}50%{opacity:.6}}
+.zoom-pop{animation:zoomPop .55s cubic-bezier(.16,1,.3,1)}
+.zoom-in{animation:zoomIn .5s cubic-bezier(.16,1,.3,1) both}
+.pulse-glow{animation:pulseGlow 1s ease-in-out 3}
+.highlight-row{animation:highlightRow .9s ease}
+.badge-zoom{animation:badgeZoom .5s cubic-bezier(.16,1,.3,1)}
+.panel-glow-white{animation:panelGlow 1s ease-in-out 3}
+.qr-reveal{animation:qrReveal .7s cubic-bezier(.16,1,.3,1) both}
+.bar-pulse{animation:barPulse .5s ease 3}
+
+
+/* ── RELOJ FADE-OUT ── */
+@keyframes clockFadeOut{0%{opacity:1;transform:scale(1)}50%{opacity:1;transform:scale(1.08);border-color:var(--orange)}100%{opacity:0;transform:scale(.9)}}
+.clock-farewell{animation:clockFadeOut 1.2s ease forwards}
+
+
+/* ── LEAFLET POPUPS ── */
+.leaflet-popup-content{font-size:14px!important;line-height:1.65!important;font-family:'DM Sans',sans-serif!important;color:#1a1a2e!important}
+.leaflet-popup-content b{font-size:15px!important;font-weight:700!important}
+.leaflet-popup-content small{font-size:12px!important;color:#6B7280!important}
+.leaflet-popup-content-wrapper{border-radius:10px!important;box-shadow:0 6px 24px rgba(0,0,0,.25)!important;padding:4px!important}
+
+</style>
+</head>
+<body>
+<div class="demo-chrome">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+    <div class="url-bar">kit2help.es · Demo interactiva</div>
+    <div class="badge-live">● LIVE DEMO</div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-bar">
+    <div class="progress-steps" id="progressSteps"></div>
+    <div class="progress-label" id="progressLabel">Paso 1 de 9</div>
+  </div>
+
+  <!-- SCREEN -->
+  <div class="screen" id="screen">
+
+    <!-- ══ P1: MAPA VACÍO + TOASTS ══ -->
+    <div class="panel active" id="p1" style="flex-direction:column;overflow:hidden">
+      <div id="map1" style="flex:1;min-height:0;width:100%"></div>
+      <div class="map-overlay-ctx">📍 Valencia · 29 oct 2024</div>
+      <div class="map-overlay-time" id="clock1">18:42</div>
+      <div class="toast-container" id="toastContainer"></div>
+      <div id="map1-intro" style="
+        position:absolute;inset:0;z-index:700;
+        background:rgba(17,24,39,.82);backdrop-filter:blur(4px);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+        animation:fadeIn .4s ease;
+        pointer-events:none;
+      ">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--teal);animation:narrativeIn .6s ease">Kit2Help · Demo interactiva</div>
+        <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;text-align:center;line-height:1.25;animation:narrativeIn .7s ease">Valencia<br><span style="color:var(--orange)">29 octubre 2024</span></div>
+        <div style="font-size:15px;color:rgba(255,255,255,.75);letter-spacing:1px;animation:narrativeIn .8s ease">18:42h · Se detectan las primeras señales</div>
+        <div style="margin-top:8px;width:40px;height:3px;border-radius:2px;background:var(--teal);animation:narrativeIn 1s ease"></div>
+      </div>
+      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner" id="narr1">Valencia, 29 octubre 2024 — 18:42h. Los primeros avisos ciudadanos llegan al sistema. El mapa espera.</div></div>
+    </div>
+
+    <!-- ══ P2: ALTA CIUDADANO ══ -->
+    <div class="panel" id="p2">
+      <div class="panel-inner">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--teal-light);border:1px solid rgba(29,158,117,.3);font-size:11px;font-weight:700;color:var(--teal-dark);margin-bottom:12px">👤 Ciudadano afectado</div>
+        <div class="panel-header">
+          <div class="panel-title">Activar necesidad</div>
+          <div class="panel-sub">Reporta una necesidad de forma estructurada para que llegue al coordinador correcto.</div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Ubicación</label>
+          <input class="form-input" id="inputDireccion" type="text" placeholder="Escribiendo dirección..." value="">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Categoría</label>
+          <div class="cat-grid">
+            <div class="cat-btn active">🚨 Emergencia</div>
+            <div class="cat-btn">📍 Pto. encuentro</div>
+            <div class="cat-btn">📦 Recogida de kits</div>
+            <div class="cat-btn">🤝 Voluntarios</div>
+            <div class="cat-btn">🏠 Refugio / Hospedaje</div>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Urgencia</label>
+          <div class="prio-grid">
+            <div class="prio-btn active-alta">● Alta</div>
+            <div class="prio-btn">● Media</div>
+            <div class="prio-btn">● Baja</div>
+          </div>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Descripción</label>
+          <input class="form-input" id="inputDescripcion" type="text" placeholder="Añade una descripción..." value="">
+        </div>
+        <button class="btn-send" id="btnSend" onclick="enviarNecesidad()">✓ Enviar aviso</button>
+        <div class="confirm-card" id="confirmCard">
+          <div class="confirm-title">✓ Necesidad registrada</div>
+          <div class="confirm-sub">Categoría: 🚨 Emergencia · Ubicación: Calle del Maestro Sosa 12 · Urgencia: Alta</div>
+          <div class="confirm-status">● Pendiente validación · Entrando en panel de triaje. Un coordinador la revisará pronto.</div>
+        </div>
+      </div>
+      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">Cualquier ciudadano o voluntario puede reportar una necesidad desde la app. Sin llamadas, sin intermediarios.</div></div>
+    </div>
+
+    <!-- ══ P3: TRIAJE EMERGENCIA ══ -->
+    <div class="panel" id="p3">
+      <div class="panel-inner">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--purple-light);border:1px solid rgba(123,94,167,.3);font-size:11px;font-weight:700;color:var(--purple);margin-bottom:12px">🔍 Coordinador oficial</div>
+        <div class="panel-header">
+          <div class="panel-title">Panel de validación y triaje</div>
+          <div class="panel-sub">Revisa, prioriza y valida cada solicitud antes de publicarla en el muro de coordinación.</div>
+        </div>
+        <div class="triaje-tabs">
+          <div class="triaje-tab active">Todas</div>
+          <div class="triaje-tab">Pendientes <span class="tab-badge" id="badge3">1</span></div>
+          <div class="triaje-tab">Validadas</div>
+          <div class="triaje-tab">Rechazadas</div>
+        </div>
+        <div class="subfilters">
+          <span class="subfilter-label">PRIORIDAD:</span>
+          <button class="subfilter-btn active">Todas</button><button class="subfilter-btn">● Alta</button><button class="subfilter-btn">● Media</button><button class="subfilter-btn">● Baja</button>
+          <div class="sep"></div>
+          <span class="subfilter-label">TIPO:</span>
+          <button class="subfilter-btn active">Todos</button><button class="subfilter-btn">↓ Necesidad</button><button class="subfilter-btn">↑ Oferta</button>
+        </div>
+        <div id="triajeCards3">
+          <div class="val-card" id="vc1">
+            <div class="val-header">
+              <div class="val-icon" style="background:#FCEBEB">🚨</div>
+              <div class="val-info">
+                <div class="val-title-txt">Emergencia · Zona sur Valencia</div>
+                <div class="val-meta">📍 Paiporta / Catarroja / Massanassa</div>
+                <div class="val-meta" style="margin-top:3px;display:flex;gap:5px;flex-wrap:wrap">
+                  <span class="prio-tag prio-alta">● Alta</span>
+                  <span class="tipo-nec">↓ Necesidad</span>
+                  <span style="font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--orange-light);color:#7D5200">⚡ 3 avisos de proximidad</span>
+                </div>
+              </div>
+              <div class="val-actions">
+                <button class="val-btn val-btn-ok" id="btnValidar3" onclick="validarCard('vc1','badge3',true,'✓ Validada y publicada en el muro. Pin de cobertura activo en el mapa operativo.')">✓ Validar</button>
+                <button class="val-btn val-btn-rej" onclick="validarCard('vc1','badge3',false,'✗ Incidencia rechazada.')">✗ Rechazar</button>
+                <button class="val-btn val-btn-more">Detalles</button>
+              </div>
+            </div>
+            <div id="vc1-done" class="val-done"></div>
+          </div>
+        </div>
+      </div>
+      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">Kit2Help agrupa N avisos de proximidad en una única incidencia coordinable. Sin duplicidades, sin ruido.</div></div>
+    </div>
+
+    <!-- ══ P4: MURO + MAPA SPLIT ══ -->
+    <div class="panel" id="p4" style="overflow:hidden;flex-direction:column">
+      <div class="split-view">
+        <div class="split-left">
+          <div class="muro-header">
+            <div class="muro-title">📋 Panel Global</div>
+            <div class="muro-live"><div class="live-dot"></div>Actualizando en tiempo real</div>
+          </div>
+          <div class="muro-filters">
+            <button class="mf-btn active">Todas</button>
+            <button class="mf-btn"><div class="mf-dot" style="background:var(--red)"></div>Emergencia</button>
+            <button class="mf-btn"><div class="mf-dot" style="background:var(--orange)"></div>Pto. encuentro</button>
+            <button class="mf-btn"><div class="mf-dot" style="background:var(--purple)"></div>Voluntarios</button>
+            <button class="mf-btn"><div class="mf-dot" style="background:var(--blue)"></div>Refugio</button>
+          </div>
+          <div id="muroItems4" style="transition:transform .3s">
+            <div class="muro-item">
+              <div class="muro-dot-side" style="background:var(--red)"></div>
+              <div style="flex:1">
+                <div class="muro-item-title">🚨 Emergencia · Zona sur Valencia</div>
+                <div class="muro-item-sub">Paiporta / Catarroja / Massanassa · 3 avisos consolidados · Alta</div>
+                <div class="muro-item-footer">
+                  <div class="muro-new-badge">Recién validada</div>
+                  <div class="muro-cat-tag" style="background:var(--red-light);color:var(--red-dark)">🚨 Emergencia</div>
+                  <div class="prio-tag prio-alta">● Alta</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;padding:0 2px">Información validada, priorizada y lista para actuar. Sin ruido.</div>
+        </div>
+        <div class="split-right">
+          <div id="map4" style="flex:1;min-height:0;width:100%"></div>
+          <div class="map-legend">
+            <div class="map-legend-title">Capas activas</div>
+            <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--red)"></div>Emergencias</div>
+            <div class="map-legend-item" style="opacity:.4"><div class="map-legend-dot" style="background:var(--purple)"></div>Voluntarios</div>
+            <div class="map-legend-item" style="opacity:.4"><div class="map-legend-dot" style="background:var(--blue)"></div>Refugio</div>
+            <div class="map-legend-item" style="opacity:.4"><div class="map-legend-dot" style="background:var(--teal)"></div>Recogida kits</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="background:rgba(17,24,39,.88);backdrop-filter:blur(8px);padding:8px 16px;flex-shrink:0;display:flex;justify-content:center;border-top:1px solid rgba(255,255,255,.08)">
+      <span style="font-size:12px;color:rgba(255,255,255,.9);font-style:italic;border-left:3px solid var(--teal);padding-left:10px">Validado por el coordinador → visible al instante en el muro y en el mapa para todos los actores.</span>
+    </div>
+
+    <!-- ══ P5: TRIAJE NUEVAS SOLICITUDES ══ -->
+    <div class="panel" id="p5">
+      <div class="panel-inner">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--purple-light);border:1px solid rgba(123,94,167,.3);font-size:11px;font-weight:700;color:var(--purple);margin-bottom:12px">🔍 Coordinador oficial</div>
+        <div class="panel-header">
+          <div class="panel-title">Panel de validación y triaje</div>
+          <div class="panel-sub">Nuevas solicitudes entran al sistema. El coordinador las valida para publicarlas.</div>
+        </div>
+        <div class="triaje-tabs">
+          <div class="triaje-tab active">Todas</div>
+          <div class="triaje-tab">Pendientes <span class="tab-badge" id="badge5">0</span></div>
+          <div class="triaje-tab">Validadas <span style="font-size:10px;margin-left:2px;color:var(--teal);font-weight:700">1</span></div>
+          <div class="triaje-tab">Rechazadas</div>
+        </div>
+        <div class="subfilters">
+          <span class="subfilter-label">TIPO:</span>
+          <button class="subfilter-btn active">Todos</button><button class="subfilter-btn">↓ Necesidad</button><button class="subfilter-btn">↑ Oferta</button>
+        </div>
+        <div id="triajeCards5">
+          <div style="font-size:12px;color:var(--muted);font-style:italic;padding:10px 0" id="p5-waiting">Esperando nuevas solicitudes...</div>
+        </div>
+      </div>
+      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">Nuevas solicitudes entran al triaje: necesidades reales y ofertas disponibles. El coordinador decide.</div></div>
+    </div>
+
+    <!-- ══ P6: MAPA GLOBAL ══ -->
+    <div class="panel" id="p6" style="overflow:hidden;flex-direction:column">
+      <div id="map5wrap" style="flex:1;min-height:0;width:100%;position:relative">
+        <div id="map5" style="position:absolute;inset:0"></div>
+        <div id="map5filters" style="position:absolute;top:10px;left:10px;right:210px;display:flex;gap:6px;z-index:500;flex-wrap:wrap">
+          <div class="map5-filter on"><div class="map5-dot" style="background:var(--red)"></div>Emergencias</div>
+          <div class="map5-filter on"><div class="map5-dot" style="background:var(--teal)"></div>Recogida kits</div>
+          <div class="map5-filter on"><div class="map5-dot" style="background:var(--purple)"></div>Voluntarios</div>
+          <div class="map5-filter on"><div class="map5-dot" style="background:var(--orange)"></div>Encuentro / Refugio</div>
+        </div>
+        <div id="map5panel" style="position:absolute;top:10px;right:10px;z-index:500;background:rgba(17,24,39,.92);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:14px 16px;min-width:195px">
+          <div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px">Necesidades actuales</div>
+          <div style="display:flex;align-items:center;margin-bottom:4px"><span style="font-size:12px;color:rgba(255,255,255,.8);flex:1">🚨 Emergencias</span><span style="font-size:12px;font-weight:700;color:var(--red)">Alta</span></div>
+          <div style="height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin-bottom:9px"><div style="height:100%;width:100%;background:var(--red);border-radius:2px"></div></div>
+          <div style="display:flex;align-items:center;margin-bottom:4px"><span style="font-size:12px;color:rgba(255,255,255,.8);flex:1">🤝 Voluntarios</span><span style="font-size:12px;font-weight:700;color:#A78BF5">62%</span></div>
+          <div style="height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin-bottom:9px"><div style="height:100%;width:62%;background:var(--purple);border-radius:2px"></div></div>
+          <div style="display:flex;align-items:center;margin-bottom:4px"><span style="font-size:12px;color:rgba(255,255,255,.8);flex:1">📍 Pto. encuentro</span><span style="font-size:12px;font-weight:700;color:var(--orange)">Media</span></div>
+          <div style="height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin-bottom:9px"><div style="height:100%;width:55%;background:var(--orange);border-radius:2px"></div></div>
+          <div style="display:flex;align-items:center;margin-bottom:4px"><span style="font-size:12px;color:rgba(255,255,255,.8);flex:1">📦 Recogida kits</span><span style="font-size:12px;font-weight:700;color:var(--teal)">75%</span></div>
+          <div style="height:3px;background:rgba(255,255,255,.1);border-radius:2px;margin-bottom:9px"><div style="height:100%;width:75%;background:var(--teal);border-radius:2px"></div></div>
+          <div style="display:flex;align-items:center;margin-bottom:4px"><span style="font-size:12px;color:rgba(255,255,255,.8);flex:1">🏠 Refugio</span><span style="font-size:12px;font-weight:700;color:var(--blue)">Media</span></div>
+          <div style="height:3px;background:rgba(255,255,255,.1);border-radius:2px"><div style="height:100%;width:45%;background:var(--blue);border-radius:2px"></div></div>
+        </div>
+        <div class="narrative" style="position:absolute;bottom:8px;left:0;right:0;z-index:400;padding:0 12px;display:flex;justify-content:center;pointer-events:none">
+          <div class="narrative-inner">El mismo mapa para todos. Coordinadores, voluntarios, entidades y ciudadanos ven lo mismo, en tiempo real.</div>
+        </div>
+      </div>
+      <div class="map5-metrics">
+        <div class="map5-metric"><span class="map5-num">134</span><span class="map5-lbl">Kits entregados</span></div>
+        <div class="map5-metric"><span class="map5-num">524</span><span class="map5-lbl">Personas ayudadas</span></div>
+        <div class="map5-metric"><span class="map5-num">23</span><span class="map5-lbl">Voluntarios activos</span></div>
+        <div class="map5-metric"><span class="map5-num">7</span><span class="map5-lbl">Puntos abiertos</span></div>
+      </div>
+    </div>
+
+    <!-- ══ P7: TRANSICIÓN KITS ══ -->
+    <div class="panel" id="p7" style="flex-direction:column">
+      <div class="trans-wrap">
+        <div class="trans-eyebrow" id="t7-eyebrow" style="opacity:0;transition:opacity .5s">Módulo de coordinación de ayuda material</div>
+        <div class="trans-headline" id="t7-headline" style="opacity:0;transition:opacity .6s">La emergencia está coordinada.<br><span style="color:var(--teal)">¿Y la ayuda material?</span></div>
+        <div class="trans-grid" id="t7-grid" style="opacity:0;transition:opacity .5s">
+          <div class="trans-left">
+            <span class="trans-label done">✓ Coordinación activa</span>
+            <div class="trans-item" id="t7-i1" style="opacity:0;transform:translateX(-12px);transition:all .4s"><div class="trans-icon">✅</div><div class="trans-text">Emergencia detectada y validada por el coordinador</div></div>
+            <div class="trans-item" id="t7-i2" style="opacity:0;transform:translateX(-12px);transition:all .4s"><div class="trans-icon">✅</div><div class="trans-text">Voluntarios Operativo disponibles en zona</div></div>
+            <div class="trans-item" id="t7-i3" style="opacity:0;transform:translateX(-12px);transition:all .4s"><div class="trans-icon">✅</div><div class="trans-text">Refugio para familia de Paiporta en gestión</div></div>
+            <div class="trans-item" id="t7-i4" style="opacity:0;transform:translateX(-12px);transition:all .4s"><div class="trans-icon">✅</div><div class="trans-text">Mapa operativo activo para todos los actores</div></div>
+          </div>
+          <div class="trans-right">
+            <span class="trans-label next">→ Lo que viene ahora</span>
+            <div class="trans-headline2" id="t7-kits" style="opacity:0;transition:opacity .5s">📦 Kits de ayuda material</div>
+            <div class="trans-desc" id="t7-desc" style="opacity:0;transition:opacity .5s">El coordinador define qué kits se necesitan y dónde. Los donantes los preparan, generan un QR y los entregan. El sistema rastrea cada kit hasta el afectado.</div>
+            <button class="btn-trans" id="t7-btn" style="opacity:0;transition:opacity .4s;transform:translateY(8px)" onclick="nextStep()">Ver cómo funciona →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ P8: COORDINADOR KITS ══ -->
+    <div class="panel" id="p8">
+      <div class="panel-inner">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--purple-light);border:1px solid rgba(123,94,167,.3);font-size:11px;font-weight:700;color:var(--purple);margin-bottom:12px">👤 Coordinador</div>
+        <div class="panel-header">
+          <div class="panel-title">📦 Gestión de kits</div>
+          <div class="panel-sub">Define qué kits se necesitan, con qué contenido y dónde deben llegar.</div>
+        </div>
+        <div class="kit-mode-toggle">
+          <button class="kit-mode-btn active">👤 Coordinador</button>
+          <button class="kit-mode-btn" onclick="nextStep()">🎁 Donante →</button>
+        </div>
+        <div class="kit-section-title">TIPO DE KIT</div>
+        <div class="kit-types" id="kitTypesRow">
+          <div class="kit-type-card" onclick="selectKitType(this)"><span class="kit-type-icon">🍊</span><div class="kit-type-name">Alimenticio</div><div class="kit-type-sub">Agua y comida</div></div>
+          <div class="kit-type-card active" onclick="selectKitType(this)"><span class="kit-type-icon">💊</span><div class="kit-type-name">Sanitario</div><div class="kit-type-sub">Medicamentos</div></div>
+          <div class="kit-type-card" onclick="selectKitType(this)"><span class="kit-type-icon">👘</span><div class="kit-type-name">Ropa</div><div class="kit-type-sub">Abrigo y mantas</div></div>
+          <div class="kit-type-card" onclick="selectKitType(this)"><span class="kit-type-icon">🔧</span><div class="kit-type-name">Herramientas</div><div class="kit-type-sub">Equipamiento</div></div>
+          <div class="kit-type-card" onclick="selectKitType(this)"><span class="kit-type-icon">✏️</span><div class="kit-type-name">Personalizado</div><div class="kit-type-sub">Configurable</div></div>
+        </div>
+        <div id="kitContentBox" style="padding:11px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:10px;transition:box-shadow .3s">
+          <div class="kit-section-title" style="margin-bottom:9px">💊 KIT SANITARIO</div>
+          <div class="kit-item-row"><span class="kit-item-emoji">💊</span><span class="kit-item-name">Analgésicos</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q1',-1)">−</button><span class="qty-val" id="q1">2</span><button class="qty-btn" onclick="adjustQty('q1',1)">+</button></div></div>
+          <div class="kit-item-row"><span class="kit-item-emoji">🩹</span><span class="kit-item-name">Vendas y apósitos</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q2',-1)">−</button><span class="qty-val" id="q2">10</span><button class="qty-btn" onclick="adjustQty('q2',1)">+</button></div></div>
+          <div class="kit-item-row"><span class="kit-item-emoji">🧴</span><span class="kit-item-name">Antiséptico</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q3',-1)">−</button><span class="qty-val" id="q3">1</span><button class="qty-btn" onclick="adjustQty('q3',1)">+</button></div></div>
+          <div class="kit-item-row"><span class="kit-item-emoji">🌡️</span><span class="kit-item-name">Termómetro</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q4',-1)">−</button><span class="qty-val" id="q4">1</span><button class="qty-btn" onclick="adjustQty('q4',1)">+</button></div></div>
+          <div class="kit-total">Total elementos: <strong id="totalElem">14</strong></div>
+        </div>
+        <button class="btn-crear-kit" id="btnCrearKit" onclick="crearKit()">📦 Crear kit</button>
+        <div class="kit-created-list" id="kitCreatedList"></div>
+        <div class="puntos-section" id="puntosSection" style="display:none">
+          <div class="puntos-title">📍 PUNTOS DE NECESIDAD ASOCIADOS</div>
+          <div class="punto-row"><span>📍</span><div><div style="font-size:12px;font-weight:600">Iglesia San Pedro · Paiporta</div><div style="font-size:11px;color:var(--muted)">Kit Sanitario · 30 uds. requeridas</div></div></div>
+          <div class="punto-row"><span>📍</span><div><div style="font-size:12px;font-weight:600">Plaza Colón 3 · Catarroja</div><div style="font-size:11px;color:var(--muted)">Kit Sanitario · 15 uds. requeridas</div></div></div>
+        </div>
+      </div>
+      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">El coordinador define qué kits se necesitan, dónde y cuántos. El sistema los registra y los hace visibles a los donantes.</div></div>
+    </div>
+
+    <!-- ══ P9: DONANTE + TRAZABILIDAD ══ -->
+    <div class="panel" id="p9">
+      <div class="panel-inner">
+        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--orange-light);border:1px solid rgba(239,159,39,.3);font-size:11px;font-weight:700;color:#7D5200;margin-bottom:12px">🎁 Donante</div>
+        <div class="panel-header">
+          <div class="panel-title">📦 Gestión de kits</div>
+          <div class="panel-sub">El donante ve los kits disponibles, los prepara y genera el QR de entrega.</div>
+        </div>
+        <div class="kit-mode-toggle">
+          <button class="kit-mode-btn" onclick="goToStep(8)">← Coordinador</button>
+          <button class="kit-mode-btn active">🎁 Donante</button>
+        </div>
+        <div class="kit-section-title">PUNTOS DE RECOGIDA · DEJA TU KIT AQUÍ</div>
+        <div class="puntos-recogida">
+          <div class="punto-card"><span class="punto-card-icon">🏟️</span><div class="punto-card-info"><div class="punto-card-name">Polideportivo Municipal Norte</div><div class="punto-card-addr">Av. de la Constitución, 14 · Alimenticio · Ropa</div></div><div class="punto-card-dist">0.4 km</div><div class="no-admite">No admite este tipo</div></div>
+          <div class="punto-card admite" id="puntoAdmite"><span class="punto-card-icon">🏛️</span><div class="punto-card-info"><div class="punto-card-name">Centre Cívic Russafa</div><div class="punto-card-addr">C/ Dénia, 67 · Sanitario · Herramientas</div></div><div class="punto-card-dist">1.1 km</div><div class="admite-badge">✓ Admite este kit</div></div>
+          <div class="punto-card admite"><span class="punto-card-icon">🏀</span><div class="punto-card-info"><div class="punto-card-name">Pavelló Esportiu Sant Pau</div><div class="punto-card-addr">Pg. de Sant Joan, 2 · Todos los tipos</div></div><div class="punto-card-dist">1.9 km</div><div class="admite-badge">✓ También destino final</div></div>
+        </div>
+        <div class="qr-section">
+          <div class="kit-section-title" style="margin-bottom:8px">CONTENIDO: 💊 Kit Sanitario</div>
+          <div class="qr-donor-name">👤 &nbsp;<span style="font-size:12px;color:var(--muted)">Donante:</span>&nbsp;<strong>Sandra González</strong></div>
+          <button class="btn-crear-kit" id="btnGenQR" onclick="generarQR()" style="margin:0 0 8px">🔲 Generar QR del kit</button>
+          <div id="qrcode"></div>
+          <div id="qrCodeLabel" style="display:none" class="qr-kit-code">KIT-N0GW-0001</div>
+        </div>
+        <div class="qr-instrucciones" id="qrInstrucciones" style="display:none">
+          <div class="qr-instruc-title">📦 Cómo preparar la caja</div>
+          <div class="qr-instruc-item">Coloca todos los elementos dentro de una caja de cartón cerrada.</div>
+          <div class="qr-instruc-item">Identifica la caja con el color <span class="qr-color-badge"><span class="color-dot" style="background:#3A7BD5"></span> AZUL</span> — asignado a kit Sanitario.</div>
+          <div class="qr-instruc-item">Escribe en la caja el código: <strong>KIT-N0GW-0001</strong></div>
+          <div class="qr-instruc-item">Cierra con precinto y llévala al punto de recogida.</div>
+        </div>
+        <div class="traz-section">
+          <div class="traz-header">
+            <div class="traz-title">📊 Seguimiento de kits</div>
+            <div class="muro-live"><div class="live-dot"></div>Tiempo real</div>
+          </div>
+          <div class="traz-item" id="trazItem1">
+            <div class="traz-item-header">
+              <span class="traz-item-icon">💊</span>
+              <div class="traz-item-info"><div class="traz-item-name">Kit Sanitario</div><div class="traz-item-meta"><span style="font-family:monospace;font-size:10px">KIT-N0GW-0001</span> · Sandra González · 13:48</div></div>
+              <span class="traz-item-status status-prep" id="traz1-status">● Preparado</span>
+              <button class="btn-avanzar" onclick="avanzarKit('traz1')">Avanzar →</button>
+            </div>
+            <div class="traz-progress"><div class="traz-bar" id="traz1-bar" style="width:33%"></div></div>
+          </div>
+          <div class="traz-item">
+            <div class="traz-item-header">
+              <span class="traz-item-icon">🍊</span>
+              <div class="traz-item-info"><div class="traz-item-name">Kit Alimenticio</div><div class="traz-item-meta"><span style="font-family:monospace;font-size:10px">KIT-15MQ-0001</span> · Cruz Roja · 13:44</div></div>
+              <span class="traz-item-status status-camino" id="traz2-status">🚚 En camino</span>
+              <button class="btn-avanzar" onclick="avanzarKit('traz2')">Avanzar →</button>
+            </div>
+            <div class="traz-progress"><div class="traz-bar" id="traz2-bar" style="width:66%"></div></div>
+          </div>
+        </div>
+        <div class="kit-final-note"><strong>Sin Excel. Sin llamadas. Sin pérdidas.</strong><br>Cada acción actualiza la lista automáticamente. El coordinador consulta el estado en cualquier momento.</div>
+      </div>
+      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">Del kit creado al QR físico: trazabilidad completa. Sin Excel. Sin llamadas. Sin pérdidas.</div></div>
+    </div>
+
+  </div><!-- /screen -->
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <button class="btn-restart" onclick="restart()">↺ Reiniciar</button>
+    <div class="step-indicator" id="stepIndicator">Paso 1 de 9</div>
+    <button class="btn-next" id="btnNext" onclick="nextStep()">Continuar ▶</button>
+  </div>
+
+</div><!-- /demo-chrome -->
+
+<script>
+// ══════════════════════════════════════
+// ESTADO
+// ══════════════════════════════════════
+let currentStep = 1;
+const TOTAL_STEPS = 9;
+let maps = {};
+let demoCompleted = false;
+let p5CardsAdded = 0, p5CardTimer = null, p5AutoTimer = null;
+let traz1State = 0, traz2State = 1;
+let kitCreated = false, qrGenerated = false;
+let needSent = false;
+let map5Markers = [];
+
+const stepTitles = ['','Mapa vacío','Alta ciudadano','Triaje · Emergencia','Muro + Mapa','Triaje · Nuevas solicitudes','Mapa operativo global','Módulo de Kits','Coordinador · Crear kit','Donante · QR y Trazabilidad'];
+
+// ══════════════════════════════════════
+// NAVEGACIÓN
+// ══════════════════════════════════════
+function updateProgress() {
+  const c = document.getElementById('progressSteps');
+  c.innerHTML = '';
+  for (let i=1;i<=TOTAL_STEPS;i++){
+    const s=document.createElement('div');
+    s.className='progress-step'+(demoCompleted?' done':i<currentStep?' done':i===currentStep?' active':'');
+    c.appendChild(s);
+  }
+  document.getElementById('progressLabel').textContent=`Paso ${currentStep} de ${TOTAL_STEPS}`;
+  document.getElementById('stepIndicator').textContent=`Paso ${currentStep} de ${TOTAL_STEPS} — ${stepTitles[currentStep]}`;
+  const btnN=document.getElementById('btnNext');
+  if(currentStep>=TOTAL_STEPS){
+    demoCompleted=true;
+    btnN.textContent='↺ Ver demo de nuevo';
+    btnN.className='btn-next final-btn';
+    btnN.onclick=restart;
+  } else {
+    btnN.textContent='· · ·';
+    btnN.className='btn-next';
+    btnN.onclick=null;
+  }
+}
+
+function showPanel(n) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const panel = document.getElementById('p'+n);
+  if(panel) panel.classList.add('active');
+  if(n===1 && !maps['map1']) setTimeout(initMap1,120);
+  if(n===1 && maps['map1']){ setTimeout(()=>{ maps['map1'].invalidateSize(); },150); setTimeout(startP1Sequence,200); }
+  if(n===4 && !maps['map4']) setTimeout(initMap4,120);
+  if(n===4 && maps['map4']) setTimeout(()=>{ maps['map4'].invalidateSize(); },150);
+  if(n===6 && !maps['map5']) setTimeout(initMap5,120);
+  if(n===6 && maps['map5']) setTimeout(()=>{ maps['map5'].invalidateSize(); },150);
+  if(n===2) setTimeout(autoSequenceP2, 600);
+  if(n===3) setTimeout(autoSequenceP3, 600);
+  if(n===4) setTimeout(autoSequenceP4, 500);
+  if(n===5) startP5Sequence();
+  if(n===6){ setTimeout(autoPopupMap5, 2200); setTimeout(zoomNecesidadesPanel, 13000); setTimeout(()=>autoNext(4500), 13000); }
+  if(n===7) setTimeout(autoSequenceP7, 300);
+  if(n===8) setTimeout(autoSequenceP8, 600);
+  if(n===9) setTimeout(autoSequenceP9, 800);
+}
+
+function nextStep(){
+  if(currentStep>=TOTAL_STEPS) return;
+  currentStep++;
+  updateProgress();
+  showPanel(currentStep);
+}
+
+function goToStep(n){
+  currentStep=n;
+  updateProgress();
+  showPanel(n);
+}
+
+function restart(){
+  currentStep=1;
+  p5CardsAdded=0;
+  // limpiar toasts residuales
+  const tc=document.getElementById('toastContainer'); if(tc) tc.innerHTML='';
+  // limpiar timer reloj
+  if(p1ClockTimer){ clearInterval(p1ClockTimer); p1ClockTimer=null; }
+  if(p5CardTimer) clearTimeout(p5CardTimer);
+  if(p5AutoTimer) clearTimeout(p5AutoTimer);
+  kitCreated=false; qrGenerated=false; needSent=false; p7Played=false; p3Played=false; p4Played=false; p8Played=false; p9Played=false; demoCompleted=false;
+  if(autoNextTimer){ clearTimeout(autoNextTimer); autoNextTimer=null; }
+  // reset p7 animaciones
+  ['t7-eyebrow','t7-headline','t7-grid','t7-i1','t7-i2','t7-i3','t7-i4','t7-kits','t7-desc','t7-btn'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.style.opacity='0';if(id!=='t7-grid'&&id!=='t7-eyebrow'&&id!=='t7-headline')el.style.transform='translateX(-12px)';}
+  });
+  const tb=document.getElementById('t7-btn');if(tb)tb.style.transform='translateY(8px)';
+  traz1State=0; traz2State=1;
+  // reset map5panel zoom
+  const mp=document.getElementById('map5panel'); if(mp){mp.style.transform='scale(1)';mp.style.boxShadow='';mp.style.borderColor='';mp.style.transition='';}
+  // reset puntoAdmite
+  const pa=document.getElementById('puntoAdmite'); if(pa){pa.style.boxShadow='';pa.style.transform='';}
+  // reset kitContentBox
+  const kb=document.getElementById('kitContentBox'); if(kb) kb.style.boxShadow='';
+  // reset p3
+  const vc1=document.getElementById('vc1');
+  if(vc1){ vc1.querySelector('.val-actions').style.display=''; vc1.querySelector('.val-actions').style.display='flex'; document.getElementById('vc1-done').className='val-done'; document.getElementById('vc1-done').textContent=''; }
+  document.getElementById('badge3').textContent='1';
+  document.getElementById('badge3').className='tab-badge';
+  // reset p2
+  document.getElementById('confirmCard').className='confirm-card';
+  const d=document.getElementById('inputDireccion'); if(d) d.value='';
+  const dd=document.getElementById('inputDescripcion'); if(dd) dd.value='';
+  document.getElementById('btnSend').textContent='✓ Enviar aviso';
+  document.getElementById('btnSend').disabled=false;
+  needSent=false;
+  // reset p5
+  document.getElementById('triajeCards5').innerHTML='<div style="font-size:12px;color:var(--muted);font-style:italic;padding:10px 0" id="p5-waiting">Esperando nuevas solicitudes...</div>';
+  document.getElementById('badge5').textContent='0';
+  document.getElementById('badge5').className='tab-badge';
+  p5CardsAdded=0;
+  // reset kits p8
+  document.getElementById('kitCreatedList').innerHTML='';
+  document.getElementById('puntosSection').style.display='none';
+  document.getElementById('btnCrearKit').textContent='📦 Crear kit';
+  document.getElementById('btnCrearKit').disabled=false;
+  // reset qr p9
+  document.getElementById('qrcode').innerHTML='';
+  document.getElementById('qrCodeLabel').style.display='none';
+  document.getElementById('qrInstrucciones').style.display='none';
+  document.getElementById('btnGenQR').textContent='🔲 Generar QR del kit';
+  document.getElementById('btnGenQR').disabled=false;
+  // reset traz
+  document.getElementById('traz1-status').className='traz-item-status status-prep';
+  document.getElementById('traz1-status').textContent='● Preparado';
+  document.getElementById('traz1-bar').style.width='33%';
+  document.getElementById('traz2-status').className='traz-item-status status-camino';
+  document.getElementById('traz2-status').textContent='🚚 En camino';
+  document.getElementById('traz2-bar').style.width='66%';
+  updateProgress();
+  showPanel(1);
+}
+
+// ══════════════════════════════════════
+// MAPA 1 — VACÍO + TOASTS
+// ══════════════════════════════════════
+let p1ClockTimer = null;
+
+function startP1Sequence(){
+  // Limpiar cualquier timer previo
+  if(p1ClockTimer) clearInterval(p1ClockTimer);
+  // Resetear reloj visualmente
+  const clockEl=document.getElementById('clock1');
+  if(clockEl){
+    clockEl.textContent='18:42';
+    clockEl.classList.remove('clock-farewell');
+    clockEl.style.opacity='1';
+    clockEl.style.borderColor='';
+    clockEl.style.boxShadow='';
+  }
+  // Reloj animado
+  let min=42;
+  p1ClockTimer=setInterval(()=>{
+    min++;if(min>=60)min=0;
+    if(clockEl && !clockEl.classList.contains('clock-farewell')){
+      clockEl.textContent='18:'+String(min).padStart(2,'0');
+      clockEl.classList.add('clock-glow');
+      setTimeout(()=>clockEl.classList.remove('clock-glow'),1200);
+    }
+  },3500);
+  // Overlay: ocultar tras 2.8s
+  setTimeout(()=>{
+    const intro=document.getElementById('map1-intro');
+    if(intro){ intro.classList.add('intro-hiding'); setTimeout(()=>intro.style.display='none',650); }
+  },2800);
+  // Reloj farewell: glow naranja → fade antes del primer toast
+  setTimeout(()=>{
+    if(clockEl){ clockEl.style.borderColor='var(--orange)'; clockEl.style.boxShadow='0 0 0 6px rgba(239,159,39,.4)'; }
+  }, 3000);
+  setTimeout(()=>{ if(clockEl) clockEl.classList.add('clock-farewell'); }, 3200);
+  // Toasts secuenciales
+  setTimeout(()=>showToast('📍 Paiporta · Agua en vivienda · Pendiente validación'),3400);
+  setTimeout(()=>showToast('📍 Catarroja · Corte de vía · Pendiente validación'),5200);
+  setTimeout(()=>showToast('📍 Massanassa · Persona mayor sin salida · Pendiente validación'),7000);
+  // Auto-next
+  setTimeout(()=>autoNext(4500), 7000);
+}
+
+function initMap1(){
+  const m=L.map('map1',{zoomControl:false,attributionControl:true}).setView([39.44,-0.39],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(m);
+  maps['map1']=m;
+  setTimeout(()=>m.invalidateSize(),200);
+  startP1Sequence();
+}
+
+function showToast(msg){
+  const c=document.getElementById('toastContainer');
+  if(!c)return;
+  const t=document.createElement('div');
+  t.className='toast';
+  t.innerHTML=`<div class="toast-dot"></div><span style="flex:1">${msg}</span><div class="toast-label">Pendiente</div>`;
+  c.appendChild(t);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>t.classList.add('show')));
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(-8px) scale(.96)';setTimeout(()=>t.remove(),400);},5000);
+}
+
+// ══════════════════════════════════════
+// P2: ALTA CIUDADANO
+// ══════════════════════════════════════
+// ══ TYPEWRITER ══
+function typeWriter(el, text, speed, onDone){
+  el.value='';
+  el.classList.add('input-typing','typing-cursor');
+  let i=0;
+  const t=setInterval(()=>{
+    el.value+=text[i++];
+    if(i>=text.length){ clearInterval(t); el.classList.remove('typing-cursor'); setTimeout(()=>el.classList.remove('input-typing'),400); if(onDone) onDone(); }
+  }, speed);
+}
+
+function autoSequenceP2(){
+  const dir=document.getElementById('inputDireccion');
+  const desc=document.getElementById('inputDescripcion');
+  const btn=document.getElementById('btnSend');
+  if(!dir||needSent) return;
+  // Step 1: escribir dirección
+  setTimeout(()=>{
+    typeWriter(dir,'Calle Mayor 7, Paiporta, Valencia',42, ()=>{
+      // Step 2: escribir descripción
+      setTimeout(()=>{
+        typeWriter(desc,'Agua entrando en vivienda, necesitamos ayuda urgente',38, ()=>{
+          // Step 3: spotlight en botón + auto-click
+          setTimeout(()=>{
+            btn.classList.add('btn-spotlight');
+            btn.scrollIntoView({behavior:'smooth',block:'center'});
+            setTimeout(()=>{
+              btn.classList.remove('btn-spotlight');
+              btn.classList.add('btn-auto-click');
+              setTimeout(()=>{ btn.classList.remove('btn-auto-click'); enviarNecesidad(); },600);
+            },2800);
+          },500);
+        });
+      },600);
+    });
+  },900);
+  // auto-next: tras confirmar + tiempo lectura confirm card
+  autoNext(11500);
+}
+
+function enviarNecesidad(){
+  if(needSent)return;
+  needSent=true;
+  const btn=document.getElementById('btnSend');
+  btn.textContent='✓ Aviso enviado';
+  btn.disabled=true;
+  btn.style.background='var(--teal)';
+  setTimeout(()=>{
+    document.getElementById('confirmCard').classList.add('show');
+  },400);
+}
+
+// ══════════════════════════════════════
+// P3: TRIAJE EMERGENCIA
+// ══════════════════════════════════════
+function validarCard(cardId,badgeId,accepted,msg){
+  const card=document.getElementById(cardId);
+  const done=document.getElementById(cardId+'-done');
+  const badge=document.getElementById(badgeId);
+  card.querySelector('.val-actions').style.display='none';
+  done.className='val-done '+(accepted?'ok':'rej');
+  done.textContent=msg;
+  const cur=parseInt(badge.textContent)||0;
+  badge.textContent=Math.max(0,cur-1);
+  if(parseInt(badge.textContent)===0) badge.className='tab-badge zero';
+}
+
+// ══════════════════════════════════════
+// MAPA 4 — SPLIT MURO+MAPA
+// ══════════════════════════════════════
+function initMap4(){
+  const m=L.map('map4',{zoomControl:false,attributionControl:false}).setView([39.43,-0.40],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(m);
+  maps['map4']=m;
+  setTimeout(()=>m.invalidateSize(),200);
+  const icon=L.divIcon({html:'<div style="width:20px;height:20px;border-radius:50%;background:#E24B4A;border:3px solid #fff;box-shadow:0 0 0 5px rgba(226,75,74,.3);animation:badgePulse 1.4s infinite"></div>',className:'',iconSize:[20,20]});
+  L.marker([39.43,-0.40],{icon}).addTo(m).bindPopup('<b>🚨 Emergencia activa</b><br>Zona sur · 3 avisos consolidados<br><small>Alta prioridad · Pin de cobertura activo</small>').openPopup();
+  L.circle([39.43,-0.40],{radius:3000,color:'#E24B4A',fillColor:'#E24B4A',fillOpacity:0.07,weight:1.5,dashArray:'5,4'}).addTo(m);
+}
+
+// ══════════════════════════════════════
+// P5: TRIAJE NUEVAS SOLICITUDES CON AUTO-VALIDAR
+// ══════════════════════════════════════
+const p5Cards=[
+  {id:'p5c1',icon:'🏠',bg:'#EEF4FC',title:'Refugio / Hospedaje · Paiporta',meta:'📍 Calle Mayor 12, Paiporta',prio:'alta',tipo:'nec',extra:'Familia de 3 personas necesita alojamiento urgente'},
+  {id:'p5c2',icon:'🤝',bg:'#F5F0FB',title:'Voluntarios · Necesidad · Massanassa',meta:'📍 Plaza del Ayuntamiento, Massanassa',prio:'media',tipo:'nec',extra:'4 operarios para limpieza y acceso · Perfil: Operativo'},
+  {id:'p5c3',icon:'🤝',bg:'#E1F5EE',title:'Voluntarios · Oferta · Extramuros',meta:'📍 Calle del Maestro Sosa 12, Valencia',prio:'media',tipo:'oferta',extra:'6 personas disponibles · Operativo · Radio 18 km · Furgoneta propia'}
+];
+
+function startP5Sequence(){
+  if(p5CardsAdded>0)return;
+  const waiting=document.getElementById('p5-waiting');
+  let idx=0;
+  function addNext(){
+    if(idx>=p5Cards.length)return;
+    if(idx===0&&waiting)waiting.remove();
+    const c=p5Cards[idx];
+    const badge=document.getElementById('badge5');
+    badge.textContent=idx+1;
+    badge.className='tab-badge';
+    badge.classList.add('spotlight');
+    setTimeout(()=>badge.classList.remove('spotlight'),3200);
+    const card=document.createElement('div');
+    card.className='val-card entering';
+    card.id=c.id;
+    card.innerHTML=`
+      <div class="val-header">
+        <div class="val-icon" style="background:${c.bg}">${c.icon}</div>
+        <div class="val-info">
+          <div class="val-title-txt">${c.title}</div>
+          <div class="val-meta">${c.meta}</div>
+          <div class="val-meta" style="margin-top:3px;font-size:11px;color:var(--dark)">${c.extra}</div>
+          <div class="val-meta" style="margin-top:4px;display:flex;gap:5px">
+            <span class="prio-tag prio-${c.prio}">● ${c.prio.charAt(0).toUpperCase()+c.prio.slice(1)}</span>
+            <span class="${c.tipo==='oferta'?'tipo-oferta':'tipo-nec'}">${c.tipo==='oferta'?'↑ Oferta':'↓ Necesidad'}</span>
+          </div>
+        </div>
+        <div class="val-actions" id="${c.id}-actions">
+          <button class="val-btn val-btn-ok" id="${c.id}-btnok" onclick="validarP5Card('${c.id}')">✓ Validar</button>
+          <button class="val-btn val-btn-rej" onclick="rechazarP5Card('${c.id}')">✗ Rechazar</button>
+        </div>
+      </div>
+      <div id="${c.id}-done" class="val-done"></div>`;
+    document.getElementById('triajeCards5').appendChild(card);
+    idx++;
+    p5CardsAdded=idx;
+    if(idx<p5Cards.length){
+      p5CardTimer=setTimeout(addNext,2000);
+    } else {
+      // auto-validar primera tarjeta tras 1.5s
+      p5AutoTimer=setTimeout(autoValidarPrimera,1800);
+      // auto-next tras validar + lectura
+      autoNext(13000);
+    }
+  }
+  p5CardTimer=setTimeout(addNext,900);
+}
+
+function autoValidarPrimera(){
+  const btn=document.getElementById('p5c1-btnok');
+  if(!btn)return;
+  // spotlight en el botón
+  btn.classList.add('btn-spotlight');
+  // scroll a la tarjeta
+  const card=document.getElementById('p5c1');
+  if(card) card.scrollIntoView({behavior:'smooth',block:'center'});
+  // clic automático tras el spotlight
+  setTimeout(()=>{
+    btn.classList.remove('btn-spotlight');
+    validarP5Card('p5c1');
+  },3200);
+}
+
+function validarP5Card(cardId){
+  const card=document.getElementById(cardId);
+  const done=document.getElementById(cardId+'-done');
+  const actions=document.getElementById(cardId+'-actions');
+  if(actions) actions.style.display='none';
+  done.className='val-done ok';
+  done.textContent='✓ Validada y publicada en el muro. Visible en mapa para todos los actores.';
+  const badge=document.getElementById('badge5');
+  const newVal=Math.max(0,(parseInt(badge.textContent)||0)-1);
+  badge.textContent=newVal;
+  if(newVal===0) badge.className='tab-badge zero';
+}
+
+function rechazarP5Card(cardId){
+  const card=document.getElementById(cardId);
+  const done=document.getElementById(cardId+'-done');
+  const actions=document.getElementById(cardId+'-actions');
+  if(actions) actions.style.display='none';
+  done.className='val-done rej';
+  done.textContent='✗ Rechazada. No publicada.';
+  const badge=document.getElementById('badge5');
+  const newVal=Math.max(0,(parseInt(badge.textContent)||0)-1);
+  badge.textContent=newVal;
+  if(newVal===0) badge.className='tab-badge zero';
+}
+
+// ══════════════════════════════════════
+// MAPA 5 — GLOBAL COMPLETO
+// ══════════════════════════════════════
+function initMap5(){
+  const m=L.map('map5',{zoomControl:true,attributionControl:true}).setView([39.465,-0.375],13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(m);
+  maps['map5']=m;
+  // forzar cálculo de tamaño después de render
+  setTimeout(()=>m.invalidateSize(),200);
+
+  const mk=(color,label)=>L.divIcon({
+    html:`<div style="width:32px;height:32px;border-radius:50%;background:${color};border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;box-shadow:0 2px 10px rgba(0,0,0,.35)">${label}</div>`,
+    className:'',iconSize:[32,32],iconAnchor:[16,16]
+  });
+
+  const pins=[
+    {lat:39.43,lng:-0.40,color:'#E24B4A',label:'🚨',popup:'<b>🚨 Emergencia activa</b><br>Zona sur · 3 avisos<br><small>Alta · Pin de cobertura activo</small>'},
+    {lat:39.47,lng:-0.37,color:'#E24B4A',label:'🚨',popup:'<b>🚨 Emergencia</b><br>Campanar · Inundación<br><small>Alta prioridad</small>'},
+    {lat:39.468,lng:-0.376,color:'#EF9F27',label:'P',popup:'<b>📍 Punto de encuentro</b><br>IES Benlliure<br>Capacidad 80 personas',autoOpen:true},
+    {lat:39.455,lng:-0.360,color:'#EF9F27',label:'P',popup:'<b>📍 Punto de encuentro</b><br>IES Luis Vives<br>Capacidad 120 personas'},
+    {lat:39.46,lng:-0.38,color:'#7B5EA7',label:'V',popup:'<b>🤝 Voluntarios Operativo</b><br>6 disponibles · Furgoneta propia<br>Radio 18 km · Extramuros'},
+    {lat:39.445,lng:-0.395,color:'#7B5EA7',label:'V',popup:'<b>🤝 Voluntarios Ciudadano</b><br>12 disponibles · Zona sur<br>Limpieza y apoyo general'},
+    {lat:39.452,lng:-0.365,color:'#1D9E75',label:'K',popup:'<b>📦 Recogida de kits</b><br>Pavelló Esportiu Sant Pau<br>Alimenticio · Sanitario · Ropa'},
+    {lat:39.470,lng:-0.370,color:'#1D9E75',label:'K',popup:'<b>📦 Recogida de kits</b><br>Centre Cívic Russafa<br>Sanitario · Herramientas'},
+    {lat:39.448,lng:-0.380,color:'#3A7BD5',label:'R',popup:'<b>🏠 Refugio solicitado</b><br>Familia 3 personas · Paiporta<br>Urgente'},
+  ];
+
+  map5Markers=[];
+  pins.forEach(p=>{
+    const marker=L.marker([p.lat,p.lng],{icon:mk(p.color,p.label)}).addTo(m).bindPopup(p.popup);
+    if(p.autoOpen) marker._autoOpen=true;
+    map5Markers.push(marker);
+  });
+
+  // círculo cobertura emergencia
+  L.circle([39.43,-0.40],{radius:2800,color:'#E24B4A',fillColor:'#E24B4A',fillOpacity:0.06,weight:1,dashArray:'5,4'}).addTo(m);
+
+  // filtros
+  document.querySelectorAll('.map5-filter').forEach(btn=>{
+    btn.addEventListener('click',()=>btn.classList.toggle('on'));
+  });
+}
+
+function autoPopupMap5(){
+  if(!maps['map5'])return;
+  // Secuencia: pin 0 (emergencia) → pin 2 (punto encuentro IES) → pin 4 (voluntarios) → cerrar
+  const seq=[0,2,4];
+  let si=0;
+  function showNext(){
+    if(si>=seq.length){
+      // cerrar todos los popups y recentrar
+      maps['map5'].closePopup();
+      maps['map5'].flyTo([39.465,-0.375],13,{duration:1});
+      return;
+    }
+    const marker=map5Markers[seq[si]];
+    if(!marker){si++;showNext();return;}
+    maps['map5'].flyTo(marker.getLatLng(),14,{duration:1.0});
+    setTimeout(()=>{
+      marker.openPopup();
+      si++;
+      setTimeout(showNext,2800);
+    },1100);
+  }
+  setTimeout(showNext,800);
+}
+
+// ══════════════════════════════════════
+// KITS P8
+// ══════════════════════════════════════
+function selectKitType(el){
+  document.querySelectorAll('.kit-type-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function adjustQty(id,delta){
+  const el=document.getElementById(id);
+  el.textContent=Math.max(0,(parseInt(el.textContent)||0)+delta);
+  const ids=['q1','q2','q3','q4'];
+  document.getElementById('totalElem').textContent=ids.reduce((s,i)=>s+(parseInt(document.getElementById(i).textContent)||0),0);
+}
+
+function crearKit(){
+  if(kitCreated)return;
+  kitCreated=true;
+  const btn=document.getElementById('btnCrearKit');
+  btn.textContent='✓ Kit creado';
+  btn.disabled=true;
+  const item=document.createElement('div');
+  item.className='kit-created-item';
+  item.innerHTML=`<span class="kit-created-icon">💊</span><div class="kit-created-info"><div class="kit-created-name">Kit Sanitario</div><div class="kit-created-meta">14 elementos · Listo para asignar</div></div><span class="kit-code">KIT-N0GW-0001</span><span class="kit-status-badge">✓ Creado</span>`;
+  document.getElementById('kitCreatedList').appendChild(item);
+  setTimeout(()=>{ document.getElementById('puntosSection').style.display='block'; },600);
+}
+
+// ══════════════════════════════════════
+// QR + TRAZABILIDAD P9
+// ══════════════════════════════════════
+function generarQR(){
+  if(qrGenerated)return;
+  qrGenerated=true;
+  const btn=document.getElementById('btnGenQR');
+  btn.textContent='✓ QR generado';
+  btn.disabled=true;
+  btn.style.background='var(--teal)';
+  const container=document.getElementById('qrcode');
+  try{
+    new QRCode(container,{text:'KIT-N0GW-0001',width:100,height:100,colorDark:'#0E4D38',colorLight:'#E1F5EE',correctLevel:QRCode.CorrectLevel.M});
+  }catch(e){
+    container.innerHTML='<div style="width:100px;height:100px;background:var(--teal-light);display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:36px;margin:0 auto">🔲</div>';
+  }
+  document.getElementById('qrCodeLabel').style.display='block';
+  setTimeout(()=>{ document.getElementById('qrInstrucciones').style.display='block'; },500);
+}
+
+const trazStates=[
+  {cls:'status-prep',txt:'● Preparado',w:'33%'},
+  {cls:'status-camino',txt:'🚚 En camino',w:'66%'},
+  {cls:'status-recibido',txt:'✅ Recibido',w:'100%'}
+];
+
+function avanzarKit(id){
+  if(id==='traz1'){
+    traz1State=Math.min(2,traz1State+1);
+    const s=trazStates[traz1State];
+    document.getElementById('traz1-status').className='traz-item-status '+s.cls;
+    document.getElementById('traz1-status').textContent=s.txt;
+    document.getElementById('traz1-bar').style.width=s.w;
+  } else {
+    traz2State=Math.min(2,traz2State+1);
+    const s=trazStates[traz2State];
+    document.getElementById('traz2-status').className='traz-item-status '+s.cls;
+    document.getElementById('traz2-status').textContent=s.txt;
+    document.getElementById('traz2-bar').style.width=s.w;
+  }
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+// ══ AUTO-SECUENCIA P7 ══
+let p7Played = false;
+function autoSequenceP7(){
+  if(p7Played) return;
+  p7Played = true;
+
+  function show(id, delay, extraFn){
+    setTimeout(()=>{
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+      if(extraFn) extraFn(el);
+    }, delay);
+  }
+
+  // Eyebrow + headline
+  show('t7-eyebrow', 400);
+  show('t7-headline', 900);
+  // Grid aparece
+  show('t7-grid', 1500);
+  // Items izquierda uno a uno con glow
+  [['t7-i1',1800],['t7-i2',2300],['t7-i3',2800],['t7-i4',3300]].forEach(([id,d])=>{
+    show(id, d, el=>{ el.classList.add('trans-item-glow'); setTimeout(()=>el.classList.remove('trans-item-glow'),900); });
+  });
+  // Derecha: kits headline + desc + botón
+  show('t7-kits', 3900);
+  show('t7-desc', 4400);
+  show('t7-btn', 4900, el=>{
+    setTimeout(()=>{ el.classList.add('btn-trans-ready'); setTimeout(()=>el.classList.remove('btn-trans-ready'),3800); }, 200);
+  });
+  // auto-next
+  autoNext(9500);
+}
+
+
+
+// ══ AUTO-NEXT: avanza al siguiente paso automáticamente ══
+let autoNextTimer = null;
+function autoNext(delay){
+  if(autoNextTimer) clearTimeout(autoNextTimer);
+  const btn = document.getElementById('btnNext');
+  autoNextTimer = setTimeout(()=>{
+    if(!btn) return;
+    // efecto visual: pulso + escala en el botón
+    btn.classList.add('active-btn');
+    btn.style.transition='transform .2s, box-shadow .2s';
+    btn.style.transform='scale(1.12)';
+    btn.style.boxShadow='0 0 0 8px rgba(251,191,36,.7)';
+    setTimeout(()=>{
+      btn.style.transform='scale(1)';
+      btn.style.boxShadow='';
+      setTimeout(()=>{ btn.classList.remove('active-btn'); if(currentStep < TOTAL_STEPS) nextStep(); }, 200);
+    }, 280);
+  }, delay);
+}
+
+// ══ HELPER: aplicar clase de foco con timeout de limpieza ══
+function focusEl(id, cls, duration){
+  const el = typeof id === 'string' ? document.getElementById(id) : id;
+  if(!el) return;
+  el.classList.remove(cls);
+  void el.offsetWidth; // reflow para reiniciar animación
+  el.classList.add(cls);
+  if(duration) setTimeout(()=>el.classList.remove(cls), duration);
+}
+
+function scrollTo(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// ══ AUTO-SECUENCIA P3 — TRIAJE EMERGENCIA ══
+let p3Played = false;
+function autoSequenceP3(){
+  if(p3Played) return;
+  p3Played = true;
+  // 1. Badge zoom
+  setTimeout(()=>focusEl('badge3','badge-zoom',600), 800);
+  // 2. Spotlight pulsante en badge
+  setTimeout(()=>focusEl('badge3','spotlight',3200), 1000);
+  // 3. Scroll a tarjeta + spotlight en botón validar
+  setTimeout(()=>{
+    scrollTo('vc1');
+    focusEl('btnValidar3','btn-spotlight',3200);
+  }, 2200);
+  // 4. Auto-click Validar
+  setTimeout(()=>{
+    const btn=document.getElementById('btnValidar3');
+    if(btn && !btn.disabled) { btn.classList.add('zoom-pop'); setTimeout(()=>validarCard('vc1','badge3',true,'✓ Validada y publicada en el muro. Pin de cobertura activo en el mapa operativo.'),300); }
+  }, 5200);
+  // 5. Auto-next
+  autoNext(7500);
+}
+
+// ══ AUTO-SECUENCIA P4 — MURO + MAPA ══
+let p4Played = false;
+function autoSequenceP4(){
+  if(p4Played) return;
+  p4Played = true;
+  // 1. Zoom en tarjeta del muro
+  setTimeout(()=>{
+    const items=document.getElementById('muroItems4');
+    if(items){ const card=items.querySelector('.muro-item'); if(card){focusEl(card,'zoom-in',600);} }
+  }, 700);
+  // 2. Spotlight en leyenda del mapa
+  setTimeout(()=>{
+    const leg=document.querySelector('#p4 .map-legend');
+    if(leg) focusEl(leg,'panel-glow-white',3200);
+  }, 2500);
+  // 3. Abrir popup del mapa p4 automáticamente
+  setTimeout(()=>{
+    if(maps['map4']){
+      maps['map4'].eachLayer(l=>{ if(l.getPopup && l.getPopup()) l.openPopup(); });
+    }
+  }, 3800);
+  // 4. Auto-next
+  autoNext(7000);
+}
+
+// ══ AUTO-SECUENCIA P6 — MAPA GLOBAL (zoom en panel necesidades) ══
+// Se llama DESPUÉS de que autoPopupMap5 termina (~12s)
+function zoomNecesidadesPanel(){
+  const panel = document.getElementById('map5panel');
+  if(!panel) return;
+  // Sin scale — mantiene posición y tamaño exactos
+  // Solo anillo exterior teal pulsante + label flotante
+  panel.style.transition='box-shadow .35s ease, border-color .35s ease, transform .4s cubic-bezier(.16,1,.3,1)';
+  panel.style.transformOrigin='top right';
+  // Label "Atención aquí" — se añade al wrapper del mapa (position:relative)
+  const wrap = document.getElementById('map5wrap');
+  let label = document.getElementById('needs-label');
+  if(label) label.remove();
+  label = document.createElement('div');
+  label.id='needs-label';
+  label.style.cssText='position:absolute;top:10px;right:215px;background:var(--teal);color:#fff;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px;letter-spacing:.5px;text-transform:uppercase;white-space:nowrap;opacity:0;transition:opacity .35s;pointer-events:none;font-family:"DM Sans",sans-serif;box-shadow:0 3px 12px rgba(29,158,117,.6);z-index:600;display:flex;align-items:center;gap:6px';
+  label.innerHTML='<span style="animation:blink 1s infinite;display:inline-block">👁</span> Necesidades actuales';
+  if(wrap) wrap.appendChild(label);
+  // Pulso 1 — anillo grueso teal
+  setTimeout(()=>{
+    label.style.opacity='1';
+    panel.style.borderColor='var(--teal)';
+    panel.style.transform='scale(1.12)';
+    panel.style.transform='scale(1.1)';
+    panel.style.boxShadow='0 0 0 4px var(--teal), 0 0 0 10px rgba(29,158,117,.4), 0 0 32px rgba(29,158,117,.25)';
+  }, 200);
+  // Pulso 2 — baja
+  setTimeout(()=>{
+    panel.style.transform='scale(1)';
+    panel.style.boxShadow='0 0 0 2px var(--teal), 0 4px 16px rgba(0,0,0,.5)';
+  }, 900);
+  // Pulso 3 — sube
+  setTimeout(()=>{
+    panel.style.transform='scale(1.1)';
+    panel.style.boxShadow='0 0 0 4px var(--teal), 0 0 0 10px rgba(29,158,117,.4), 0 0 32px rgba(29,158,117,.25)';
+  }, 1500);
+  // Final — queda con borde teal suave, label desaparece
+  setTimeout(()=>{
+    panel.style.transform='scale(1)';
+    panel.style.boxShadow='0 0 0 2px rgba(29,158,117,.6), 0 8px 24px rgba(0,0,0,.5)';
+    label.style.opacity='0';
+    setTimeout(()=>{ if(label.parentNode) label.remove(); }, 400);
+  }, 2400);
+}
+
+// ══ AUTO-SECUENCIA P8 — COORDINADOR KITS ══
+let p8Played = false;
+function autoSequenceP8(){
+  if(p8Played) return;
+  p8Played = true;
+  // 1. Zoom en fila de tipos de kit
+  setTimeout(()=>focusEl('kitTypesRow','zoom-pop',600), 900);
+  // 2. Highlight en caja de contenido
+  setTimeout(()=>{
+    const box=document.getElementById('kitContentBox');
+    if(box){ box.style.transition='box-shadow .3s'; box.style.boxShadow='0 0 0 3px rgba(29,158,117,.5)'; setTimeout(()=>box.style.boxShadow='',1400); }
+  }, 2000);
+  // 3. Spotlight en botón crear kit
+  setTimeout(()=>{
+    scrollTo('btnCrearKit');
+    focusEl('btnCrearKit','btn-spotlight',3200);
+  }, 3200);
+  // 4. Auto-click Crear kit
+  setTimeout(()=>{
+    const btn=document.getElementById('btnCrearKit');
+    if(btn && !btn.disabled){ btn.classList.add('zoom-pop'); setTimeout(()=>crearKit(),300); }
+  }, 6200);
+  // 5. Zoom en puntos de necesidad al aparecer
+  setTimeout(()=>{ scrollTo('puntosSection'); focusEl('puntosSection','pulse-glow',3000); }, 7400);
+  // auto-next
+  autoNext(11500);
+}
+
+// ══ AUTO-SECUENCIA P9 — DONANTE + QR + TRAZABILIDAD ══
+let p9Played = false;
+function autoSequenceP9(){
+  if(p9Played) return;
+  p9Played = true;
+  // 1. Highlight en punto que admite el kit
+  setTimeout(()=>{
+    const p=document.getElementById('puntoAdmite');
+    if(p){ p.style.transition='box-shadow .3s,transform .3s'; p.style.boxShadow='0 0 0 3px var(--teal)'; p.style.transform='scale(1.02)'; setTimeout(()=>{p.style.boxShadow='';p.style.transform='';},1600); }
+  }, 1000);
+  // 2. Spotlight en botón generar QR
+  setTimeout(()=>{
+    scrollTo('btnGenQR');
+    focusEl('btnGenQR','btn-spotlight',3200);
+  }, 2800);
+  // 3. Auto-click Generar QR
+  setTimeout(()=>{
+    const btn=document.getElementById('btnGenQR');
+    if(btn && !btn.disabled){ btn.classList.add('zoom-pop'); setTimeout(()=>generarQR(),300); }
+  }, 5800);
+  // 4. Zoom reveal en QR generado
+  setTimeout(()=>{
+    const qr=document.getElementById('qrcode');
+    if(qr){ qr.style.transition='transform .5s'; qr.classList.add('qr-reveal'); setTimeout(()=>qr.classList.remove('qr-reveal'),800); }
+    focusEl('qrCodeLabel','zoom-pop',600);
+  }, 7000);
+  // 5. Scroll a trazabilidad + spotlight botón avanzar
+  setTimeout(()=>{
+    scrollTo('trazItem1');
+    const btnAv=document.querySelector('#trazItem1 .btn-avanzar');
+    if(btnAv) focusEl(btnAv,'btn-spotlight',3200);
+  }, 8500);
+  // 6. Auto-avanzar kit1 a "En camino"
+  setTimeout(()=>{
+    const btnAv=document.querySelector('#trazItem1 .btn-avanzar');
+    if(btnAv) btnAv.classList.add('zoom-pop');
+    setTimeout(()=>{
+      avanzarKit('traz1');
+      focusEl('traz1-bar','bar-pulse',1800);
+    },300);
+  }, 11500);
+  // 7. Auto-avanzar kit1 a "Recibido"
+  setTimeout(()=>{
+    avanzarKit('traz1');
+    focusEl('traz1-status','zoom-pop',600);
+    focusEl('traz1-bar','bar-pulse',1800);
+  }, 14000);
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  updateProgress();
+  showPanel(1);
+});
+</script>
+</body>
+</html>
