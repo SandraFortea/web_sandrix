@@ -23,13 +23,16 @@
   --radius:12px;--radius-sm:8px;
 }
 
-html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#111;overflow:hidden}
+html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#0d0d1a;overflow:hidden;display:flex;align-items:center;justify-content:center}
 
 /* ── CHROME WRAPPER ── */
 .demo-chrome{
   display:flex;flex-direction:column;
-  height:100vh;width:100vw;
-  max-width:1300px;margin:0 auto;
+  width:1024px;height:680px;
+  flex-shrink:0;
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.06);
 }
 
 /* ── TOPBAR ── */
@@ -44,7 +47,10 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
 .dot{width:10px;height:10px;border-radius:50%}
 .dot-r{background:#FF5F57}.dot-y{background:#FEBC2E}.dot-g{background:#28C840}
 .url-bar{flex:1;text-align:center;font-size:11px;color:rgba(255,255,255,0.4)}
-.badge-live{font-size:10px;background:rgba(226,75,74,.2);color:#F7A8A7;border:1px solid rgba(226,75,74,.3);border-radius:20px;padding:2px 8px;font-weight:600}
+.badge-live{font-size:10px;background:rgba(226,75,74,.2);color:#F7A8A7;border:1px solid rgba(226,75,74,.3);border-radius:20px;padding:2px 8px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
+.badge-live:hover{background:rgba(226,75,74,.4);border-color:rgba(226,75,74,.7);color:#fff}
+@keyframes chromeWake{0%{box-shadow:0 24px 80px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.06)}50%{box-shadow:0 24px 80px rgba(0,0,0,.8),0 0 0 3px #FBBF24,0 0 40px rgba(251,191,36,.3)}100%{box-shadow:0 24px 80px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.06)}}
+.chrome-wake{animation:chromeWake .6s ease}
 
 /* ── PROGRESS BAR ── */
 .progress-bar{
@@ -52,7 +58,10 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
   flex-shrink:0;display:flex;align-items:center;gap:10px;
 }
 .progress-steps{display:flex;gap:3px;flex:1}
-.progress-step{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);transition:background .4s}
+.progress-step{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,0.12);transition:background .4s,transform .2s;cursor:pointer;position:relative}
+.progress-step:hover{background:rgba(251,191,36,.5)!important;transform:scaleY(2)}
+@keyframes stepFlash{0%{background:#FBBF24}100%{background:var(--teal)}}
+.progress-step.flash{animation:stepFlash .4s ease forwards}
 .progress-step.done{background:var(--teal)}
 .progress-step.active{background:var(--red)}
 .progress-label{font-size:11px;color:rgba(255,255,255,.45);white-space:nowrap;min-width:110px;text-align:right}
@@ -80,9 +89,9 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
   border-left:4px solid #FBBF24;
   border-radius:var(--radius);
   padding:11px 22px;
-  font-size:15px;color:#fff;
+  font-size:13px;color:#fff;
   font-style:italic;text-align:center;
-  max-width:860px;line-height:1.6;font-weight:500;
+  max-width:860px;line-height:1.55;font-weight:500;
   animation:narrativeIn .55s cubic-bezier(.16,1,.3,1);
   box-shadow:0 6px 28px rgba(0,0,0,.4);
 }
@@ -135,7 +144,7 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
   background:rgba(17,24,39,.88);backdrop-filter:blur(6px);
   border:2px solid rgba(29,158,117,.4);
   border-radius:var(--radius-sm);padding:7px 14px;
-  color:#fff;font-family:'Syne',sans-serif;font-size:23px;font-weight:800;
+  color:#fff;font-family:'Syne',sans-serif;font-size:19px;font-weight:800;
   z-index:500;letter-spacing:2px;
   transition:border-color .3s;
 }
@@ -157,7 +166,7 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
   border:1.5px solid rgba(239,159,39,.5);
   border-left:5px solid var(--orange);
   border-radius:var(--radius);padding:11px 16px;
-  font-size:15px;color:#fff;font-weight:500;
+  font-size:13px;color:#fff;font-weight:500;
   box-shadow:0 8px 28px rgba(0,0,0,.45);
   backdrop-filter:blur(8px);
   opacity:0;transform:translateY(-12px) scale(.93);
@@ -171,7 +180,7 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
 .toast-label{font-size:10px;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:.5px;margin-left:auto;padding:2px 8px;background:rgba(239,159,39,.18);border:1px solid rgba(239,159,39,.4);border-radius:20px}
 
 /* ══ PANEL 1b: ALTA CIUDADANO ══ */
-.panel-inner{padding:16px;flex:1;overflow-y:auto}
+.panel-inner{padding:12px 14px;flex:1;overflow-y:auto}
 .panel-header{margin-bottom:14px}
 .panel-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--dark);margin-bottom:3px}
 .panel-sub{font-size:12px;color:var(--muted);line-height:1.5}
@@ -282,12 +291,9 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
 /* ══ TRANSICIÓN KITS ══ */
 #p7{background:var(--dark);justify-content:center;align-items:center}
 #p6{overflow:hidden}
-.trans-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px;height:100%;gap:20px}
+.trans-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 20px;height:100%;gap:14px}
 .trans-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--teal)}
-.trans-headline{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;text-align:center;line-height:1.3}
-.trans-grid{display:flex;gap:0;max-width:780px;width:100%;border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);overflow:hidden}
-.trans-left{flex:1;padding:24px;border-right:1px solid rgba(255,255,255,.1)}
-.trans-right{flex:1;padding:24px;background:rgba(29,158,117,.07)}
+.trans-headline{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff;text-align:center;line-height:1.3}
 .trans-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;display:block}
 .trans-label.done{color:var(--teal)}
 .trans-label.next{color:var(--orange)}
@@ -296,8 +302,6 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
 .trans-text{font-size:12px;color:rgba(255,255,255,.75);line-height:1.4}
 .trans-headline2{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#fff;margin-bottom:6px}
 .trans-desc{font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;margin-bottom:16px}
-.btn-trans{padding:10px 22px;border:none;border-radius:var(--radius);background:var(--teal);color:#fff;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:background .2s}
-.btn-trans:hover{background:#17835f}
 
 /* ══ KITS COORDINADOR ══ */
 .kit-mode-toggle{display:flex;gap:4px;background:rgba(0,0,0,.06);border-radius:var(--radius);padding:4px;margin-bottom:16px}
@@ -388,7 +392,6 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
 @keyframes itemGlow{0%{box-shadow:0 0 0 0 rgba(29,158,117,0);background:transparent}40%{box-shadow:0 0 0 6px rgba(29,158,117,.25);background:rgba(29,158,117,.08)}100%{box-shadow:0 0 0 0 rgba(29,158,117,0);background:transparent}}
 .trans-item-glow{animation:itemGlow .8s ease;border-radius:8px;padding:4px 6px;margin:-4px -6px}
 @keyframes btnReadyPulse{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}50%{box-shadow:0 0 0 12px rgba(251,191,36,.65)}}
-.btn-trans-ready{animation:btnReadyPulse 1.2s ease-in-out 3}
 
 
 /* ── ZOOM / FOCO AUTOMÁTICO ── */
@@ -421,6 +424,57 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
 .leaflet-popup-content small{font-size:12px!important;color:#6B7280!important}
 .leaflet-popup-content-wrapper{border-radius:10px!important;box-shadow:0 6px 24px rgba(0,0,0,.25)!important;padding:4px!important}
 
+
+/* ── NARRATIVE COMO FLEX CHILD (no absolute) ── */
+.narrative-bar{
+  background:rgba(17,24,39,.9);backdrop-filter:blur(10px);
+  border-top:3px solid #FBBF24;
+  padding:7px 14px;flex-shrink:0;
+  display:flex;justify-content:center;align-items:center;
+  animation:narrativeIn .55s cubic-bezier(.16,1,.3,1);
+}
+.narrative-bar span{
+  font-size:15px;color:#fff;font-style:italic;font-weight:500;
+  line-height:1.6;text-align:center;max-width:860px;
+}
+.narrative-bar.fade-out{animation:narrativeOut 1s ease forwards}
+@keyframes narrativeOut{0%{opacity:1}100%{opacity:0;height:0;padding:0;border:none}}
+
+/* ── LAYOUT DOS COLUMNAS KITS ── */
+.kit-two-col{display:flex;gap:10px;flex:1;min-height:0;overflow:hidden}
+.kit-col-left{flex:1;overflow-y:auto;padding:8px 10px 8px 0;display:flex;flex-direction:column;gap:7px;min-width:0}
+.kit-col-right{width:42%;overflow-y:auto;padding:8px 0 8px 10px;display:flex;flex-direction:column;gap:7px;border-left:1px solid var(--border);min-width:0}
+.kit-col-section{padding:9px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border)}
+.kit-col-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+/* puntos de recogida compactos en p9 */
+.punto-card-compact{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--white);font-size:12px}
+.punto-card-compact.admite{border-color:var(--teal)}
+.punto-compact-name{font-weight:600;color:var(--dark);flex:1;font-size:12px}
+.punto-compact-dist{font-size:11px;color:var(--muted);white-space:nowrap}
+/* trazabilidad compacta */
+.traz-compact{border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:6px;background:var(--white)}
+.traz-compact-header{padding:7px 10px;display:flex;align-items:center;gap:7px}
+
+
+
+
+/* ── HIGHLIGHT LÍNEA COLOR CAJA ── */
+@keyframes colorLineHighlight{
+  0%{background:transparent;border-left-color:transparent;transform:scale(1)}
+  30%{background:rgba(251,191,36,.22);border-left-color:#FBBF24;transform:scale(1.02)}
+  70%{background:rgba(251,191,36,.18);border-left-color:#FBBF24;transform:scale(1.02)}
+  100%{background:rgba(251,191,36,.1);border-left-color:#FBBF24;transform:scale(1)}
+}
+.color-line-highlight{
+  border-left:3px solid #FBBF24!important;
+  border-radius:4px;
+  padding-left:10px!important;
+  animation:colorLineHighlight .8s ease forwards;
+  background:rgba(251,191,36,.1);
+}
+@keyframes colorDotPop{0%{transform:scale(1)}40%{transform:scale(2.2)}70%{transform:scale(1.6)}100%{transform:scale(1.8)}}
+.color-dot-pop{animation:colorDotPop .6s cubic-bezier(.16,1,.3,1) forwards}
+
 </style>
 </head>
 <body>
@@ -430,7 +484,7 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
   <div class="topbar">
     <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
     <div class="url-bar">kit2help.es · Demo interactiva</div>
-    <div class="badge-live">● LIVE DEMO</div>
+    <div class="badge-live" id="badgeLive" onclick="restartFromBadge()" title="Volver al inicio">● LIVE DEMO</div>
   </div>
 
   <!-- PROGRESS -->
@@ -456,7 +510,7 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
         pointer-events:none;
       ">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:var(--teal);animation:narrativeIn .6s ease">Kit2Help · Demo interactiva</div>
-        <div style="font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:#fff;text-align:center;line-height:1.25;animation:narrativeIn .7s ease">Valencia<br><span style="color:var(--orange)">29 octubre 2024</span></div>
+        <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;text-align:center;line-height:1.25;animation:narrativeIn .7s ease">Valencia<br><span style="color:var(--orange)">29 octubre 2024</span></div>
         <div style="font-size:15px;color:rgba(255,255,255,.75);letter-spacing:1px;animation:narrativeIn .8s ease">18:42h · Se detectan las primeras señales</div>
         <div style="margin-top:8px;width:40px;height:3px;border-radius:2px;background:var(--teal);animation:narrativeIn 1s ease"></div>
       </div>
@@ -464,7 +518,7 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
     </div>
 
     <!-- ══ P2: ALTA CIUDADANO ══ -->
-    <div class="panel" id="p2">
+    <div class="panel" id="p2" style="flex-direction:column">
       <div class="panel-inner">
         <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--teal-light);border:1px solid rgba(29,158,117,.3);font-size:11px;font-weight:700;color:var(--teal-dark);margin-bottom:12px">👤 Ciudadano afectado</div>
         <div class="panel-header">
@@ -504,11 +558,13 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
           <div class="confirm-status">● Pendiente validación · Entrando en panel de triaje. Un coordinador la revisará pronto.</div>
         </div>
       </div>
-      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">Cualquier ciudadano o voluntario puede reportar una necesidad desde la app. Sin llamadas, sin intermediarios.</div></div>
+    <div class="narrative-bar" id="narr-bar-3930">
+      <span>Cualquier ciudadano o voluntario puede reportar una necesidad desde la app. Sin llamadas, sin intermediarios.</span>
+    </div>
     </div>
 
     <!-- ══ P3: TRIAJE EMERGENCIA ══ -->
-    <div class="panel" id="p3">
+    <div class="panel" id="p3" style="flex-direction:column">
       <div class="panel-inner">
         <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--purple-light);border:1px solid rgba(123,94,167,.3);font-size:11px;font-weight:700;color:var(--purple);margin-bottom:12px">🔍 Coordinador oficial</div>
         <div class="panel-header">
@@ -551,7 +607,9 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
           </div>
         </div>
       </div>
-      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">Kit2Help agrupa N avisos de proximidad en una única incidencia coordinable. Sin duplicidades, sin ruido.</div></div>
+    <div class="narrative-bar" id="narr-bar-1026">
+      <span>Kit2Help agrupa N avisos de proximidad en una única incidencia coordinable. Sin duplicidades, sin ruido.</span>
+    </div>
     </div>
 
     <!-- ══ P4: MURO + MAPA SPLIT ══ -->
@@ -597,12 +655,8 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
         </div>
       </div>
     </div>
-    <div style="background:rgba(17,24,39,.88);backdrop-filter:blur(8px);padding:8px 16px;flex-shrink:0;display:flex;justify-content:center;border-top:1px solid rgba(255,255,255,.08)">
-      <span style="font-size:12px;color:rgba(255,255,255,.9);font-style:italic;border-left:3px solid var(--teal);padding-left:10px">Validado por el coordinador → visible al instante en el muro y en el mapa para todos los actores.</span>
-    </div>
-
     <!-- ══ P5: TRIAJE NUEVAS SOLICITUDES ══ -->
-    <div class="panel" id="p5">
+    <div class="panel" id="p5" style="flex-direction:column">
       <div class="panel-inner">
         <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--purple-light);border:1px solid rgba(123,94,167,.3);font-size:11px;font-weight:700;color:var(--purple);margin-bottom:12px">🔍 Coordinador oficial</div>
         <div class="panel-header">
@@ -623,7 +677,9 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
           <div style="font-size:12px;color:var(--muted);font-style:italic;padding:10px 0" id="p5-waiting">Esperando nuevas solicitudes...</div>
         </div>
       </div>
-      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">Nuevas solicitudes entran al triaje: necesidades reales y ofertas disponibles. El coordinador decide.</div></div>
+    <div class="narrative-bar" id="narr-bar-3242">
+      <span>Nuevas solicitudes entran al triaje: necesidades reales y ofertas disponibles. El coordinador decide.</span>
+    </div>
     </div>
 
     <!-- ══ P6: MAPA GLOBAL ══ -->
@@ -662,126 +718,140 @@ html,body{height:100%;width:100%;font-family:'DM Sans',sans-serif;background:#11
     </div>
 
     <!-- ══ P7: TRANSICIÓN KITS ══ -->
-    <div class="panel" id="p7" style="flex-direction:column">
-      <div class="trans-wrap">
-        <div class="trans-eyebrow" id="t7-eyebrow" style="opacity:0;transition:opacity .5s">Módulo de coordinación de ayuda material</div>
-        <div class="trans-headline" id="t7-headline" style="opacity:0;transition:opacity .6s">La emergencia está coordinada.<br><span style="color:var(--teal)">¿Y la ayuda material?</span></div>
-        <div class="trans-grid" id="t7-grid" style="opacity:0;transition:opacity .5s">
-          <div class="trans-left">
-            <span class="trans-label done">✓ Coordinación activa</span>
-            <div class="trans-item" id="t7-i1" style="opacity:0;transform:translateX(-12px);transition:all .4s"><div class="trans-icon">✅</div><div class="trans-text">Emergencia detectada y validada por el coordinador</div></div>
-            <div class="trans-item" id="t7-i2" style="opacity:0;transform:translateX(-12px);transition:all .4s"><div class="trans-icon">✅</div><div class="trans-text">Voluntarios Operativo disponibles en zona</div></div>
-            <div class="trans-item" id="t7-i3" style="opacity:0;transform:translateX(-12px);transition:all .4s"><div class="trans-icon">✅</div><div class="trans-text">Refugio para familia de Paiporta en gestión</div></div>
-            <div class="trans-item" id="t7-i4" style="opacity:0;transform:translateX(-12px);transition:all .4s"><div class="trans-icon">✅</div><div class="trans-text">Mapa operativo activo para todos los actores</div></div>
-          </div>
-          <div class="trans-right">
-            <span class="trans-label next">→ Lo que viene ahora</span>
-            <div class="trans-headline2" id="t7-kits" style="opacity:0;transition:opacity .5s">📦 Kits de ayuda material</div>
-            <div class="trans-desc" id="t7-desc" style="opacity:0;transition:opacity .5s">El coordinador define qué kits se necesitan y dónde. Los donantes los preparan, generan un QR y los entregan. El sistema rastrea cada kit hasta el afectado.</div>
-            <button class="btn-trans" id="t7-btn" style="opacity:0;transition:opacity .4s;transform:translateY(8px)" onclick="nextStep()">Ver cómo funciona →</button>
-          </div>
+    <div class="panel" id="p7" style="flex-direction:column;background:var(--dark);justify-content:center;align-items:center;overflow:hidden">
+      <div style="max-width:680px;padding:32px 24px;text-align:center;display:flex;flex-direction:column;gap:28px">
+        <div id="t7-q" style="opacity:0;transition:opacity .7s;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:400;font-style:italic;color:rgba(255,255,255,.6);line-height:1.7">
+          "¿Cómo organizas la ayuda cuando todo llega al mismo tiempo, al mismo sitio, sin orden?"
+        </div>
+        <div id="t7-p" style="opacity:0;transition:opacity .7s;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:#fff;line-height:1.4">
+          La ayuda llega sin definir necesidades,<br>sin control, sin coordinación.
+        </div>
+        <div id="t7-s" style="opacity:0;transition:opacity .7s;font-size:13px;font-weight:600;color:var(--teal);letter-spacing:1px;text-transform:uppercase">
+          Kit2Help resuelve exactamente eso →
         </div>
       </div>
     </div>
 
+    <!-- ══ P8
+
     <!-- ══ P8: COORDINADOR KITS ══ -->
-    <div class="panel" id="p8">
-      <div class="panel-inner">
-        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--purple-light);border:1px solid rgba(123,94,167,.3);font-size:11px;font-weight:700;color:var(--purple);margin-bottom:12px">👤 Coordinador</div>
-        <div class="panel-header">
-          <div class="panel-title">📦 Gestión de kits</div>
-          <div class="panel-sub">Define qué kits se necesitan, con qué contenido y dónde deben llegar.</div>
+    <div class="panel" id="p8" style="flex-direction:column;overflow:hidden">
+      <div style="padding:8px 16px 0;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:var(--purple-light);border:1px solid rgba(123,94,167,.3);font-size:10px;font-weight:700;color:var(--purple)">👤 Coordinador</div>
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">📦 Gestión de kits</div>
         </div>
-        <div class="kit-mode-toggle">
+        <div class="kit-mode-toggle" style="margin-bottom:6px">
           <button class="kit-mode-btn active">👤 Coordinador</button>
           <button class="kit-mode-btn" onclick="nextStep()">🎁 Donante →</button>
         </div>
-        <div class="kit-section-title">TIPO DE KIT</div>
-        <div class="kit-types" id="kitTypesRow">
-          <div class="kit-type-card" onclick="selectKitType(this)"><span class="kit-type-icon">🍊</span><div class="kit-type-name">Alimenticio</div><div class="kit-type-sub">Agua y comida</div></div>
-          <div class="kit-type-card active" onclick="selectKitType(this)"><span class="kit-type-icon">💊</span><div class="kit-type-name">Sanitario</div><div class="kit-type-sub">Medicamentos</div></div>
-          <div class="kit-type-card" onclick="selectKitType(this)"><span class="kit-type-icon">👘</span><div class="kit-type-name">Ropa</div><div class="kit-type-sub">Abrigo y mantas</div></div>
-          <div class="kit-type-card" onclick="selectKitType(this)"><span class="kit-type-icon">🔧</span><div class="kit-type-name">Herramientas</div><div class="kit-type-sub">Equipamiento</div></div>
-          <div class="kit-type-card" onclick="selectKitType(this)"><span class="kit-type-icon">✏️</span><div class="kit-type-name">Personalizado</div><div class="kit-type-sub">Configurable</div></div>
-        </div>
-        <div id="kitContentBox" style="padding:11px;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);margin-bottom:10px;transition:box-shadow .3s">
-          <div class="kit-section-title" style="margin-bottom:9px">💊 KIT SANITARIO</div>
-          <div class="kit-item-row"><span class="kit-item-emoji">💊</span><span class="kit-item-name">Analgésicos</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q1',-1)">−</button><span class="qty-val" id="q1">2</span><button class="qty-btn" onclick="adjustQty('q1',1)">+</button></div></div>
-          <div class="kit-item-row"><span class="kit-item-emoji">🩹</span><span class="kit-item-name">Vendas y apósitos</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q2',-1)">−</button><span class="qty-val" id="q2">10</span><button class="qty-btn" onclick="adjustQty('q2',1)">+</button></div></div>
-          <div class="kit-item-row"><span class="kit-item-emoji">🧴</span><span class="kit-item-name">Antiséptico</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q3',-1)">−</button><span class="qty-val" id="q3">1</span><button class="qty-btn" onclick="adjustQty('q3',1)">+</button></div></div>
-          <div class="kit-item-row"><span class="kit-item-emoji">🌡️</span><span class="kit-item-name">Termómetro</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q4',-1)">−</button><span class="qty-val" id="q4">1</span><button class="qty-btn" onclick="adjustQty('q4',1)">+</button></div></div>
-          <div class="kit-total">Total elementos: <strong id="totalElem">14</strong></div>
-        </div>
-        <button class="btn-crear-kit" id="btnCrearKit" onclick="crearKit()">📦 Crear kit</button>
-        <div class="kit-created-list" id="kitCreatedList"></div>
-        <div class="puntos-section" id="puntosSection" style="display:none">
-          <div class="puntos-title">📍 PUNTOS DE NECESIDAD ASOCIADOS</div>
-          <div class="punto-row"><span>📍</span><div><div style="font-size:12px;font-weight:600">Iglesia San Pedro · Paiporta</div><div style="font-size:11px;color:var(--muted)">Kit Sanitario · 30 uds. requeridas</div></div></div>
-          <div class="punto-row"><span>📍</span><div><div style="font-size:12px;font-weight:600">Plaza Colón 3 · Catarroja</div><div style="font-size:11px;color:var(--muted)">Kit Sanitario · 15 uds. requeridas</div></div></div>
+        <div class="kit-section-title" style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">TIPO DE KIT</div>
+        <div class="kit-types" id="kitTypesRow" style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap">
+          <div class="kit-type-card" style="padding:6px 10px;min-width:75px" onclick="selectKitType(this)"><span class="kit-type-icon" style="font-size:16px">🍊</span><div class="kit-type-name" style="font-size:10px">Alimenticio</div></div>
+          <div class="kit-type-card active" style="padding:6px 10px;min-width:75px" onclick="selectKitType(this)"><span class="kit-type-icon" style="font-size:16px">💊</span><div class="kit-type-name" style="font-size:10px">Sanitario</div></div>
+          <div class="kit-type-card" style="padding:6px 10px;min-width:75px" onclick="selectKitType(this)"><span class="kit-type-icon" style="font-size:16px">👘</span><div class="kit-type-name" style="font-size:10px">Ropa</div></div>
+          <div class="kit-type-card" style="padding:6px 10px;min-width:75px" onclick="selectKitType(this)"><span class="kit-type-icon" style="font-size:16px">🔧</span><div class="kit-type-name" style="font-size:10px">Herramientas</div></div>
+          <div class="kit-type-card" style="padding:6px 10px;min-width:75px" onclick="selectKitType(this)"><span class="kit-type-icon" style="font-size:16px">✏️</span><div class="kit-type-name" style="font-size:10px">Personalizado</div></div>
         </div>
       </div>
-      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">El coordinador define qué kits se necesitan, dónde y cuántos. El sistema los registra y los hace visibles a los donantes.</div></div>
+      <div class="kit-two-col" style="padding:0 12px">
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="kit-col-left">
+          <div id="kitContentBox" class="kit-col-section" style="transition:box-shadow .3s">
+            <div class="kit-col-title">💊 Kit Sanitario</div>
+            <div class="kit-item-row"><span class="kit-item-emoji">💊</span><span class="kit-item-name">Analgésicos</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q1',-1)">−</button><span class="qty-val" id="q1">2</span><button class="qty-btn" onclick="adjustQty('q1',1)">+</button></div></div>
+            <div class="kit-item-row"><span class="kit-item-emoji">🩹</span><span class="kit-item-name">Vendas y apósitos</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q2',-1)">−</button><span class="qty-val" id="q2">10</span><button class="qty-btn" onclick="adjustQty('q2',1)">+</button></div></div>
+            <div class="kit-item-row"><span class="kit-item-emoji">🧴</span><span class="kit-item-name">Antiséptico</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q3',-1)">−</button><span class="qty-val" id="q3">1</span><button class="qty-btn" onclick="adjustQty('q3',1)">+</button></div></div>
+            <div class="kit-item-row"><span class="kit-item-emoji">🌡️</span><span class="kit-item-name">Termómetro</span><div class="kit-qty"><button class="qty-btn" onclick="adjustQty('q4',-1)">−</button><span class="qty-val" id="q4">1</span><button class="qty-btn" onclick="adjustQty('q4',1)">+</button></div></div>
+            <div class="kit-total" style="font-size:11px;color:var(--muted);padding-top:6px">Total: <strong id="totalElem" style="color:var(--teal);font-family:'Syne',sans-serif;font-size:15px">14</strong></div>
+          </div>
+          <button class="btn-crear-kit" id="btnCrearKit" onclick="crearKit()" style="padding:8px;margin:6px 0;font-size:12px">📦 Crear kit</button>
+          <div class="kit-created-list" id="kitCreatedList"></div>
+        </div>
+        <!-- COLUMNA DERECHA -->
+        <div class="kit-col-right">
+          <div class="puntos-section" id="puntosSection" style="display:none;margin-top:0">
+            <div class="puntos-title">📍 PUNTOS DE NECESIDAD</div>
+            <div class="punto-row"><span>📍</span><div><div style="font-size:12px;font-weight:600">Iglesia San Pedro · Paiporta</div><div style="font-size:11px;color:var(--muted)">Kit Sanitario · 30 uds.</div></div></div>
+            <div class="punto-row"><span>📍</span><div><div style="font-size:12px;font-weight:600">Plaza Colón 3 · Catarroja</div><div style="font-size:11px;color:var(--muted)">Kit Sanitario · 15 uds.</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="narrative-bar" id="narr-p8">
+        <span>El coordinador registra qué se necesita y dónde. El donante recibe instrucciones exactas — sin llamadas, sin confusión.</span>
+      </div>
     </div>
 
     <!-- ══ P9: DONANTE + TRAZABILIDAD ══ -->
-    <div class="panel" id="p9">
-      <div class="panel-inner">
-        <div style="display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:20px;background:var(--orange-light);border:1px solid rgba(239,159,39,.3);font-size:11px;font-weight:700;color:#7D5200;margin-bottom:12px">🎁 Donante</div>
-        <div class="panel-header">
-          <div class="panel-title">📦 Gestión de kits</div>
-          <div class="panel-sub">El donante ve los kits disponibles, los prepara y genera el QR de entrega.</div>
+    <div class="panel" id="p9" style="flex-direction:column;overflow:hidden">
+      <div style="padding:8px 16px 0;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;background:var(--orange-light);border:1px solid rgba(239,159,39,.3);font-size:10px;font-weight:700;color:#7D5200">🎁 Donante</div>
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--dark)">📦 Gestión de kits</div>
         </div>
-        <div class="kit-mode-toggle">
+        <div class="kit-mode-toggle" style="margin-bottom:6px">
           <button class="kit-mode-btn" onclick="goToStep(8)">← Coordinador</button>
           <button class="kit-mode-btn active">🎁 Donante</button>
         </div>
-        <div class="kit-section-title">PUNTOS DE RECOGIDA · DEJA TU KIT AQUÍ</div>
-        <div class="puntos-recogida">
-          <div class="punto-card"><span class="punto-card-icon">🏟️</span><div class="punto-card-info"><div class="punto-card-name">Polideportivo Municipal Norte</div><div class="punto-card-addr">Av. de la Constitución, 14 · Alimenticio · Ropa</div></div><div class="punto-card-dist">0.4 km</div><div class="no-admite">No admite este tipo</div></div>
-          <div class="punto-card admite" id="puntoAdmite"><span class="punto-card-icon">🏛️</span><div class="punto-card-info"><div class="punto-card-name">Centre Cívic Russafa</div><div class="punto-card-addr">C/ Dénia, 67 · Sanitario · Herramientas</div></div><div class="punto-card-dist">1.1 km</div><div class="admite-badge">✓ Admite este kit</div></div>
-          <div class="punto-card admite"><span class="punto-card-icon">🏀</span><div class="punto-card-info"><div class="punto-card-name">Pavelló Esportiu Sant Pau</div><div class="punto-card-addr">Pg. de Sant Joan, 2 · Todos los tipos</div></div><div class="punto-card-dist">1.9 km</div><div class="admite-badge">✓ También destino final</div></div>
-        </div>
-        <div class="qr-section">
-          <div class="kit-section-title" style="margin-bottom:8px">CONTENIDO: 💊 Kit Sanitario</div>
-          <div class="qr-donor-name">👤 &nbsp;<span style="font-size:12px;color:var(--muted)">Donante:</span>&nbsp;<strong>Sandra González</strong></div>
-          <button class="btn-crear-kit" id="btnGenQR" onclick="generarQR()" style="margin:0 0 8px">🔲 Generar QR del kit</button>
-          <div id="qrcode"></div>
-          <div id="qrCodeLabel" style="display:none" class="qr-kit-code">KIT-N0GW-0001</div>
-        </div>
-        <div class="qr-instrucciones" id="qrInstrucciones" style="display:none">
-          <div class="qr-instruc-title">📦 Cómo preparar la caja</div>
-          <div class="qr-instruc-item">Coloca todos los elementos dentro de una caja de cartón cerrada.</div>
-          <div class="qr-instruc-item">Identifica la caja con el color <span class="qr-color-badge"><span class="color-dot" style="background:#3A7BD5"></span> AZUL</span> — asignado a kit Sanitario.</div>
-          <div class="qr-instruc-item">Escribe en la caja el código: <strong>KIT-N0GW-0001</strong></div>
-          <div class="qr-instruc-item">Cierra con precinto y llévala al punto de recogida.</div>
-        </div>
-        <div class="traz-section">
-          <div class="traz-header">
-            <div class="traz-title">📊 Seguimiento de kits</div>
-            <div class="muro-live"><div class="live-dot"></div>Tiempo real</div>
-          </div>
-          <div class="traz-item" id="trazItem1">
-            <div class="traz-item-header">
-              <span class="traz-item-icon">💊</span>
-              <div class="traz-item-info"><div class="traz-item-name">Kit Sanitario</div><div class="traz-item-meta"><span style="font-family:monospace;font-size:10px">KIT-N0GW-0001</span> · Sandra González · 13:48</div></div>
-              <span class="traz-item-status status-prep" id="traz1-status">● Preparado</span>
-              <button class="btn-avanzar" onclick="avanzarKit('traz1')">Avanzar →</button>
-            </div>
-            <div class="traz-progress"><div class="traz-bar" id="traz1-bar" style="width:33%"></div></div>
-          </div>
-          <div class="traz-item">
-            <div class="traz-item-header">
-              <span class="traz-item-icon">🍊</span>
-              <div class="traz-item-info"><div class="traz-item-name">Kit Alimenticio</div><div class="traz-item-meta"><span style="font-family:monospace;font-size:10px">KIT-15MQ-0001</span> · Cruz Roja · 13:44</div></div>
-              <span class="traz-item-status status-camino" id="traz2-status">🚚 En camino</span>
-              <button class="btn-avanzar" onclick="avanzarKit('traz2')">Avanzar →</button>
-            </div>
-            <div class="traz-progress"><div class="traz-bar" id="traz2-bar" style="width:66%"></div></div>
-          </div>
-        </div>
-        <div class="kit-final-note"><strong>Sin Excel. Sin llamadas. Sin pérdidas.</strong><br>Cada acción actualiza la lista automáticamente. El coordinador consulta el estado en cualquier momento.</div>
       </div>
-      <div class="narrative" style="position:absolute;bottom:0"><div class="narrative-inner">Del kit creado al QR físico: trazabilidad completa. Sin Excel. Sin llamadas. Sin pérdidas.</div></div>
+      <div class="kit-two-col" style="padding:0 12px">
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="kit-col-left">
+          <div>
+            <div class="kit-col-title" style="margin-bottom:5px">PUNTOS DE RECOGIDA</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div class="punto-card-compact"><span style="font-size:16px">🏟️</span><div style="flex:1"><div class="punto-compact-name">Polideportivo Municipal Norte</div><div style="font-size:11px;color:var(--muted)">Alimenticio · Ropa</div></div><span class="punto-compact-dist">0.4 km</span><span class="no-admite" style="font-size:10px;color:var(--muted)">No admite</span></div>
+              <div class="punto-card-compact admite" id="puntoAdmite"><span style="font-size:16px">🏛️</span><div style="flex:1"><div class="punto-compact-name">Centre Cívic Russafa</div><div style="font-size:11px;color:var(--muted)">Sanitario · Herramientas</div></div><span class="punto-compact-dist">1.1 km</span><span class="admite-badge" style="font-size:10px">✓ Admite</span></div>
+              <div class="punto-card-compact admite"><span style="font-size:16px">🏀</span><div style="flex:1"><div class="punto-compact-name">Pavelló Esportiu Sant Pau</div><div style="font-size:11px;color:var(--muted)">Todos los tipos</div></div><span class="punto-compact-dist">1.9 km</span><span class="admite-badge" style="font-size:10px">✓ Destino final</span></div>
+            </div>
+          </div>
+          <div class="kit-col-section" style="text-align:center">
+            <div class="kit-col-title" style="text-align:left">CONTENIDO: 💊 Kit Sanitario</div>
+            <div style="display:flex;align-items:center;gap:7px;padding:7px 10px;border:1.5px solid var(--border);border-radius:var(--radius-sm);margin-bottom:10px;background:var(--bg);font-size:12px;color:var(--dark)">👤 &nbsp;<span style="color:var(--muted)">Donante:</span>&nbsp;<strong>Sandra González</strong></div>
+            <button class="btn-crear-kit" id="btnGenQR" onclick="generarQR()" style="margin:0 0 5px;width:100%;padding:8px;font-size:12px">🔲 Generar QR del kit</button>
+            <div id="qrcode" style="display:flex;justify-content:center;margin:8px 0 6px"></div>
+            <div id="qrCodeLabel" style="display:none;font-family:monospace;font-size:12px;font-weight:700;color:var(--teal-dark);padding:3px 9px;background:var(--teal-light);border-radius:6px;display:none">KIT-N0GW-0001</div>
+          </div>
+        </div>
+        <!-- COLUMNA DERECHA -->
+        <div class="kit-col-right">
+          <div class="qr-instrucciones" id="qrInstrucciones" style="display:none">
+            <div class="qr-instruc-title" style="font-size:10px">📦 Cómo preparar la caja</div>
+            <div class="qr-instruc-item">Coloca todos los elementos dentro de una caja de cartón cerrada.</div>
+            <div class="qr-instruc-item">Identifica la caja con el color <span class="qr-color-badge"><span class="color-dot" style="background:#3A7BD5"></span> <strong>AZUL</strong></span> — preasignado al kit Sanitario.</div>
+            <div class="qr-instruc-item">Escribe en la caja el código: <strong>KIT-N0GW-0001</strong></div>
+            <div class="qr-instruc-item">Cierra con precinto y llévala al punto de recogida.</div>
+          </div>
+          <div>
+            <div class="traz-header" style="display:flex;align-items:center;gap:7px;margin-bottom:8px">
+              <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--dark);flex:1">📊 Seguimiento</div>
+              <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--teal);font-weight:600"><div class="live-dot"></div>Tiempo real</div>
+            </div>
+            <div class="traz-compact" id="trazItem1">
+              <div class="traz-compact-header">
+                <span style="font-size:16px">💊</span>
+                <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--dark)">Kit Sanitario</div><div style="font-size:10px;color:var(--muted);font-family:monospace">KIT-N0GW-0001 · 13:48</div></div>
+                <span class="traz-item-status status-prep" id="traz1-status">● Preparado</span>
+                <button class="btn-avanzar" onclick="avanzarKit('traz1')">→</button>
+              </div>
+              <div class="traz-progress"><div class="traz-bar" id="traz1-bar" style="width:33%"></div></div>
+            </div>
+            <div class="traz-compact">
+              <div class="traz-compact-header">
+                <span style="font-size:16px">🍊</span>
+                <div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--dark)">Kit Alimenticio</div><div style="font-size:10px;color:var(--muted);font-family:monospace">KIT-15MQ-0001 · 13:44</div></div>
+                <span class="traz-item-status status-camino" id="traz2-status">🚚 En camino</span>
+                <button class="btn-avanzar" onclick="avanzarKit('traz2')">→</button>
+              </div>
+              <div class="traz-progress"><div class="traz-bar" id="traz2-bar" style="width:66%"></div></div>
+            </div>
+            <div style="margin-top:8px;padding:10px;background:var(--teal-light);border-radius:var(--radius-sm);border:1px solid rgba(29,158,117,.3);font-size:13px;color:var(--teal-dark);line-height:1.5"><strong>Sin Excel. Sin llamadas. Sin pérdidas.</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="narrative-bar" id="narr-p9">
+        <span>Del kit creado al QR físico: trazabilidad completa. Sin Excel. Sin llamadas. Sin pérdidas.</span>
+      </div>
     </div>
 
   </div><!-- /screen -->
@@ -820,8 +890,13 @@ function updateProgress() {
   for (let i=1;i<=TOTAL_STEPS;i++){
     const s=document.createElement('div');
     s.className='progress-step'+(demoCompleted?' done':i<currentStep?' done':i===currentStep?' active':'');
+    s.title=`Ir al paso ${i}`;
+    (function(step){ s.addEventListener('click',()=>jumpToStep(step)); })(i);
     c.appendChild(s);
   }
+  // Actualizar badge con paso actual
+  const bl=document.getElementById('badgeLive');
+  if(bl){ bl.textContent=demoCompleted?'✓ COMPLETADO':`● PASO ${currentStep}/${TOTAL_STEPS}`; }
   document.getElementById('progressLabel').textContent=`Paso ${currentStep} de ${TOTAL_STEPS}`;
   document.getElementById('stepIndicator').textContent=`Paso ${currentStep} de ${TOTAL_STEPS} — ${stepTitles[currentStep]}`;
   const btnN=document.getElementById('btnNext');
@@ -849,6 +924,9 @@ function showPanel(n) {
   if(n===6 && maps['map5']) setTimeout(()=>{ maps['map5'].invalidateSize(); },150);
   if(n===2) setTimeout(autoSequenceP2, 600);
   if(n===3) setTimeout(autoSequenceP3, 600);
+  // fade narratives en pasos con contenido scrollable
+  if(n===2||n===3||n===5) setTimeout(()=>{ document.querySelectorAll('#p'+n+' .narrative-bar').forEach(el=>{el.classList.add('fade-out');setTimeout(()=>el.style.display='none',1000)}); }, 4000);
+  if(n===8||n===9) setTimeout(()=>{ const nb=document.getElementById(n===8?'narr-p8':'narr-p9'); if(nb){nb.classList.add('fade-out');setTimeout(()=>nb.style.display='none',1000);} }, 4000);
   if(n===4) setTimeout(autoSequenceP4, 500);
   if(n===5) startP5Sequence();
   if(n===6){ setTimeout(autoPopupMap5, 2200); setTimeout(zoomNecesidadesPanel, 13000); setTimeout(()=>autoNext(4500), 13000); }
@@ -871,22 +949,19 @@ function goToStep(n){
 }
 
 function restart(){
+  resetAllFlags();
   currentStep=1;
-  p5CardsAdded=0;
-  // limpiar toasts residuales
-  const tc=document.getElementById('toastContainer'); if(tc) tc.innerHTML='';
-  // limpiar timer reloj
-  if(p1ClockTimer){ clearInterval(p1ClockTimer); p1ClockTimer=null; }
   if(p5CardTimer) clearTimeout(p5CardTimer);
   if(p5AutoTimer) clearTimeout(p5AutoTimer);
   kitCreated=false; qrGenerated=false; needSent=false; p7Played=false; p3Played=false; p4Played=false; p8Played=false; p9Played=false; demoCompleted=false;
   if(autoNextTimer){ clearTimeout(autoNextTimer); autoNextTimer=null; }
+  // reset narrative bars
+  document.querySelectorAll('.narrative-bar').forEach(el=>{ el.style.display=''; el.classList.remove('fade-out'); });
+  // reset color-line-highlight
+  document.querySelectorAll('.color-line-highlight').forEach(el=>{ el.classList.remove('color-line-highlight'); });
+  document.querySelectorAll('.color-dot-pop').forEach(el=>{ el.classList.remove('color-dot-pop'); });
   // reset p7 animaciones
-  ['t7-eyebrow','t7-headline','t7-grid','t7-i1','t7-i2','t7-i3','t7-i4','t7-kits','t7-desc','t7-btn'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el){el.style.opacity='0';if(id!=='t7-grid'&&id!=='t7-eyebrow'&&id!=='t7-headline')el.style.transform='translateX(-12px)';}
-  });
-  const tb=document.getElementById('t7-btn');if(tb)tb.style.transform='translateY(8px)';
+  ['t7-q','t7-p','t7-s'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.opacity='0'; });
   traz1State=0; traz2State=1;
   // reset map5panel zoom
   const mp=document.getElementById('map5panel'); if(mp){mp.style.transform='scale(1)';mp.style.boxShadow='';mp.style.borderColor='';mp.style.transition='';}
@@ -1319,37 +1394,26 @@ function avanzarKit(id){
 // ══════════════════════════════════════
 // INIT
 // ══════════════════════════════════════
-// ══ AUTO-SECUENCIA P7 ══
+// ══ AUTO-SECUENCIA P7 — TRANSICIÓN KITS ══
 let p7Played = false;
 function autoSequenceP7(){
   if(p7Played) return;
   p7Played = true;
-
-  function show(id, delay, extraFn){
-    setTimeout(()=>{
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-      if(extraFn) extraFn(el);
-    }, delay);
-  }
-
-  // Eyebrow + headline
-  show('t7-eyebrow', 400);
-  show('t7-headline', 900);
-  // Grid aparece
-  show('t7-grid', 1500);
-  // Items izquierda uno a uno con glow
-  [['t7-i1',1800],['t7-i2',2300],['t7-i3',2800],['t7-i4',3300]].forEach(([id,d])=>{
-    show(id, d, el=>{ el.classList.add('trans-item-glow'); setTimeout(()=>el.classList.remove('trans-item-glow'),900); });
-  });
-  // Derecha: kits headline + desc + botón
-  show('t7-kits', 3900);
-  show('t7-desc', 4400);
-  show('t7-btn', 4900, el=>{
-    setTimeout(()=>{ el.classList.add('btn-trans-ready'); setTimeout(()=>el.classList.remove('btn-trans-ready'),3800); }, 200);
-  });
+  // Pregunta — entra primero
+  setTimeout(()=>{
+    const el=document.getElementById('t7-q');
+    if(el) el.style.opacity='1';
+  }, 600);
+  // Problema — entra con peso
+  setTimeout(()=>{
+    const el=document.getElementById('t7-p');
+    if(el) el.style.opacity='1';
+  }, 2400);
+  // Solución — entra al final
+  setTimeout(()=>{
+    const el=document.getElementById('t7-s');
+    if(el) el.style.opacity='1';
+  }, 4800);
   // auto-next
   autoNext(9500);
 }
@@ -1374,6 +1438,120 @@ function autoNext(delay){
       setTimeout(()=>{ btn.classList.remove('active-btn'); if(currentStep < TOTAL_STEPS) nextStep(); }, 200);
     }, 280);
   }, delay);
+}
+
+
+// ══ NARRATIVE FADE-OUT AUTOMÁTICO ══
+function autoFadeNarrative(id, delay){
+  setTimeout(()=>{
+    const el = document.getElementById(id);
+    if(el){ el.classList.add('fade-out'); setTimeout(()=>{ if(el) el.style.display='none'; }, 1000); }
+  }, delay);
+}
+
+
+
+
+// ══ HIGHLIGHT LÍNEA COLOR CAJA ══
+function highlightColorLine(){
+  // Buscar el div con el texto AZUL dentro de qrInstrucciones
+  const items = document.querySelectorAll('#qrInstrucciones .qr-instruc-item');
+  let colorItem = null;
+  items.forEach(el=>{ if(el.textContent.includes('AZUL') || el.textContent.includes('color')) colorItem = el; });
+  if(!colorItem) return;
+  colorItem.style.position='relative';
+  colorItem.classList.add('color-line-highlight');
+  // Pop del cuadrado de color
+  const dot = colorItem.querySelector('.color-dot');
+  if(dot){ dot.classList.add('color-dot-pop'); }
+
+}
+
+
+// ══ SALTO DIRECTO A PASO DESDE PROGRESS BAR ══
+function jumpToStep(n){
+  // Flash en el segmento clicado
+  const steps = document.querySelectorAll('.progress-step');
+  if(steps[n-1]){ steps[n-1].classList.add('flash'); setTimeout(()=>steps[n-1].classList.remove('flash'),450); }
+  // Efecto foco en la ventana
+  const chrome = document.querySelector('.demo-chrome');
+  if(chrome){ chrome.classList.add('chrome-wake'); setTimeout(()=>chrome.classList.remove('chrome-wake'),650); }
+  // Reset de estado
+  resetAllFlags();
+  // Ir al paso
+  currentStep = n;
+  demoCompleted = false;
+  updateProgress();
+  showPanel(n);
+}
+
+function restartFromBadge(){
+  const chrome = document.querySelector('.demo-chrome');
+  if(chrome){ chrome.classList.add('chrome-wake'); setTimeout(()=>chrome.classList.remove('chrome-wake'),650); }
+  restart();
+}
+
+function resetAllFlags(){
+  // Cancelar timers activos
+  if(autoNextTimer){ clearTimeout(autoNextTimer); autoNextTimer=null; }
+  if(p1ClockTimer){ clearInterval(p1ClockTimer); p1ClockTimer=null; }
+  if(p5CardTimer) clearTimeout(p5CardTimer);
+  if(p5AutoTimer) clearTimeout(p5AutoTimer);
+  // Reset flags de secuencias
+  p3Played=false; p4Played=false; p7Played=false; p8Played=false; p9Played=false;
+  p5CardsAdded=0;
+  kitCreated=false; qrGenerated=false; needSent=false;
+  traz1State=0; traz2State=1;
+  // Reset UI de triaje p3
+  const vc1=document.getElementById('vc1');
+  if(vc1){ const va=vc1.querySelector('.val-actions'); if(va) va.style.display=''; const vd=document.getElementById('vc1-done'); if(vd){vd.className='val-done';vd.textContent='';} }
+  const b3=document.getElementById('badge3'); if(b3){b3.textContent='1';b3.className='tab-badge';}
+  // Reset triaje p5
+  const tc5=document.getElementById('triajeCards5');
+  if(tc5) tc5.innerHTML='<div style="font-size:12px;color:var(--muted);font-style:italic;padding:10px 0" id="p5-waiting">Esperando nuevas solicitudes...</div>';
+  const b5=document.getElementById('badge5'); if(b5){b5.textContent='0';b5.className='tab-badge';}
+  // Reset kits p8
+  const kcl=document.getElementById('kitCreatedList'); if(kcl) kcl.innerHTML='';
+  const ps=document.getElementById('puntosSection'); if(ps) ps.style.display='none';
+  const bck=document.getElementById('btnCrearKit'); if(bck){bck.textContent='📦 Crear kit';bck.disabled=false;}
+  // Reset QR p9
+  const qrc=document.getElementById('qrcode'); if(qrc) qrc.innerHTML='';
+  const qrl=document.getElementById('qrCodeLabel'); if(qrl) qrl.style.display='none';
+  const qri=document.getElementById('qrInstrucciones'); if(qri) qri.style.display='none';
+  const bgq=document.getElementById('btnGenQR'); if(bgq){bgq.textContent='🔲 Generar QR del kit';bgq.disabled=false;bgq.style.background='';}
+  // Reset trazabilidad
+  const ts1=document.getElementById('traz1-status'); if(ts1){ts1.className='traz-item-status status-prep';ts1.textContent='● Preparado';}
+  const tb1=document.getElementById('traz1-bar'); if(tb1) tb1.style.width='33%';
+  const ts2=document.getElementById('traz2-status'); if(ts2){ts2.className='traz-item-status status-camino';ts2.textContent='🚚 En camino';}
+  const tb2=document.getElementById('traz2-bar'); if(tb2) tb2.style.width='66%';
+  // Reset P7 animaciones
+  ['t7-q','t7-p','t7-s'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.style.opacity='0';
+  });
+  // Reset map5panel
+  const mp=document.getElementById('map5panel'); if(mp){mp.style.transform='scale(1)';mp.style.boxShadow='';mp.style.borderColor='';mp.style.transition='';}
+  const pa=document.getElementById('puntoAdmite'); if(pa){pa.style.boxShadow='';pa.style.transform='';}
+  const kb=document.getElementById('kitContentBox'); if(kb) kb.style.boxShadow='';
+  // Reset intro p1
+  const intro=document.getElementById('map1-intro'); if(intro){intro.style.display='flex';intro.classList.remove('intro-hiding');}
+  const clk=document.getElementById('clock1'); if(clk){clk.classList.remove('clock-farewell');clk.style.opacity='';clk.style.borderColor='';clk.style.boxShadow='';clk.textContent='18:42';}
+  // Limpiar toasts
+  const tc=document.getElementById('toastContainer'); if(tc) tc.innerHTML='';
+  // Reset narrative bars
+  document.querySelectorAll('.narrative-bar').forEach(el=>{el.style.display='';el.classList.remove('fade-out');});
+  // Reset color-line
+  document.querySelectorAll('.color-line-highlight').forEach(el=>el.classList.remove('color-line-highlight'));
+  document.querySelectorAll('.color-dot-pop').forEach(el=>el.classList.remove('color-dot-pop'));
+  // Reset necesidades label
+  const nl=document.getElementById('needs-label'); if(nl) nl.remove();
+  // Reset btn-next
+  const bn=document.getElementById('btnNext');
+  if(bn){bn.textContent='· · ·';bn.className='btn-next';bn.onclick=null;bn.style.transform='';bn.style.boxShadow='';}
+  // Reset input p2
+  const di=document.getElementById('inputDireccion'); if(di) di.value='';
+  const ddi=document.getElementById('inputDescripcion'); if(ddi) ddi.value='';
+  const cc=document.getElementById('confirmCard'); if(cc) cc.className='confirm-card';
+  const bs=document.getElementById('btnSend'); if(bs){bs.textContent='✓ Enviar aviso';bs.disabled=false;bs.style.background='';}
 }
 
 // ══ HELPER: aplicar clase de foco con timeout de limpieza ══
@@ -1489,25 +1667,29 @@ let p8Played = false;
 function autoSequenceP8(){
   if(p8Played) return;
   p8Played = true;
-  // 1. Zoom en fila de tipos de kit
-  setTimeout(()=>focusEl('kitTypesRow','zoom-pop',600), 900);
-  // 2. Highlight en caja de contenido
+  // ① Zoom en fila de tipos de kit
+  setTimeout(()=>{
+    focusEl('kitTypesRow','zoom-pop',600);
+  }, 900);
+  // ② Highlight en caja de contenido
   setTimeout(()=>{
     const box=document.getElementById('kitContentBox');
-    if(box){ box.style.transition='box-shadow .3s'; box.style.boxShadow='0 0 0 3px rgba(29,158,117,.5)'; setTimeout(()=>box.style.boxShadow='',1400); }
-  }, 2000);
-  // 3. Spotlight en botón crear kit
+    if(box){ box.style.transition='box-shadow .3s'; box.style.boxShadow='0 0 0 3px rgba(251,191,36,.6)'; setTimeout(()=>box.style.boxShadow='',1600); }
+  }, 2400);
+  // ③ Spotlight en botón crear kit
   setTimeout(()=>{
-    scrollTo('btnCrearKit');
     focusEl('btnCrearKit','btn-spotlight',3200);
-  }, 3200);
-  // 4. Auto-click Crear kit
+  }, 3800);
+  // ③ Auto-click Crear kit
   setTimeout(()=>{
     const btn=document.getElementById('btnCrearKit');
     if(btn && !btn.disabled){ btn.classList.add('zoom-pop'); setTimeout(()=>crearKit(),300); }
-  }, 6200);
-  // 5. Zoom en puntos de necesidad al aparecer
-  setTimeout(()=>{ scrollTo('puntosSection'); focusEl('puntosSection','pulse-glow',3000); }, 7400);
+  }, 6800);
+  // ④ Puntos de necesidad al aparecer
+  setTimeout(()=>{
+    focusEl('puntosSection','pulse-glow',3000);
+  }, 8000);
+  // limpiar badge
   // auto-next
   autoNext(11500);
 }
@@ -1517,48 +1699,48 @@ let p9Played = false;
 function autoSequenceP9(){
   if(p9Played) return;
   p9Played = true;
-  // 1. Highlight en punto que admite el kit
+  // ① Punto de recogida que admite el kit
   setTimeout(()=>{
-    const p=document.getElementById('puntoAdmite');
-    if(p){ p.style.transition='box-shadow .3s,transform .3s'; p.style.boxShadow='0 0 0 3px var(--teal)'; p.style.transform='scale(1.02)'; setTimeout(()=>{p.style.boxShadow='';p.style.transform='';},1600); }
+  const p=document.getElementById('puntoAdmite');
+    if(p){ p.style.transition='box-shadow .3s,transform .3s'; p.style.boxShadow='0 0 0 3px #FBBF24'; p.style.transform='scale(1.02)'; setTimeout(()=>{p.style.boxShadow='';p.style.transform='';},1800); }
   }, 1000);
-  // 2. Spotlight en botón generar QR
+  // ② Spotlight en botón generar QR
   setTimeout(()=>{
-    scrollTo('btnGenQR');
-    focusEl('btnGenQR','btn-spotlight',3200);
-  }, 2800);
-  // 3. Auto-click Generar QR
+  focusEl('btnGenQR','btn-spotlight',3200);
+  }, 3200);
+  // ② Auto-click Generar QR
   setTimeout(()=>{
     const btn=document.getElementById('btnGenQR');
     if(btn && !btn.disabled){ btn.classList.add('zoom-pop'); setTimeout(()=>generarQR(),300); }
-  }, 5800);
-  // 4. Zoom reveal en QR generado
+  }, 6200);
+  // QR reveal
   setTimeout(()=>{
     const qr=document.getElementById('qrcode');
-    if(qr){ qr.style.transition='transform .5s'; qr.classList.add('qr-reveal'); setTimeout(()=>qr.classList.remove('qr-reveal'),800); }
+    if(qr){ qr.classList.add('qr-reveal'); setTimeout(()=>qr.classList.remove('qr-reveal'),800); }
     focusEl('qrCodeLabel','zoom-pop',600);
-  }, 7000);
-  // 5. Scroll a trazabilidad + spotlight botón avanzar
+  }, 7500);
+  // ③ Highlight línea color caja — el momento clave
   setTimeout(()=>{
-    scrollTo('trazItem1');
+    highlightColorLine();
+  }, 8800);
+  // ④ Spotlight botón avanzar trazabilidad
+  setTimeout(()=>{
     const btnAv=document.querySelector('#trazItem1 .btn-avanzar');
     if(btnAv) focusEl(btnAv,'btn-spotlight',3200);
-  }, 8500);
-  // 6. Auto-avanzar kit1 a "En camino"
+  }, 10500);
+  // ④ Auto-avanzar kit1 a "En camino"
   setTimeout(()=>{
     const btnAv=document.querySelector('#trazItem1 .btn-avanzar');
     if(btnAv) btnAv.classList.add('zoom-pop');
-    setTimeout(()=>{
-      avanzarKit('traz1');
-      focusEl('traz1-bar','bar-pulse',1800);
-    },300);
-  }, 11500);
-  // 7. Auto-avanzar kit1 a "Recibido"
+    setTimeout(()=>{ avanzarKit('traz1'); focusEl('traz1-bar','bar-pulse',1800); },300);
+  }, 13500);
+  // Auto-avanzar kit1 a "Recibido"
   setTimeout(()=>{
     avanzarKit('traz1');
     focusEl('traz1-status','zoom-pop',600);
     focusEl('traz1-bar','bar-pulse',1800);
-  }, 14000);
+  }, 16000);
+  // limpiar badge al terminar
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
