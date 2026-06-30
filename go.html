@@ -1,349 +1,222 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-PWJN89WB');</script>
-  <!-- End Google Tag Manager -->
-  <!-- Google tag (gtag.js) -->
+<!-- Google Tag Manager -->
+<script>(function (w, d, s, l, i) {
+  w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+  var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+  j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+})(window, document, 'script', 'dataLayer', 'GTM-PWJN89WB');</script>
+<!-- End Google Tag Manager -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-0CGM2ND1FB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-0CGM2ND1FB');
+</script>
 
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0CGM2ND1FB"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sandra González — Kit2Help</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-    gtag('config', 'G-0CGM2ND1FB');
-  </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kit2Help — Ayuda cuando más se necesita</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap"
-    rel="stylesheet">
-  <link rel="stylesheet" href="demoStyle.css">
+<style>
+  :root{
+    --mint:#2CD3A6; --mint-dk:#1faa84; --dark:#229175; --dark2:#1a7560;
+    --bg:#0F1F1A; --surface:#FFFFFF; --text:#0F1F1A; --muted:#5E7A72;
+    --border:#D8EDE8; --wa:#25D366; --wa-dk:#1DA851;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Inter',sans-serif;
+    background:radial-gradient(circle at 30% 0%, #163b30 0%, #0F1F1A 55%);
+    color:var(--text);
+    min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+    padding:28px 18px;
+  }
+  .card{
+    width:100%; max-width:400px;
+    background:var(--surface);
+    border-radius:24px;
+    padding:36px 28px 28px;
+    box-shadow:0 30px 60px rgba(0,0,0,.35);
+    text-align:center;
+    animation:rise .5s ease both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 
+  .avatar{
+    width:84px;height:84px;border-radius:50%;
+    margin:0 auto 16px;
+    background:linear-gradient(135deg,var(--mint) 0%,var(--dark) 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:28px; color:#fff;
+    box-shadow:0 8px 20px rgba(34,145,117,.35);
+  }
+  /* Para usar tu foto en vez de iniciales, sustituye el div .avatar por:
+     <img class="avatar" src="tu-foto.jpg" style="object-fit:cover;"> */
+
+  h1{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:21px; font-weight:700; letter-spacing:-.2px;
+  }
+  .role{
+    font-size:13px; color:var(--muted); margin-top:4px; font-weight:500;
+  }
+  .pitch{
+    font-size:13.5px; line-height:1.55; color:#3a4a45;
+    margin:18px 0 22px;
+  }
+
+  .wa-btn{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    background:var(--wa); color:#fff; text-decoration:none;
+    font-weight:700; font-size:15.5px;
+    padding:15px 18px; border-radius:14px;
+    box-shadow:0 10px 22px rgba(37,211,102,.35);
+    transition:transform .15s ease, background .15s ease;
+  }
+  .wa-btn:active{ transform:scale(.97); background:var(--wa-dk); }
+  .wa-btn svg{ width:21px; height:21px; flex-shrink:0; }
+
+  .links{
+    display:flex; justify-content:center; gap:18px;
+    margin-top:18px; flex-wrap:wrap;
+  }
+  .links a{
+    font-size:12.5px; font-weight:600; color:var(--dark);
+    text-decoration:none; border-bottom:1px solid transparent;
+  }
+  .links a:hover{ border-bottom-color:var(--dark); }
+
+  .fallback{
+    margin-top:22px; padding-top:16px; border-top:1px solid var(--border);
+  }
+  .fallback-toggle{
+    background:none; border:none; cursor:pointer;
+    font-size:11.5px; color:var(--muted); text-decoration:underline;
+    font-family:inherit;
+  }
+  .fallback-form{
+    display:none; margin-top:14px; text-align:left; gap:10px; flex-direction:column;
+  }
+  .fallback-form.open{ display:flex; }
+  .fallback-form input,.fallback-form select{
+    width:100%; padding:11px 12px; border-radius:9px;
+    border:1px solid var(--border); font-size:13px; font-family:inherit;
+    background:#F4F8F7; color:var(--text);
+  }
+  .fallback-form button{
+    background:var(--dark); color:#fff; border:none; border-radius:9px;
+    padding:11px; font-weight:700; font-size:13px; cursor:pointer; font-family:inherit;
+  }
+  .fallback-form button:disabled{ opacity:.6; cursor:default; }
+
+  .footer-note{
+    margin-top:22px; font-size:10.5px; color:#7c8f88;
+  }
+</style>
 </head>
-
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PWJN89WB" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PWJN89WB" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
-  
- 
+<div class="card">
+  <div class="avatar">SG</div>
 
-  <!-- HERO -->
-  <div id="hero">
-    <div class="hero-bg"></div>
-    <div style="position:relative;z-index:1;margin-bottom:24px;animation:fadeUp 0.5s ease both;">
-      <img src="logoKit2Help_reducido.png" alt="Kit2Help"
-        style="width:200px;height:200px;filter:drop-shadow(0 8px 20px rgba(29,158,117,0.18));">
+  <h1>Sandra González Fortea</h1>
+  <div class="role">CTO &amp; Co-fundadora · Kit2Help</div>
 
-    </div>
-    <div class="hero-tag">
-      <div class="dot-pulse"></div>
-      La ayuda llega cuando más se necesita.
-    </div>
-    <h1 class="hero-title">
-      La próxima catástrofe no esperará. <br>
-      <span class="accent">Nosotros, <br>sí estamos listos<br></span>
-      
-    </h1>
-    <p class="hero-sub">
-     Buscamos inversores y aliados institucionales que compartan la visión de una respuesta a emergencias más eficiente, trazable y humana
-    </p>
-    <div class="hero-actions">
-      <a href="index.html" class="btn-primary">Ver la plataforma</a>
-      
-    </div>
+  <p class="pitch">
+    Kit2Help es la plataforma que coordina ayuntamientos, protección civil
+    y voluntariado en un único mapa operativo durante una emergencia.
+  </p>
 
+  <!-- WHATSAPP: sustituye 34600000000 por tu número real -->
+  <a class="wa-btn"
+     href="https://wa.me/34600000000?text=Hola%20Sandra%2C%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20Kit2Help"
+     target="_blank" rel="noopener"
+     onclick="gtag('event','click_whatsapp',{'event_category':'contact'});">
+    <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.6 14.2c-.3-.1-1.7-.8-2-.9-.3-.1-.5-.1-.6.1-.2.3-.7.9-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5C10.1 8.7 9.6 7.4 9.4 7c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3 4.8 4.3.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.1L2 22l5-1.3c1.4.8 3.1 1.2 4.9 1.2 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3C4.2 15 3.7 13.5 3.7 12c0-4.6 3.7-8.3 8.3-8.3s8.3 3.7 8.3 8.3-3.7 8.3-8.3 8.3z"/></svg>
+    Hablemos por WhatsApp
+  </a>
+
+  <div class="links">
+    <a href="Kit2Help_OnePager_Inversor.html" target="_blank" rel="noopener">One-pager</a>
+    <a href="https://www.linkedin.com/in/kit2help" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:hola@kit2help.es">Email</a>
   </div>
 
-  <!-- FEATURES -->
-  <section id="features">
-    <div class="label reveal">Video</div>
-    <h2 class="section-title reveal reveal-delay-1">Las imagenes hablan solas</h2>
-    <p class="section-sub reveal reveal-delay-2">Cuando las personas se enfrentan a una emergencia, el caos se apodera de todo</p>
-    <div class="features-grid">
-      <div class="feature-card reveal">
-        <div class="feature-icon">📡</div>
-        <h3>Pendiente subir</h3>
-        <p>Video</span>
-      </div>
-      
-    </div>
-  </section>
-
-
-  <!-- CTA -->
-  <div id="cta">
-    <div class="inner">
-      <h2>Únete antes de que llegue la próxima emergencia</h2>
-      <p>Kit2Help es gratuita para ciudadanos, voluntarios. Configura tu comunidad en menos de 5 minutos.</p>
-
-      <button class="btn-white" onclick="openModal()">
-        Llevar Kit2Help a mi zona
-      </button>
-
-      <a class="btn-white" href="demo.html"> Ver Demo</a>
+  <div class="fallback">
+    <button class="fallback-toggle" onclick="toggleFallback()">Prefiero dejar mis datos</button>
+    <div class="fallback-form" id="fallbackForm">
+      <input type="text" id="k2-honeypot" style="display:none" tabindex="-1" autocomplete="off">
+      <input type="text" id="k2-name" placeholder="Nombre">
+      <input type="text" id="k2-city" placeholder="Ciudad">
+      <input type="email" id="k2-email" placeholder="Correo electrónico (Obligatorio)" required>
+      <input type="tel" id="k2-phone" placeholder="Teléfono">
+      <select id="k2-type">
+        <option value="">Tipo de perfil</option>
+        <option value="Inversor">Inversor</option>
+        <option value="Organización">Organización</option>
+        <option value="Administración">Administración</option>
+        <option value="Voluntario">Voluntario</option>
+      </select>
+      <button onclick="submitLead()" class="k2-submit">Enviar solicitud</button>
     </div>
   </div>
 
-  <div id="leadModal" class="k2-modal">
-    <div class="k2-modal-box">
-      <!-- cerrar -->
-      <div class="k2-close" onclick="closeModal()">✕</div>
+  <div class="footer-note">Kit2Help · 2026</div>
+</div>
 
-      <h3 class="k2-title">Llevar Kit2Help a tu zona</h3>
-      <p class="k2-sub">Déjanos tus datos y te contactamos cuando esté disponible.</p>
+<script>
+function toggleFallback(){
+  document.getElementById('fallbackForm').classList.toggle('open');
+}
 
-      <div class="k2-form">
+async function submitLead() {
+  const honey = document.getElementById('k2-honeypot').value;
+  if (honey !== "") { return; }
 
-        <!-- Campo Honeypot (Trampa para bots) -->
-        <input type="text" id="k2-honeypot" style="display:none" tabindex="-1" autocomplete="off">
+  const name = document.getElementById('k2-name').value.trim();
+  const email = document.getElementById('k2-email').value.trim();
+  const city = document.getElementById('k2-city').value.trim();
+  const phone = document.getElementById('k2-phone').value.trim();
+  const type = document.getElementById('k2-type').value;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+  if (!name) { alert("Por favor, dinos tu nombre."); return; }
+  if (!emailRegex.test(email)) { alert("Por favor, introduce un correo electrónico válido."); return; }
 
-        <input type="text" id="k2-name" placeholder="Nombre">
-        <input type="text" id="k2-city" placeholder="Ciudad">
+  const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwCNRCqioHrJOVEdKGayVEWTYB889V4aupiBpidTMHtaaJzphhcTQGtAEyXl95hDvYa/exec";
+  const btn = document.querySelector('.k2-submit');
 
-        <!-- Campo Email Obligatorio -->
-        <input type="email" id="k2-email" placeholder="Correo electrónico (Obligatorio)" required>
-
-        <!-- Campo Teléfono Opcional -->
-        <input type="tel" id="k2-phone" placeholder="Teléfono">
-
-        <select id="k2-type">
-          <option value="">Tipo de perfil</option>
-          <option value="Voluntario">Voluntario</option>
-          <option value="Organización">Organización</option>
-          <option value="Administración">Administración</option>
-        </select>
-
-        <button onclick="submitLead()" class="k2-submit">
-          Enviar solicitud
-        </button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-
-      <div class="footer-left">
-        <strong>Kit2Help</strong>
-        <span>— Coordinación de ayuda en emergencias · 2026</span>
-      </div>
-
-      <div class="footer-right">
-        <a href="https://www.linkedin.com/in/kit2help" target="_blank" rel="noopener" class="linkedin-btn">
-
-          <!-- Icono LinkedIn -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-            <path
-              d="M4.98 3.5C4.98 4.88 3.87 6 2.49 6 1.11 6 0 4.88 0 3.5 0 2.12 1.11 1 2.49 1c1.38 0 2.49 1.12 2.49 2.5zM.21 8.98h4.56V24H.21V8.98zM7.98 8.98h4.37v2.05h.06c.61-1.16 2.11-2.38 4.35-2.38 4.65 0 5.5 3.06 5.5 7.04V24h-4.56v-6.9c0-1.64-.03-3.75-2.29-3.75-2.29 0-2.64 1.79-2.64 3.63V24H7.98V8.98z" />
-          </svg>
-
-          <span>LinkedIn</span>
-        </a>
-      </div>
-
-    </div>
-  </footer>
-
-
-
-  <!-- MODAL QUIÉNES SOMOS -->
-  <div class="qs-modal" id="qsModal">
-    <div class="qs-box">
-
-      <button class="qs-close" onclick="cerrarQuienesSomos()">×</button>
-      <div class="qs-avatar">👩‍💼</div>
-      <div class="qs-name">Sandra González</div>
-      <div class="qs-role">Fundadora &amp; Directora de Kit2Help</div>
-      <p class="qs-bio">
-        Sandra es ingeniera informática y fundadora de Kit2Help. El proyecto nace de una reflexión sencilla:
-        <i>
-          solo somos conscientes de las carencias en la gestión de ayuda cuando la emergencia ya ha llegado</i>
-        .<br><br>
-
-
-        Tras la DANA, pudo observar que la respuesta de los equipos operativos es indispensable, pero también que el
-        papel de
-        los voluntarios resulta clave para cubrir necesidades inmediatas y apoyar a la población afectada.
-        <br>Sin embargo,
-        muchas de estas personas carecen de herramientas para coordinarse de forma eficaz.<br><br>
-
-        Por eso nace Kit2Help: una plataforma diseñada para dar visibilidad, organización y conexión a
-        todos los actores que participan en una emergencia.
-      </p>
-      <a class="qs-linkedin" href="https://www.linkedin.com/in/kit2help" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-        </svg>
-        Ver perfil en LinkedIn
-      </a>
-    </div>
-  </div>
-
-
-  <script>
-
-    // ── Mobile menu ──
-    function toggleMenu() {
-      document.getElementById('mobileMenu').classList.toggle('open');
-    }
-    document.addEventListener('click', e => {
-      if (!e.target.closest('nav') && !e.target.closest('.mobile-menu'))
-        document.getElementById('mobileMenu').classList.remove('open');
+  try {
+    btn.textContent = "Enviando..."; btn.disabled = true;
+    await fetch(URL_APPS_SCRIPT, {
+      method: "POST", mode: "no-cors",
+      body: JSON.stringify({ name, city, email, phone: phone || "No proporcionado", type })
     });
-
-    // ── Quiénes somos modal ──
-    function abrirQuienesSomos() {
-      document.getElementById('qsModal').classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function cerrarQuienesSomos() {
-      document.getElementById('qsModal').classList.remove('open');
-      document.body.style.overflow = '';
-    }
-    document.addEventListener('click', function (e) {
-      const modal = document.getElementById('qsModal');
-      if (modal && e.target === modal) cerrarQuienesSomos();
-    });
-
-
-    // -- correo form contacto --
-
-    function openModal() {
-      document.getElementById('leadModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-      document.getElementById('leadModal').style.display = 'none';
-    }
-
-
-    async function submitLead() {
-      // 1. Verificar Honeypot inmediatamente
-      const honey = document.getElementById('k2-honeypot').value;
-      if (honey !== "") {
-        console.warn("Spam detectado");
-        return; // Detiene la ejecución si un bot llenó el campo oculto
-      }
-
-      // 2. Capturar valores
-      const name = document.getElementById('k2-name').value.trim();
-      const email = document.getElementById('k2-email').value.trim();
-      const city = document.getElementById('k2-city').value.trim();
-      const phone = document.getElementById('k2-phone').value.trim();
-      const type = document.getElementById('k2-type').value;
-
-      // 3. Validaciones de formato
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!name) {
-        alert("Por favor, dinos tu nombre.");
-        return;
-      }
-      if (!emailRegex.test(email)) {
-        alert("Por favor, introduce un correo electrónico válido.");
-        return;
-      }
-
-      // 4. Envío de datos
-      const URL_APPS_SCRIPT = "https://script.google.com/macros/s/AKfycbwCNRCqioHrJOVEdKGayVEWTYB889V4aupiBpidTMHtaaJzphhcTQGtAEyXl95hDvYa/exec"; // Pega aquí la URL de la implementación
-      const btn = document.querySelector('.k2-submit');
-
-      try {
-        // Cambiamos el texto para dar feedback de carga
-        btn.textContent = "Enviando...";
-        btn.disabled = true;
-
-        await fetch(URL_APPS_SCRIPT, {
-          method: "POST",
-          mode: "no-cors",
-          body: JSON.stringify({
-            name, city, email, phone: phone || "No proporcionado", type
-          })
-        });
-
-        // Éxito
-        btn.textContent = "✓ Enviado";
-        btn.style.background = "#085041";
-
-        setTimeout(() => {
-          closeModal();
-          btn.textContent = "Enviar solicitud";
-          btn.style.background = "";
-          btn.disabled = false;
-          // Limpiar campos
-          document.getElementById('k2-name').value = "";
-          document.getElementById('k2-email').value = "";
-          document.getElementById('k2-city').value = "";
-          document.getElementById('k2-phone').value = "";
-        }, 2000);
-
-      } catch (error) {
-        alert("Hubo un problema. Revisa tu conexión.");
-        btn.disabled = false;
-        btn.textContent = "Enviar solicitud";
-      }
-    }
-
-
-    // ── Scroll reveal ──
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.12 });
-    reveals.forEach(el => observer.observe(el));
-
-    // ── Counter animation ──
-    function animateCounter(el, target) {
-      let cur = 0; const step = Math.ceil(target / 40);
-      const t = setInterval(() => {
-        cur = Math.min(cur + step, target); el.textContent = cur;
-        if (cur >= target) clearInterval(t);
-      }, 40);
-    }
-    const statsObs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          document.querySelectorAll('[data-target]').forEach(el => animateCounter(el, parseInt(el.dataset.target)));
-          statsObs.disconnect();
-        }
-      });
-    }, { threshold: 0.5 });
-    const heroEl = document.querySelector('.hero-stats');
-    if (heroEl) statsObs.observe(heroEl);
-
-
-    // ── Live counters ──
-    setInterval(() => {
-      [['liveKits', 1], ['livePeople', 3]].forEach(([id, d]) => {
-        if (Math.random() > 0.55) {
-          const el = document.getElementById(id);
-          if (el) el.textContent = parseInt(el.textContent) + d;
-        }
-      });
-    }, 3200);
-
-  </script>
-
-
+    btn.textContent = "✓ Enviado";
+    btn.style.background = "#085041";
+    setTimeout(() => {
+      btn.textContent = "Enviar solicitud"; btn.style.background = ""; btn.disabled = false;
+      document.getElementById('k2-name').value = "";
+      document.getElementById('k2-email').value = "";
+      document.getElementById('k2-city').value = "";
+      document.getElementById('k2-phone').value = "";
+      document.getElementById('fallbackForm').classList.remove('open');
+    }, 1800);
+  } catch (error) {
+    alert("Hubo un problema. Revisa tu conexión.");
+    btn.disabled = false; btn.textContent = "Enviar solicitud";
+  }
+}
+</script>
 </body>
-
 </html>
