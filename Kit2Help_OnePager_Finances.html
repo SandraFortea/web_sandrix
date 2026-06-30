@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit2Help — Modelo Financiero Pre-Seed</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g0:#229175;--g1:#1a9070;--g2:#1a7560;--g3:#145f4d;
+  --mint:#2CD3A6;--mint-lt:#E6F9F4;--mint-dk:#1faa84;
+  --blue:#4EA2E2;--blue-lt:#EEF6FF;
+  --bg:#F4F8F7;--sur:#FFFFFF;--bdr:#D8EDE8;
+  --txt:#0F1F1A;--mut:#5E7A72;
+  --red:#C93535;--red-lt:#FFF2F0;
+  --r:12px;--r-s:7px
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--txt);font-size:12px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.page{width:1100px;margin:0 auto;padding:20px 26px 26px}
+
+/* ── HEADER ── */
+.hdr{background:linear-gradient(120deg,var(--g0) 0%,var(--g2) 55%,var(--g3) 100%);border-radius:var(--r);padding:12px 18px;display:flex;flex-direction:row;align-items:center;gap:0;margin-bottom:14px;position:relative;overflow:hidden}
+.hdr::after{content:'';position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.07) 0%,transparent 70%);pointer-events:none}
+.hdr-logo-area{flex-shrink:0;margin-right:22px;display:flex;align-items:center}
+.hdr-logo-area img{height:100px;width:auto;object-fit:contain;display:block}
+.hdr-brand-area{flex:1}
+.hdr-name{font-family:'Space Grotesk',sans-serif;font-size:36px;font-weight:800;color:#fff;letter-spacing:-1px;line-height:1}
+.hdr-name span{color:var(--mint)}
+.hdr-tag{font-size:18px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:rgba(246,241,241,.93);margin-top:5px}
+.hdr-sub{font-size:13px;color:rgba(255,255,255,.72);margin-top:8px;max-width:440px;line-height:1.6}
+.hdr-kpis{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;flex-shrink:0}
+.kp{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:var(--r-s);padding:10px 12px;text-align:center;min-width:118px}
+.kp-wide{grid-column:span 2}
+.kp-v{font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700;color:#fff;line-height:1}
+.kp-v.g{color:#6FFFD4}
+.kp-l{font-size:11px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:4px}
+
+/* ── LAYOUT ── */
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g2asym{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:14px}
+.mb12{margin-bottom:14px}
+
+/* ── CARD ── */
+.c{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:18px 18px}
+
+/* ── SECTION LABEL ── */
+.lbl{font-size:15px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;margin-bottom:9px;display:flex;align-items:center;gap:7px}
+.lbl::before{content:'';display:block;width:3px;height:12px;border-radius:2px;background:currentColor}
+.lbl.m{color:var(--mint-dk)}.lbl.d{color:var(--g1)}.lbl.b{color:var(--blue)}.lbl.p{color:#7B6FD8}
+
+/* ── COLOUR SEMANTICS — absolute rule ── */
+/* positive = green, negative = red, neutral = --mut or --txt */
+.vpos{color:var(--g1);font-weight:600}
+.vneg{color:var(--red);font-weight:600}
+.vdash{color:var(--mut)}
+
+/* ── P&L TABLE ── */
+.t{width:100%;border-collapse:collapse}
+.t th{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mut);padding:5px 8px;background:var(--bg);text-align:right}
+.t th:first-child{text-align:left}
+.t td{padding:5px 8px;font-size:11px;border-bottom:1px solid var(--bdr);text-align:right;vertical-align:middle}
+.t td:first-child{text-align:left;color:var(--mut);font-size:10.5px}
+.t .sec td{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mut);background:var(--bg);border-bottom:none;padding:8px 8px 2px}
+.t .sub td{font-weight:700;color:var(--txt);background:rgba(34,145,117,.04)}
+.t .ebitda td{font-weight:700;font-size:12px;background:var(--mint-lt)}
+.t tr:last-child td{border-bottom:none}
+
+/* ── CASH FLOW ── */
+.cf-block{margin-bottom:7px}
+.cf-head{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#1e1f1f
+;background:var(--bg);padding:4px 9px;border:1px solid var(--bdr);border-bottom:none;border-radius:5px 5px 0 0}
+.cf-body{border:1px solid var(--bdr);border-radius:0 0 5px 5px;overflow:hidden}
+.cf-row{display:grid;grid-template-columns:1fr 72px 72px 72px;padding:5px 9px;border-bottom:1px solid var(--bdr);align-items:center;font-size:10.5px;gap:4px}
+.cf-row:last-child{border-bottom:none}
+.cf-row.hdrow span{font-size:8.5px;font-weight:700;color:var(--mut);text-transform:uppercase;text-align:right}
+.cf-row.hdrow span:first-child{text-align:left}
+.cf-row.subtot{background:rgba(34,145,117,.04);font-weight:700}
+.cf-row.total{background:var(--mint-lt);font-weight:700;font-size:11.5px}
+.cf-label{color:var(--mut);font-size:10.5px}
+.cf-label.strong{color:var(--txt);font-weight:600;font-size:11px}
+.cf-val{text-align:right}
+.cf-footer{display:grid;grid-template-columns:1fr 72px 72px 72px;padding:5px 9px;gap:4px;font-size:10.5px;background:var(--bg);border-top:1px solid var(--bdr);border-radius:0 0 5px 5px}
+.cf-footer .cf-label{font-size:10px}
+
+/* ── RUNWAY ── */
+.rw-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.rw-c{border-radius:var(--r-s);padding:13px 14px;border:1px solid var(--bdr)}
+.rw-c.g{background:var(--mint-lt);border-color:rgba(44,211,166,.25)}
+.rw-c.y{background:#FFFBF0;border-color:rgba(210,160,30,.25)}
+.rw-c.b{background:#EEF8F2;border-color:rgba(34,145,117,.2)}
+.rw-yr{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--mut);margin-bottom:4px}
+.rw-v{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;line-height:1;margin-bottom:4px}
+.rw-c.g .rw-v{color:var(--g1)}.rw-c.y .rw-v{color:#B08000}.rw-c.b .rw-v{color:var(--g1)}
+.rw-s{font-size:11px;color:var(--mut);line-height:1.4}
+.rw-burn{display:flex;justify-content:space-between;align-items:center;margin-top:7px;padding-top:7px;border-top:1px dashed var(--bdr);font-size:10px}
+.rw-burn .lk{color:var(--mut)}
+/* ACCIÓ note */
+.accio-note{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid rgba(78,162,226,.3);border-left:3px solid var(--blue);border-radius:var(--r-s);overflow:hidden}
+.accio-left{padding:10px 13px;background:var(--blue-lt)}
+.accio-right{padding:10px 13px;background:#F8FBFF;border-left:1px solid rgba(78,162,226,.15)}
+.accio-tag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#2d7abf;margin-bottom:5px}
+.accio-txt{font-size:11px;color:var(--txt);line-height:1.55}
+.accio-txt strong{color:var(--g1)}
+.accio-req{font-size:10px;color:var(--mut);line-height:1.5;padding-left:14px}
+.accio-req li{margin-bottom:2px}
+
+/* ── SCENARIOS ── */
+.sc-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
+.sc-card{border-radius:var(--r);border:1.5px solid var(--bdr);background:var(--sur);overflow:hidden;position:relative}
+.sc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sc-card.s1::before{background:var(--g1)}.sc-card.s2::before{background:var(--mint)}.sc-card.s3::before{background:var(--blue)}
+.sc-card.s1{border-color:#C8E8DF}.sc-card.s2{border-color:rgba(44,211,166,.35)}.sc-card.s3{border-color:rgba(78,162,226,.35)}
+.sc-inner{padding:12px 14px}
+.sc-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 8px;border-radius:20px;margin-bottom:6px}
+.s1 .sc-badge{background:rgba(34,145,117,.1);color:var(--g1)}
+.s2 .sc-badge{background:var(--mint-lt);color:var(--mint-dk)}
+.s3 .sc-badge{background:var(--blue-lt);color:#2d7abf}
+.sc-ttl{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:var(--txt);margin-bottom:4px;line-height:1.2}
+.sc-desc{font-size:10px;color:var(--mut);line-height:1.45;margin-bottom:10px}
+.sc-years{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px}
+.sc-yr-box{border-radius:6px;padding:7px 6px;text-align:center;background:var(--bg)}
+.sc-yr-box.ok{background:var(--mint-lt);border:1px solid rgba(44,211,166,.2)}
+.sc-yr-box.neg-box{background:var(--red-lt);border:1px solid rgba(201,53,53,.12)}
+.sc-yr-box.ok2{background:var(--blue-lt);border:1px solid rgba(78,162,226,.2)}
+.sc-yr-lbl{font-size:8.5px;font-weight:600;color:var(--mut);text-transform:uppercase;letter-spacing:.7px;margin-bottom:2px}
+.sc-yr-val{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;line-height:1}
+.sc-yr-box.ok .sc-yr-val{color:var(--g1)}
+.sc-yr-box.neg-box .sc-yr-val{color:var(--red)}
+.sc-yr-box.ok2 .sc-yr-val{color:#2d7abf}
+.sc-be{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:var(--r-s);font-size:10px;font-weight:600;margin-top:6px}
+.s1 .sc-be{background:rgba(34,145,117,.07);color:var(--g1)}
+.s2 .sc-be{background:var(--mint-lt);color:var(--mint-dk)}
+.s3 .sc-be{background:var(--blue-lt);color:#2d7abf}
+.sc-note{background:var(--bg);border:1px solid var(--bdr);border-left:3px solid var(--mint-dk);border-radius:var(--r-s);padding:8px 12px;font-size:10.5px;color:var(--mut);line-height:1.55}
+.sc-note strong{color:var(--txt)}
+
+/* ── TEAM ── */
+.founder-bar{background:linear-gradient(118deg,var(--g2) 0%,var(--g3) 100%);border:1.5px solid var(--mint);border-radius:8px;padding:9px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.founder-av{width:30px;height:30px;border-radius:50%;background:rgba(44,211,166,.2);border:1.5px solid var(--mint);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.founder-nm{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:700;color:#fff}
+.founder-rl{font-size:9.5px;color:var(--mint);font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.founder-badge{font-size:9.5px;font-weight:600;background:rgba(44,211,166,.2);color:var(--mint);border:1px solid rgba(44,211,166,.3);border-radius:20px;padding:2px 8px;margin-left:auto;flex-shrink:0}
+.team-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.team-col{display:flex;flex-direction:column;gap:6px}
+.team-head{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;padding:5px 10px;border-radius:5px;text-align:center}
+.team-head.t{background:var(--mint-lt);color:var(--mint-dk)}
+.team-head.b{background:var(--blue-lt);color:#2d7abf}
+.team-head.p{background:rgba(155,143,232,.1);color:#7B6FD8}
+.team-node{border-radius:6px;padding:8px 10px;border:1px solid var(--bdr);background:var(--sur)}
+.team-node.t{border-left:3px solid var(--mint-dk)}
+.team-node.b{border-left:3px solid var(--blue)}
+.team-node.eq{border-left:3px solid #9B8FE8;background:#faf9fe}
+.team-node.ex{border-left:2px dashed rgba(155,143,232,.35);background:#fafafd}
+.tn-name{font-size:11px;font-weight:700;color:var(--txt);line-height:1.2;margin-bottom:2px}
+.tn-role{font-size:10px;color:var(--mut);line-height:1.3}
+.info-bar{display:flex;gap:9px;align-items:flex-start;padding:9px 11px;border-radius:var(--r-s);font-size:11px;line-height:1.5;background:var(--mint-lt);border:1px solid rgba(44,211,166,.2);border-left:3px solid var(--mint-dk);margin-top:10px}
+
+/* ── HYPOTHESES ── */
+.hyp-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.hyp-bar{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden}
+.hyp-head{padding:8px 12px;font-size:10px;font-weight:700;color:#fff;display:flex;align-items:center;gap:7px}
+.hyp-head.m{background:var(--g1)}.hyp-head.b{background:var(--blue)}.hyp-head.cycle{background:#5E7A72}
+.hyp-body{padding:9px 12px}
+.hyp-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bdr);gap:6px}
+.hyp-row:last-child{border-bottom:none}
+.hyp-key{font-size:10px;color:var(--mut);flex:1;line-height:1.3}
+.hyp-val{font-size:10.5px;font-weight:700;color:var(--txt);text-align:right;white-space:nowrap}
+.hyp-val.hi{color:var(--g1)}
+.hyp-progress{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--bdr)}
+.hyp-progress:last-child{border-bottom:none}
+.hp-key{font-size:10px;color:var(--mut);width:110px;flex-shrink:0}
+.hp-track{flex:1;height:5px;background:var(--bg);border-radius:3px;overflow:hidden}
+.hp-fill{height:100%;border-radius:3px}
+.hp-fill.m{background:var(--mint)}.hp-fill.b{background:var(--blue)}
+.hp-val{font-size:10px;font-weight:700;color:var(--txt);text-align:right;width:44px;flex-shrink:0}
+.hp-total{background:var(--mint-lt);border-radius:5px;padding:6px 5px;margin-top:4px;display:flex;align-items:center;gap:6px;border-bottom:none}
+
+/* ══════════════════════════════════════════════
+   ESTILOS DE IMPRESIÓN — A4 Portrait
+   zoom:0.65 escala 1100px → ~715px ≈ ancho A4
+   útil (210mm - 24mm márgenes = 186mm ≈ 703px)
+   ══════════════════════════════════════════════ */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm;
+  }
+
+  html {
+    zoom: 0.65;
+  }
+
+  body {
+    background: #fff !important;
+    /* forzar colores de fondo en PDF */
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .page {
+    width: 1100px;
+    padding: 6px 14px 10px;
+  }
+
+  /* ── EVITAR CORTES DE SECCIÓN ──────────────── */
+  /* El header nunca se separa de la primera fila */
+  .hdr {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Cada tarjeta se mantiene entera en su página */
+  .c {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Sub-componentes que no deben partirse */
+  .cf-block,
+  .sc-card,
+  .sc-cards,
+  .hyp-bar,
+  .rw-c,
+  .founder-bar,
+  .team-col {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* ── ESPACIADO COMPACTO ─────────────────────── */
+  .hdr        { padding: 8px 14px; margin-bottom: 6px; }
+  .g3, .g2   { gap: 6px; margin-bottom: 6px; }
+  .mb12       { margin-bottom: 6px; }
+  .c          { padding: 8px 10px; }
+
+  /* Tablas P&L */
+  .t td, .t th    { padding: 4px 6px; }
+  .t .sec td      { padding: 5px 6px 2px; }
+
+  /* Flujo de caja */
+  .cf-block  { margin-bottom: 5px; }
+  .cf-head   { padding: 3px 8px; }
+  .cf-row    { padding: 4px 8px; }
+  .cf-footer { padding: 4px 8px; }
+
+  /* Escenarios */
+  .sc-cards  { gap: 8px; margin-bottom: 8px; }
+  .sc-inner  { padding: 10px 12px; }
+  .sc-desc   { margin-bottom: 7px; }
+  .sc-years  { gap: 4px; }
+  .sc-yr-box { padding: 6px 5px; }
+
+  /* Hipótesis */
+  .hyp-head      { padding: 7px 10px; }
+  .hyp-body      { padding: 7px 10px; }
+  .hyp-row       { padding: 4px 0; }
+  .hyp-progress  { padding: 4px 0; }
+
+  /* Equipo */
+  .founder-bar  { padding: 8px 14px; margin-bottom: 8px; }
+  .team-grid    { gap: 8px; }
+  .team-col     { gap: 5px; }
+  .team-node    { padding: 7px 9px; }
+  .info-bar     { padding: 8px 10px; margin-top: 8px; }
+
+  /* Runway */
+  .rw-grid { gap: 8px; margin-bottom: 8px; }
+  .rw-c    { padding: 10px 11px; }
+  .rw-burn { margin-top: 5px; padding-top: 5px; }
+  .rw-yr   { font-size: 10px; }
+  .rw-v    { font-size: 20px; }
+  .rw-s    { font-size: 10.5px; }
+  .rw-burn { font-size: 10px; }
+  .accio-note { break-inside: avoid; page-break-inside: avoid; }
+  .accio-tag  { font-size: 9.5px; }
+  .accio-txt  { font-size: 11px; }
+  .accio-req  { font-size: 10px; }
+
+  /* ── TAMAÑOS DE FUENTE PARA IMPRESIÓN ──────────
+     Con zoom 0.65, cada px se convierte en ~0.49pt.
+     Fuentes <10px quedan a <4.9pt: ilegibles.
+     Se suben las más pequeñas para asegurar ≥6pt.
+  ────────────────────────────────────────────── */
+
+  /* Header */
+  .hdr        { padding: 8px 14px; }
+  .hdr-logo-area { margin-right: 12px; }
+  .hdr-logo-area img { height: 60px !important; }
+  .hdr-name   { font-size: 22px; }
+  .hdr-tag    { font-size: 8px; letter-spacing: 1.5px; margin-top: 3px; }
+  .hdr-sub    { font-size: 8px; margin-top: 4px; max-width: none; }
+  .kp-v       { font-size: 18px; }
+  .kp-l       { font-size: 7px; letter-spacing: .5px; }
+  .kp         { padding: 5px 7px; min-width: auto; }
+
+  /* Etiquetas de sección */
+  .lbl { font-size: 8px; letter-spacing: 1.6px; margin-bottom: 5px; }
+  .lbl::before { height: 8px; }
+
+  /* Tabla P&L */
+  .t th         { font-size: 10px; }
+  .t td         { font-size: 11px; }
+  .t td:first-child { font-size: 10.5px; }
+  .t .sec td    { font-size: 9.5px; }
+  .t .ebitda td { font-size: 12px; }
+
+  /* Flujo de caja */
+  .cf-head          { font-size: 9.5px; }
+  .cf-row           { font-size: 11px; }
+  .cf-row.hdrow span { font-size: 9.5px; }
+  .cf-label         { font-size: 11px; }
+
+  /* Runway */
+  .rw-yr  { font-size: 10px; }
+  .rw-v   { font-size: 18px; }
+  .rw-s   { font-size: 10.5px; }
+  .rw-burn { font-size: 10px; }
+
+  /* Escenarios */
+  .sc-badge  { font-size: 10px; }
+  .sc-ttl    { font-size: 12.5px; }
+  .sc-desc   { font-size: 10.5px; }
+  .sc-yr-lbl { font-size: 9px; }
+  .sc-yr-val { font-size: 12px; }
+  .sc-be     { font-size: 10.5px; }
+  .sc-note   { font-size: 11px; }
+
+  /* Equipo */
+  .founder-nm   { font-size: 12px; }
+  .founder-rl   { font-size: 9.5px; }
+  .founder-badge { font-size: 9.5px; }
+  .team-head    { font-size: 9.5px; letter-spacing: .8px; }
+  .tn-name      { font-size: 11px; }
+  .tn-role      { font-size: 10px; }
+  .info-bar     { font-size: 11px; }
+
+  /* Hipótesis */
+  .hyp-head     { font-size: 10.5px; }
+  .hyp-key      { font-size: 10.5px; }
+  .hyp-val      { font-size: 11px; }
+  .hp-key       { font-size: 10px; }
+  .hp-val       { font-size: 10.5px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══ HEADER ══ -->
+<div class="hdr">
+  <div class="hdr-logo-area">
+    <img src="logo.png" alt="Kit2Help" style="height:100px;width:auto;object-fit:contain;display:block">
+  </div>
+  <div class="hdr-brand-area">
+    <div class="hdr-name">KIT<span>2</span>HELP</div>
+    <div class="hdr-tag">Modelo Financiero · Pre-Seed</div>
+    <div class="hdr-sub">Ronda 115.000€ · 4 Tramos por Hito · Estado: MVP Piloto</div>
+  </div>
+  <div class="hdr-kpis">
+    <div class="kp"><div class="kp-v">115k€</div><div class="kp-l">Inversión Total</div></div>
+    <div class="kp"><div class="kp-v g">+65.870€</div><div class="kp-l">EBITDA Año 3</div></div>
+    <div class="kp"><div class="kp-v">274,8k€</div><div class="kp-l">ARR Año 3</div></div>
+    <div class="kp"><div class="kp-v">Año 3</div><div class="kp-l">Break-even</div></div>
+    <div class="kp kp-wide"><div class="kp-v">~3.226€/m</div><div class="kp-l">Burn Rate Año 1</div></div>
+  </div>
+</div>
+
+<!-- ══ FINANCIALS: P&L · Cash Flow (fila asimétrica) ══ -->
+<div class="g2asym">
+
+  <!-- P&L -->
+  <div class="c">
+    <div class="lbl m">Cuenta de Resultados · P&amp;L</div>
+    <table class="t">
+      <thead>
+        <tr>
+          <th style="text-align:left">Concepto</th>
+          <th>Año 1</th><th>Año 2</th><th>Año 3</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="sec"><td colspan="4">Ingresos</td></tr>
+        <tr>
+          <td>Setup implantación · municipios medianos</td>
+          <td class="vdash">—</td>
+          <td class="vpos">10.000€</td>
+          <td class="vpos">20.000€</td>
+        </tr>
+        <tr>
+          <td>SaaS recurrente · ayuntamientos pequeños y medianos</td>
+          <td class="vpos">3.125€</td>
+          <td class="vpos">57.500€</td>
+          <td class="vpos">230.000€</td>
+        </tr>
+        <tr>
+          <td>Ecosistema · ONGs + partners logísticos</td>
+          <td class="vdash">—</td>
+          <td class="vpos">13.000€</td>
+          <td class="vpos">24.800€</td>
+        </tr>
+        <tr class="sub">
+          <td style="color:var(--txt)">Total ingresos</td>
+          <td class="vpos">3.125€</td>
+          <td class="vpos">80.500€</td>
+          <td class="vpos">274.800€</td>
+        </tr>
+        <tr class="sec"><td colspan="4">Gastos operativos</td></tr>
+        <tr>
+          <td>Personal · salarios brutos + SS 33%</td>
+          <td class="vneg">−23.940€</td>
+          <td class="vneg">−83.790€</td>
+          <td class="vneg">−134.330€</td>
+        </tr>
+        <tr>
+          <td>Cloud / IA · base fija + variable por cliente</td>
+          <td class="vneg">−8.500€</td>
+          <td class="vneg">−15.200€</td>
+          <td class="vneg">−30.400€</td>
+        </tr>
+        <tr>
+          <td>Auditoría · ciberseguridad AAPP</td>
+          <td class="vdash">—</td>
+          <td class="vneg">−15.000€</td>
+          <td class="vneg">−20.000€</td>
+        </tr>
+        <tr>
+          <td>Legal · seguros RC · marketing · generales</td>
+          <td class="vneg">−9.400€</td>
+          <td class="vneg">−17.200€</td>
+          <td class="vneg">−24.200€</td>
+        </tr>
+        <tr class="sub">
+          <td style="color:var(--txt)">Total gastos</td>
+          <td class="vneg">−41.840€</td>
+          <td class="vneg">−131.190€</td>
+          <td class="vneg">−208.930€</td>
+        </tr>
+        <tr class="ebitda">
+          <td style="color:var(--txt);font-weight:700">EBITDA</td>
+          <td class="vneg">−38.715€</td>
+          <td class="vneg">−50.690€</td>
+          <td class="vpos">+65.870€</td>
+        </tr>
+        <tr>
+          <td style="color:var(--mut);font-size:10px">Margen EBITDA</td>
+          <td style="text-align:right;font-size:10px;color:var(--mut)">n/s ¹</td>
+          <td class="vneg" style="font-size:10px">−63%</td>
+          <td class="vpos" style="font-size:10px">+24%</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:9.5px;color:var(--mut);margin-top:7px;padding-top:6px;border-top:1px dashed var(--bdr)">
+      ¹ Año 1: 1 cliente Early Adopter, 5 meses, 50% dto. · Sin CAPEX — desarrollo a OPEX, modelo SaaS puro.
+    </div>
+  </div>
+
+  <!-- CASH FLOW -->
+  <div class="c">
+    <div class="lbl d">Flujo de Caja</div>
+
+    <div class="cf-block">
+      <div class="cf-head">A · Flujo Operativo</div>
+      <div class="cf-body">
+        <div class="cf-row hdrow">
+          <span></span><span>Año 1</span><span>Año 2</span><span>Año 3</span>
+        </div>
+        <div class="cf-row">
+          <span class="cf-label">Cobros contratos B2G · ONGs · partners</span>
+          <span class="cf-val vpos">3.125€</span>
+          <span class="cf-val vpos">80.500€</span>
+          <span class="cf-val vpos">274.800€</span>
+        </div>
+        <div class="cf-row">
+          <span class="cf-label">Pagos nóminas + SS empleador</span>
+          <span class="cf-val vneg">−23.940€</span>
+          <span class="cf-val vneg">−83.790€</span>
+          <span class="cf-val vneg">−134.330€</span>
+        </div>
+        <div class="cf-row">
+          <span class="cf-label">Pagos cloud · auditoría · operativos</span>
+          <span class="cf-val vneg">−17.900€</span>
+          <span class="cf-val vneg">−47.400€</span>
+          <span class="cf-val vneg">−74.600€</span>
+        </div>
+        <div class="cf-row subtot">
+          <span class="cf-label strong">FCO (Flujo Caja Operativo)</span>
+          <span class="cf-val vneg">−38.715€</span>
+          <span class="cf-val vneg">−50.690€</span>
+          <span class="cf-val vpos">+65.870€</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cf-block">
+      <div class="cf-head">B · Financiación Inversor · 4 Tramos por Hito</div>
+      <div class="cf-body">
+        <div class="cf-row">
+          <span class="cf-label">T1 (SL constituida) + T2 (MVP demostrable)</span>
+          <span class="cf-val vpos">50.000€</span>
+          <span class="cf-val vdash">—</span>
+          <span class="cf-val vdash">—</span>
+        </div>
+        <div class="cf-row">
+          <span class="cf-label">T3 · Primer ayuntamiento firmado</span>
+          <span class="cf-val vdash">—</span>
+          <span class="cf-val vpos">55.000€</span>
+          <span class="cf-val vdash">—</span>
+        </div>
+        <div class="cf-row">
+          <span class="cf-label">T4 · 5 o más clientes activos</span>
+          <span class="cf-val vdash">—</span>
+          <span class="cf-val vdash">—</span>
+          <span class="cf-val vpos">10.000€</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--bdr);border-radius:var(--r-s);overflow:hidden">
+      <div class="cf-row total">
+        <span class="cf-label strong" style="color:var(--g1)">Caja final en banco (31/12)</span>
+        <span class="cf-val vpos">11.285€</span>
+        <span class="cf-val vpos">15.595€</span>
+        <span class="cf-val vpos">91.465€</span>
+      </div>
+      <div class="cf-row" style="background:var(--bg)">
+        <span class="cf-label">Burn Rate mensual</span>
+        <span class="cf-val vneg">−3.226€</span>
+        <span class="cf-val vneg">−4.224€</span>
+        <span class="cf-val vpos">+5.489€</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /g2asym -->
+
+<!-- ══ RUNWAY — fila completa horizontal ══ -->
+<div class="c mb12">
+  <div class="lbl m">Runway por Ejercicio</div>
+  <div class="rw-grid">
+    <div class="rw-c g">
+      <div class="rw-yr">Año 1</div>
+      <div class="rw-v">~3,5 meses</div>
+      <div class="rw-s">Caja cubierta por T1+T2 durante todo el ejercicio</div>
+      <div class="rw-burn">
+        <span class="lk">Burn mensual</span>
+        <span class="vneg" style="font-size:11px;font-weight:700">−3.226€/m</span>
+      </div>
+    </div>
+    <div class="rw-c y">
+      <div class="rw-yr">Año 2</div>
+      <div class="rw-v" style="font-size:19px">~4 semanas</div>
+      <div class="rw-s">Caja 15.595€ al cierre del ejercicio anterior</div>
+      <div class="rw-burn">
+        <span class="lk">Burn mensual</span>
+        <span class="vneg" style="font-size:11px;font-weight:700">−4.224€/m</span>
+      </div>
+    </div>
+    <div class="rw-c b">
+      <div class="rw-yr">Año 3</div>
+      <div class="rw-v">FCO positivo</div>
+      <div class="rw-s">El negocio genera caja. Autónoma sin nuevos tramos.</div>
+      <div class="rw-burn">
+        <span class="lk">Generación mensual</span>
+        <span class="vpos" style="font-size:11px;font-weight:700">+5.489€/m</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Nota ACCIÓ -->
+  <div class="accio-note">
+    <div class="accio-left">
+      <div class="accio-tag">Upside condicional · Subvención ACCIÓ 2027</div>
+      <div class="accio-txt">
+        Con aprobación de ACCIÓ, la caja de inicio del Año 2 ascendería a <strong>~85.000€</strong>, eliminando la restricción de liquidez intraejercicio. El modelo base no depende de esta subvención — si llega, actúa como acelerador que amplía el margen operativo y adelanta capacidad de contratación.
+      </div>
+    </div>
+    <div class="accio-right">
+      <div class="accio-tag">Requisitos clave · verificar bases oficiales</div>
+      <ul class="accio-req">
+        <li>SL o SA constituida en Cataluña (Reg. Mercantil)</li>
+        <li>Importe máximo: 74.000€ + 1.000€ mentoría</li>
+        <li>Cobertura hasta el 80% del proyecto (mín. 100.000€)</li>
+        <li>Aportación propia mínima del 25%</li>
+        <li>Posible adelanto del 80% del importe aprobado</li>
+        <li>Próxima convocatoria: ACCIÓ 2027 (actual cerrada jun. 2026)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ESCENARIOS ══ -->
+<div class="c mb12">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <div class="lbl m" style="margin-bottom:0">Trayectoria de Escenarios · EBITDA por Año</div>
+    <div style="font-size:10px;color:var(--mut)">Misma inversión (115.000€) y equipo en los 3 escenarios</div>
+  </div>
+  <div class="sc-cards">
+
+    <div class="sc-card s1">
+      <div class="sc-inner">
+        <div class="sc-badge">① Suelo</div>
+        <div class="sc-ttl">Modelo base conservador</div>
+        <div class="sc-desc">Fundadora CTO + Socio Empresarial en equity como Dir. Comercial (coste 0€). Sin medianos adicionales ni partners de ecosistema.</div>
+        <div class="sc-years">
+          <div class="sc-yr-box neg-box">
+            <div class="sc-yr-lbl">Año 1</div>
+            <div class="sc-yr-val">−38,7k€</div>
+          </div>
+          <div class="sc-yr-box neg-box">
+            <div class="sc-yr-lbl">Año 2</div>
+            <div class="sc-yr-val">−50,7k€</div>
+          </div>
+          <div class="sc-yr-box ok">
+            <div class="sc-yr-lbl">Año 3 ✓</div>
+            <div class="sc-yr-val">+65,9k€</div>
+          </div>
+        </div>
+        <div class="sc-be">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Break-even: Año 3 · Margen +24%
+        </div>
+      </div>
+    </div>
+
+    <div class="sc-card s2">
+      <div class="sc-inner">
+        <div class="sc-badge">② Objetivo</div>
+        <div class="sc-ttl">Socio activa red de medianos</div>
+        <div class="sc-desc">Socio cierra 1 ayuntamiento mediano en Año 2 (mes 7) y 2 en Año 3. Ingresos incrementales +25k€ y +55k€ sobre el SUELO.</div>
+        <div class="sc-years">
+          <div class="sc-yr-box neg-box">
+            <div class="sc-yr-lbl">Año 1</div>
+            <div class="sc-yr-val">−38,7k€</div>
+          </div>
+          <div class="sc-yr-box neg-box">
+            <div class="sc-yr-lbl">Año 2</div>
+            <div class="sc-yr-val">−25,7k€</div>
+          </div>
+          <div class="sc-yr-box ok">
+            <div class="sc-yr-lbl">Año 3 ✓</div>
+            <div class="sc-yr-val">+120,9k€</div>
+          </div>
+        </div>
+        <div class="sc-be">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Break-even: Año 3 · Margen +44%
+        </div>
+      </div>
+    </div>
+
+    <div class="sc-card s3">
+      <div class="sc-inner">
+        <div class="sc-badge">③ Techo</div>
+        <div class="sc-ttl">Medianos + ecosistema partners</div>
+        <div class="sc-desc">Socio cierra medianos y activa partners del ecosistema: proveedores homologados, campañas solidarias, RSC logística (+30k€ A2 / +60k€ A3).</div>
+        <div class="sc-years">
+          <div class="sc-yr-box neg-box">
+            <div class="sc-yr-lbl">Año 1</div>
+            <div class="sc-yr-val">−38,7k€</div>
+          </div>
+          <div class="sc-yr-box ok2">
+            <div class="sc-yr-lbl">Año 2 ✓</div>
+            <div class="sc-yr-val">+4,3k€</div>
+          </div>
+          <div class="sc-yr-box ok">
+            <div class="sc-yr-lbl">Año 3 ✓✓</div>
+            <div class="sc-yr-val">+180,9k€</div>
+          </div>
+        </div>
+        <div class="sc-be">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2.5"/><path d="M8 12l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          Break-even: Año 2 · Margen A3 +66%
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="sc-note">
+    <strong>Upside fuera del modelo base — no incluido en ningún escenario:</strong> Subvención ACCIÓ (hasta 74.000€ condicional) · API datos medios locales (requiere dataset maduro, Año 2–3) · Piloto aseguradora (ciclo 9–12 meses, no antes de Año 3). El negocio alcanza rentabilidad sin depender de ninguno de estos vectores.
+  </div>
+</div>
+
+<!-- ══ EQUIPO ══ -->
+<div class="c mb12">
+  <div class="lbl m">Equipo y Crecimiento de Persona</div>
+  <div class="founder-bar">
+    <div class="founder-av">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="#2CD3A6" stroke-width="2"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="#2CD3A6" stroke-width="2" stroke-linecap="round"/></svg>
+    </div>
+    <div>
+      <div class="founder-nm">Sandra González Fortea</div>
+      <div class="founder-rl">CEO · Producto &amp; Estrategia · CTO &amp; Fundadora Técnica</div>
+    </div>
+    <div class="founder-badge">Única persona técnica · MVP en solitario</div>
+  </div>
+
+  <div class="team-grid">
+    <div class="team-col">
+      <div class="team-head t">Tecnología</div>
+      <div class="team-node t">
+        <div class="tn-name">CTO / Líder Técnico</div>
+        <div class="tn-role">Arquitectura, backend, seguridad, infra cloud</div>
+      </div>
+      <div class="team-node t">
+        <div class="tn-name">Desarrollador Full Stack</div>
+        <div class="tn-role">Apoyo técnico, onboarding de clientes</div>
+      </div>
+      <div class="team-node t" style="opacity:.72;border-style:dashed">
+        <div class="tn-name" style="color:var(--mut)">Senior Backend</div>
+        <div class="tn-role">Escalabilidad arquitectura 8+ clientes · incorporación diferida</div>
+      </div>
+    </div>
+    <div class="team-col">
+      <div class="team-head b">Desarrollo de Negocio</div>
+      <div class="team-node eq">
+        <div class="tn-name" style="color:#6B5FD0">Socio Empresarial · Dir. Comercial</div>
+        <div class="tn-role">Red B2G, contratos municipios medianos y partners. Equity · coste 0 en nómina.</div>
+      </div>
+      <div class="team-node b">
+        <div class="tn-name">Comercial B2G · Clientes &amp; Partners</div>
+        <div class="tn-role">Captación ayuntamientos + activación ecosistema logístico</div>
+      </div>
+    </div>
+    <div class="team-col">
+      <div class="team-head p">Producto e Implementación</div>
+      <div class="team-node" style="border-left:3px solid #9B8FE8">
+        <div class="tn-name">UX / Implementación</div>
+        <div class="tn-role">Onboarding ayuntamientos y ONGs, formación de operativos</div>
+      </div>
+      <div class="team-node ex">
+        <div class="tn-name" style="color:#8B80C8">Legal · Compliance · Administración</div>
+        <div class="tn-role">Externo. Licitaciones B2G, RGPD, gestoría. Sin estructura interna.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-bar">
+    <svg style="flex-shrink:0;margin-top:1px" width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="var(--mint-dk)" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="var(--mint-dk)" stroke-width="2" stroke-linecap="round"/></svg>
+    <div style="color:var(--g2)"><strong>Estructura lean.</strong> Único coste personal en Año 1: CTO fundadora. El Socio Empresarial cubre la Dirección Comercial en equity, eliminando ~45.000€/año de coste estructural. El perfil comercial B2G se consolida en uno durante los tres primeros años — clientes públicos y partners comparten red de relaciones institucionales.</div>
+  </div>
+</div>
+
+<!-- ══ HIPÓTESIS ══ -->
+<div class="c">
+  <div class="lbl m">Hipótesis Clave del Modelo</div>
+  <div class="hyp-wrap">
+
+    <div class="hyp-bar">
+      <div class="hyp-head m">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="#fff" stroke-width="2"/><path d="M3 9h18M9 21V9" stroke="#fff" stroke-width="2"/></svg>
+        Mercado y Tarificación
+      </div>
+      <div class="hyp-body">
+        <div class="hyp-row">
+          <span class="hyp-key">SaaS municipio pequeño / mes</span>
+          <span class="hyp-val">1.250€</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">Umbral Contrato Menor · moat regulatorio</span>
+          <span class="hyp-val hi">≤ 15.000€/año</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">Setup municipio mediano</span>
+          <span class="hyp-val">10.000€</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">SaaS municipio mediano / mes</span>
+          <span class="hyp-val">2.500€</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">Descuento Early Adopter · Año 1</span>
+          <span class="hyp-val">50%</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">ONG coordinadora / mes</span>
+          <span class="hyp-val">400€</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">Partner logístico / mes</span>
+          <span class="hyp-val">500€</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hyp-bar">
+      <div class="hyp-head b">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="7" r="4" stroke="#fff" stroke-width="2"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        Crecimiento de Clientes
+      </div>
+      <div class="hyp-body">
+        <div class="hyp-progress">
+          <span class="hp-key">Pequeños (activos)</span>
+          <div class="hp-track"><div class="hp-fill b" style="width:47%"></div></div>
+          <span class="hp-val">1 → 7</span>
+        </div>
+        <div class="hyp-progress">
+          <span class="hp-key">Medianos (activos)</span>
+          <div class="hp-track"><div class="hp-fill m" style="width:20%"></div></div>
+          <span class="hp-val">0 → 3</span>
+        </div>
+        <div class="hyp-progress">
+          <span class="hp-key">ONGs coordinadoras</span>
+          <div class="hp-track"><div class="hp-fill b" style="width:7%"></div></div>
+          <span class="hp-val">0 → 1</span>
+        </div>
+        <div class="hyp-progress">
+          <span class="hp-key">Partners logísticos</span>
+          <div class="hp-track"><div class="hp-fill m" style="width:27%"></div></div>
+          <span class="hp-val">0 → 4</span>
+        </div>
+        <div class="hyp-progress hp-total">
+          <span class="hp-key" style="font-weight:700;color:var(--g1)">Total clientes activos</span>
+          <div class="hp-track"><div class="hp-fill m" style="width:100%"></div></div>
+          <span class="hp-val" style="color:var(--g1)">1 → 15</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hyp-bar">
+      <div class="hyp-head cycle">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#fff" stroke-width="2"/><path d="M12 8v4l3 3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        Ciclos de Venta B2G
+      </div>
+      <div class="hyp-body">
+        <div class="hyp-row">
+          <span class="hyp-key">Municipio pequeño · Contrato Menor</span>
+          <span class="hyp-val">4–8 semanas</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">Municipio mediano · Proc. Negociado</span>
+          <span class="hyp-val">4–6 meses</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">ONG coordinadora</span>
+          <span class="hyp-val">Semanas</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">Partner logístico</span>
+          <span class="hyp-val">Días</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">Early Adopter · inicio de cobro</span>
+          <span class="hyp-val">Mes 8 · Año 1</span>
+        </div>
+        <div class="hyp-row">
+          <span class="hyp-key">Primer mediano · Año 2</span>
+          <span class="hyp-val">Mes 7 · Año 2</span>
+        </div>
+        <div class="hyp-row" style="background:var(--mint-lt);border-radius:5px;margin-top:5px;padding:5px 6px;border-bottom:none">
+          <span class="hyp-key" style="color:var(--g1);font-weight:600">Sin licitación para el 80% del mercado objetivo · Contrato Menor como moat estructural</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>
