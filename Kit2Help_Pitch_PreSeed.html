@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit2Help · Pitch Pre-Seed</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --mint:#2CD3A6;
+  --mint-dk:#1faa84;
+  --mint-lt:#e6f9f4;
+  --dark:#229175;
+  --dark2:#1a7560;
+  --bg:#F4F8F7;
+  --surface:#FFFFFF;
+  --border:#D8EDE8;
+  --text:#0F1F1A;
+  --muted:#5E7A72;
+  --red:#D94F4F;
+  --r:14px;
+  --r-sm:8px;
+  --slide-w:1100px;
+  --slide-h:620px;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#E8EFED;
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+  height:100vh;
+  width:100vw;
+}
+
+/* ── CONTROLES ── */
+.controls-bar{
+  position:fixed;top:0;left:0;right:0;
+  z-index:2000;
+  background:rgba(244,248,247,.97);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+  padding:9px 20px;
+  height:48px;
+  transition:opacity .3s, transform .3s;
+}
+body.pres-mode .controls-bar{
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(-100%);
+}
+body.pres-mode:hover .controls-bar{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0);
+}
+.ctrl-logo{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:14px;font-weight:700;
+  color:var(--dark);letter-spacing:-.3px;
+  margin-right:auto;
+}
+.ctrl-logo span{color:var(--mint);}
+.ctrl-btn{
+  font-family:'Inter',sans-serif;
+  font-size:11px;font-weight:600;
+  padding:5px 13px;border-radius:6px;
+  border:1px solid var(--border);
+  background:var(--surface);color:var(--dark);
+  cursor:pointer;letter-spacing:.2px;transition:all .15s;
+}
+.ctrl-btn:hover{background:var(--mint-lt);border-color:var(--mint);}
+.ctrl-btn.primary{background:var(--dark);color:#fff;border-color:var(--dark);}
+.ctrl-btn.primary:hover{background:var(--dark2);}
+.slide-counter{
+  font-size:11px;color:var(--muted);
+  font-variant-numeric:tabular-nums;min-width:54px;text-align:center;
+}
+.nav-btn{
+  width:32px;height:32px;border-radius:8px;
+  border:1px solid var(--border);background:var(--surface);
+  color:var(--dark);font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;font-weight:700;
+}
+.nav-btn:hover{background:var(--mint-lt);border-color:var(--mint);}
+.nav-btn:disabled{opacity:.3;cursor:default;}
+
+/* ── VIEWPORT NORMAL ── */
+.slides-viewport{
+  position:fixed;
+  top:48px;left:0;right:0;bottom:0;
+  overflow-y:auto;overflow-x:hidden;
+  display:flex;flex-direction:column;
+  align-items:center;
+}
+
+/* ── SLIDE WRAP ── */
+.slide-wrap{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  width:100%;
+  padding:20px 0 32px;
+  opacity:0;
+  transform:translateY(14px);
+  transition:opacity .32s ease, transform .32s ease;
+}
+.slide-wrap.active{
+  display:flex;
+  opacity:1;transform:translateY(0);
+}
+.slide-wrap.animating{
+  opacity:0;transform:translateY(14px);
+}
+
+/* ── SLIDE CARD ── */
+.slide{
+  width:var(--slide-w);
+  min-height:var(--slide-h);
+  background:var(--surface);
+  border-radius:var(--r);
+  border:1px solid var(--border);
+  box-shadow:0 4px 28px rgba(15,31,26,.09);
+  position:relative;flex-shrink:0;
+}
+.slide-inner{
+  padding:44px 52px;
+  min-height:var(--slide-h);
+  display:flex;flex-direction:column;
+  justify-content:center;
+}
+
+/* ── MODO PROYECTOR ── */
+body.pres-mode{
+  background:#000;
+  overflow:hidden;
+}
+body.pres-mode .slides-viewport{
+  top:0;
+  background:#000;
+  overflow:hidden;
+  justify-content:center;
+  align-items:center;
+}
+body.pres-mode .slide-wrap{
+  padding:0;
+  justify-content:center;
+  align-items:center;
+  position:absolute;inset:0;
+}
+body.pres-mode .slide-wrap.active{
+  display:flex;
+}
+body.pres-mode .slide{
+  border-radius:0;
+  border:none;
+  box-shadow:none;
+  transform-origin:center center;
+  /* scale se aplica via JS */
+}
+body.pres-mode .speaker-notes{display:none!important;}
+
+/* slide número */
+.slide-num{
+  position:absolute;top:16px;right:20px;
+  font-size:10px;font-family:'Space Grotesk',sans-serif;font-weight:600;
+  color:var(--mint);letter-spacing:1px;
+  background:var(--mint-lt);padding:3px 8px;border-radius:100px;
+}
+
+/* ── SPEAKER NOTES ── */
+.speaker-notes{
+  width:var(--slide-w);
+  margin:10px 0 0;
+  background:#FFFEF0;
+  border:1px solid #E8DF90;border-top:3px solid #C8B840;
+  border-radius:0 0 var(--r) var(--r);
+  padding:18px 24px 20px;
+}
+.notes-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.notes-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#8B7A00;text-transform:uppercase;}
+.notes-timing{margin-left:auto;font-size:10px;color:#A89A20;font-variant-numeric:tabular-nums;}
+.notes-section{margin-bottom:10px;}
+.notes-section-title{font-size:9.5px;font-weight:700;color:#8B7A00;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;}
+.notes-text{font-size:12.5px;line-height:1.7;color:#3A3210;}
+.notes-text strong{color:#6B5800;}
+.notes-alert{margin-top:10px;padding:8px 12px;background:rgba(217,79,79,.07);border-left:3px solid var(--red);border-radius:4px;font-size:11.5px;color:#5A1A1A;line-height:1.6;}
+.notes-tip{margin-top:10px;padding:8px 12px;background:var(--mint-lt);border-left:3px solid var(--mint);border-radius:4px;font-size:11.5px;color:#0F3A2E;line-height:1.6;}
+
+/* ── TIPOGRAFÍA ── */
+.eyebrow{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--mint-dk);margin-bottom:10px;}
+.slide-title{font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:800;line-height:1.1;color:var(--text);margin-bottom:14px;}
+.slide-title span{color:var(--dark);}
+.sec-label{font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--dark);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+
+/* ── S1 PORTADA ── */
+.s1-wrap{
+  min-height:var(--slide-h);
+  background:linear-gradient(135deg,var(--dark) 0%,#1a7560 50%,#145f4d 100%);
+  border-radius:var(--r);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:52px;position:relative;overflow:hidden;
+}
+body.pres-mode .s1-wrap{border-radius:0;}
+.s1-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(44,211,166,.15) 0%,transparent 70%);}
+.s1-grid{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 48px,rgba(255,255,255,.04) 48px,rgba(255,255,255,.04) 49px),repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,.04) 48px,rgba(255,255,255,.04) 49px);}
+.s1-logo-wrap{width:96px;height:96px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;margin-bottom:22px;position:relative;z-index:1;}
+.s1-logo-wrap img{width:68px;height:68px;object-fit:contain;}
+.s1-brand{font-family:'Space Grotesk',sans-serif;font-size:58px;font-weight:800;color:#fff;letter-spacing:-2px;line-height:1;position:relative;z-index:1;margin-bottom:10px;}
+.s1-brand span{color:var(--mint);}
+.s1-tagline{font-size:16px;color:rgba(255,255,255,.75);position:relative;z-index:1;margin-bottom:28px;max-width:520px;line-height:1.5;font-style:italic;}
+.s1-badge{display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border-radius:100px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);font-size:12px;font-weight:600;color:rgba(255,255,255,.9);position:relative;z-index:1;margin-bottom:20px;}
+.s1-pulse{width:7px;height:7px;border-radius:50%;background:var(--mint);animation:pulse 2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.s1-video-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 24px;border-radius:8px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;position:relative;z-index:1;font-family:'Inter',sans-serif;}
+.s1-video-btn:hover{background:rgba(255,255,255,.25);}
+
+/* ── S2 PROBLEMA ── */
+.prob-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start;}
+.prob-cases{display:flex;flex-direction:column;gap:11px;margin-top:14px;}
+.prob-case{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--mint);border-radius:var(--r-sm);}
+.prob-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+.prob-case-title{font-size:12.5px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.prob-case-desc{font-size:11px;color:var(--muted);line-height:1.55;}
+.prob-right{display:flex;flex-direction:column;gap:11px;}
+.prob-stat{padding:16px 18px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);text-align:center;}
+.prob-stat-num{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;color:var(--dark);line-height:1;margin-bottom:4px;}
+.prob-stat-label{font-size:11px;color:var(--muted);line-height:1.4;}
+.prob-core{padding:14px 16px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.25);border-radius:var(--r);}
+.prob-core-title{font-size:9.5px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.prob-core-text{font-size:12px;color:var(--text);line-height:1.6;}
+.prob-core-text strong{color:var(--dark);}
+
+/* ── S3 SOLUCIÓN ── */
+.sol-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;}
+.sol-img-wrap{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);box-shadow:0 4px 20px rgba(34,145,117,.1);}
+.sol-img-wrap img{width:100%;display:block;}
+.sol-flow{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:12px 0 16px;}
+.flow-step{font-size:10px;font-weight:600;padding:4px 9px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.25);border-radius:100px;color:var(--dark);}
+.flow-arrow{font-size:11px;color:var(--muted);}
+.sol-benefits{display:flex;flex-direction:column;gap:10px;}
+.sol-benefit{display:flex;align-items:flex-start;gap:11px;padding:11px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);}
+.sol-icon{width:30px;height:30px;flex-shrink:0;border-radius:7px;background:var(--mint-lt);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.sol-benefit-title{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.sol-benefit-desc{font-size:10.5px;color:var(--muted);line-height:1.45;}
+
+/* ── S4 MODELO ── */
+.biz-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;}
+.biz-eco{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;align-items:center;}
+.biz-pricing{display:flex;flex-direction:column;gap:11px;}
+.price-card{padding:13px 16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r);}
+.price-card.highlight{border-color:var(--mint-dk);background:var(--mint-lt);}
+.price-type{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.price-val{font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:800;color:var(--text);line-height:1;margin-bottom:3px;}
+.price-val span{font-size:12px;font-weight:500;color:var(--muted);}
+.price-desc{font-size:10.5px;color:var(--muted);line-height:1.4;}
+.moat-box{padding:13px 15px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.3);border-radius:var(--r);}
+.moat-title{font-size:10px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.moat-text{font-size:11.5px;color:var(--text);line-height:1.55;}
+.moat-text strong{color:var(--dark);}
+
+/* ── S5 EQUIPO ── */
+.team-grid{display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:start;}
+.founder-photo{width:128px;height:128px;border-radius:50%;border:3px solid var(--mint);overflow:hidden;box-shadow:0 4px 20px rgba(44,211,166,.2);}
+.founder-photo img{width:100%;height:100%;object-fit:cover;}
+.founder-name-big{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--text);text-align:center;margin-top:10px;}
+.founder-role-big{font-size:11px;color:var(--dark);text-align:center;font-weight:600;}
+.founder-quote-big{font-size:13px;line-height:1.7;color:var(--text);padding:15px 18px;background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--mint);border-radius:var(--r);margin-bottom:14px;font-style:italic;}
+.founder-quote-big strong{color:var(--dark);font-style:normal;}
+.validacion-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.val-chip{display:flex;align-items:center;gap:6px;padding:5px 11px;background:var(--bg);border:1px solid var(--border);border-radius:100px;font-size:10.5px;color:var(--text);}
+.val-chip-dot{width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;}
+.search-boxes{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.search-box{padding:12px 14px;background:var(--bg);border:1px solid var(--border);border-top:2px solid var(--mint);border-radius:var(--r-sm);}
+.search-box-title{font-size:10.5px;font-weight:700;color:var(--dark);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;}
+.search-box-desc{font-size:10.5px;color:var(--muted);line-height:1.5;}
+
+/* ── S6 FINANCIERO ── */
+.fin-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.fin-kpi{padding:11px 13px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);text-align:center;}
+.fin-kpi-val{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:800;color:var(--dark);line-height:1;margin-bottom:3px;}
+.fin-kpi-val.neg{color:var(--red);}
+.fin-kpi-label{font-size:9.5px;color:var(--muted);}
+.fin-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start;}
+.fin-table{width:100%;border-collapse:collapse;font-size:11px;}
+.fin-table th{text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);font-size:9.5px;font-weight:700;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;}
+.fin-table th:not(:first-child){text-align:right;}
+.fin-table td{padding:5px 8px;border-bottom:1px solid rgba(216,237,232,.5);}
+.fin-table td:not(:first-child){text-align:right;font-variant-numeric:tabular-nums;}
+.fin-table tr.sec td{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--dark);padding-top:8px;background:var(--mint-lt);}
+.fin-table tr.sub td{font-weight:700;border-top:1px solid var(--border);}
+.fin-table tr.ebitda td{font-weight:800;font-size:11.5px;background:var(--mint-lt);}
+.vpos{color:var(--dark);}
+.vneg{color:var(--red);}
+.vdash{color:var(--muted);}
+.fin-right{display:flex;flex-direction:column;gap:11px;}
+.hip-box{padding:12px 14px;background:var(--mint-lt);border:1px solid rgba(44,211,166,.25);border-radius:var(--r);}
+.hip-title{font-size:9.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--dark);margin-bottom:7px;}
+.hip-item{display:flex;align-items:flex-start;gap:7px;font-size:11px;color:var(--text);line-height:1.5;margin-bottom:4px;}
+.hip-dot{width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;margin-top:5px;}
+.tramos-mini{display:flex;flex-direction:column;gap:7px;}
+.tramo-row{display:flex;align-items:center;gap:9px;padding:7px 11px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);}
+.tramo-badge{width:26px;height:26px;border-radius:50%;background:var(--dark);border:1.5px solid var(--mint);display:flex;align-items:center;justify-content:center;font-size:8.5px;font-weight:700;color:#fff;flex-shrink:0;font-family:'Space Grotesk',sans-serif;}
+.tramo-amount{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:var(--text);min-width:54px;}
+.tramo-desc{font-size:10.5px;color:var(--muted);line-height:1.3;}
+
+/* ── S7 CIERRE ── */
+.s7-wrap{
+  min-height:var(--slide-h);
+  background:linear-gradient(135deg,var(--dark) 0%,#1a7560 50%,#145f4d 100%);
+  border-radius:var(--r);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:52px;position:relative;overflow:hidden;
+}
+body.pres-mode .s7-wrap{border-radius:0;}
+.s7-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 45%,rgba(44,211,166,.12) 0%,transparent 70%);}
+.s7-tagline{font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:800;line-height:1.25;color:#fff;max-width:700px;position:relative;z-index:1;margin-bottom:14px;}
+.s7-tagline span{color:var(--mint);}
+.s7-sub{font-size:15px;color:rgba(255,255,255,.75);max-width:580px;line-height:1.7;position:relative;z-index:1;margin-bottom:30px;}
+.s7-sub strong{color:#fff;}
+.s7-ask{padding:14px 36px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:var(--r);position:relative;z-index:1;margin-bottom:22px;}
+.s7-ask-val{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:800;color:#fff;line-height:1;}
+.s7-ask-val span{color:var(--mint);}
+.s7-ask-label{font-size:11px;color:rgba(255,255,255,.6);margin-top:4px;}
+.s7-chips{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;}
+.s7-chip{display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid rgba(255,255,255,.2);border-radius:100px;background:rgba(255,255,255,.08);font-size:11px;color:rgba(255,255,255,.85);font-weight:500;}
+.s7-chip-dot{width:5px;height:5px;border-radius:50%;background:var(--mint);}
+
+/* ── BOTÓN DEMO HOVER (slide 3) ── */
+.demo-hover-btn{
+  position:absolute;
+  bottom:18px;left:18px;
+  z-index:5;
+  font-family:'Inter',sans-serif;
+  font-size:10.5px;font-weight:700;
+  padding:7px 14px;border-radius:7px;
+  border:1.5px solid var(--mint);
+  background:var(--mint-lt);
+  color:var(--dark);
+  cursor:pointer;
+  opacity:0;
+  transition:opacity .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.slide:hover .demo-hover-btn{opacity:1;}
+body.pres-mode .slide:hover .demo-hover-btn{opacity:1;}
+
+/* ── VÍDEO OVERLAY (slide 1) ── */
+.video-overlay{
+  position:absolute;inset:0;
+  background:#000;
+  border-radius:var(--r);
+  z-index:10;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+.video-overlay.active{display:flex;}
+body.pres-mode .video-overlay{border-radius:0;}
+.video-overlay video{
+  width:100%;height:100%;
+  object-fit:contain;
+  display:block;
+  border-radius:inherit;
+}
+.video-skip-btn{
+  position:absolute;bottom:20px;right:24px;
+  z-index:11;
+  font-family:'Inter',sans-serif;
+  font-size:11px;font-weight:600;
+  padding:6px 14px;border-radius:6px;
+  border:1px solid rgba(255,255,255,.25);
+  background:rgba(0,0,0,.5);
+  color:rgba(255,255,255,.7);
+  cursor:pointer;transition:all .2s;
+}
+.video-skip-btn:hover{background:rgba(0,0,0,.8);color:#fff;}
+
+/* ── HINT ESC en modo proyector ── */
+.pres-hint{
+  position:fixed;bottom:16px;right:20px;
+  z-index:3000;
+  font-size:10px;color:rgba(255,255,255,.35);
+  font-family:'Inter',sans-serif;
+  pointer-events:none;
+  opacity:0;transition:opacity .3s;
+}
+body.pres-mode .pres-hint{opacity:1;}
+
+@media print{
+  body{overflow:auto;height:auto;}
+  .controls-bar,.speaker-notes,.pres-hint{display:none!important;}
+  .slides-viewport{position:static;overflow:visible;display:block;}
+  .slide-wrap{display:flex!important;opacity:1!important;transform:none!important;position:static;padding:0 0 20px;}
+  .slide{page-break-after:always;}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ CONTROLES ════ -->
+<div class="controls-bar">
+  <div class="ctrl-logo">Kit<span>2</span>Help · Pitch Pre-Seed</div>
+  <button class="nav-btn" id="btn-prev" onclick="goSlide(-1)" disabled title="Anterior (←)">‹</button>
+  <div class="slide-counter" id="slide-counter">1 / 7</div>
+  <button class="nav-btn" id="btn-next" onclick="goSlide(1)" title="Siguiente (→)">›</button>
+  <button class="ctrl-btn" id="btn-notes" onclick="toggleNotes(this)">📋 Ocultar guion</button>
+  <button class="ctrl-btn primary" onclick="togglePresMode(this)" title="Modo proyector (F)">🖥 Modo proyector</button>
+  <input type="file" id="video-file-input" accept="video/*" onchange="openVideo(this)" style="display:none;">
+</div>
+
+<div class="pres-hint">Pasa el cursor arriba para controles · ESC para salir · ← → para navegar</div>
+
+<!-- ════ VIEWPORT ════ -->
+<div class="slides-viewport" id="viewport">
+
+<!-- ══ SLIDE 1 · PORTADA ══ -->
+<div class="slide-wrap active" id="slide-1">
+  <div class="slide" style="background:none;border:none;box-shadow:none;">
+    <div class="s1-wrap">
+      <div class="s1-grid"></div>
+      <!-- OVERLAY VÍDEO — dentro de s1-wrap para cubrir exactamente el área verde -->
+      <div class="video-overlay" id="video-overlay">
+        <video id="slide-video" controls playsinline></video>
+        <button class="video-skip-btn" onclick="closeVideo()">Cerrar vídeo ✕</button>
+      </div>
+      <div class="slide-num" style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);">01 / 07</div>
+      <div class="s1-logo-wrap"><img src="logo.png" alt="Kit2Help"></div>
+      <div class="s1-brand">Kit<span>2</span>Help</div>
+      <div class="s1-tagline">"El mapa que conecta a todos en una emergencia."</div>
+      <div class="s1-badge"><div class="s1-pulse"></div>Pre-Seed · 115.000€ · 4 tramos por hito</div>
+      <label for="video-file-input" class="s1-video-btn" style="cursor:pointer;">▶ Seleccionar vídeo de apertura</label>
+    </div>
+  </div>
+  <div class="speaker-notes">
+    <div class="notes-header">
+      <span class="notes-label">🎙 Slide 1 · Portada</span>
+      <span class="notes-timing">⏱ 0:55 seg (vídeo) + silencio</span>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Cómo usar el vídeo</div>
+      <div class="notes-text">Pulsa <strong>"▶ Seleccionar vídeo de apertura"</strong> y elige el MP4 desde tu ordenador. El vídeo se reproduce directamente sobre la slide 1, a pantalla completa, con autoplay. Cuando termina (o pulsas "Cerrar vídeo"), vuelve la portada y puedes avanzar con →.</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Después del vídeo — silencio real</div>
+      <div class="notes-text">Espera <strong>1-2 segundos de silencio</strong> antes de hablar. Ese silencio pesa más que cualquier frase de transición. No lo rellenes. Luego avanza a la slide 2 y empieza directamente con tu nombre — sin "buenos días", sin preámbulo.</div>
+    </div>
+    <div class="notes-tip">💡 Si el vídeo falla técnicamente: di "Lo tenéis en el dosier" y arranca directamente. Sin disculpas, sin pausa.</div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 2 · PROBLEMA ══ -->
+<div class="slide-wrap" id="slide-2">
+  <div class="slide">
+    <div class="slide-inner">
+      <div class="slide-num">02 / 07</div>
+      <div class="eyebrow">El problema</div>
+      <div class="prob-grid" style="grid-template-columns:1.6fr 1fr;gap:24px;">
+        <div>
+          <div class="slide-title">Cambia la catástrofe.<br>El fallo es <span>siempre el mismo.</span></div>
+          <!-- PICTOGRAMAS -->
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px;">
+
+            <!-- Pictograma 1 -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);">
+              <svg width="96" height="96" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="52" y="28" width="56" height="96" rx="8" fill="#E6F9F4" stroke="#229175" stroke-width="2.5"/>
+                <rect x="62" y="36" width="36" height="56" rx="4" fill="#fff" stroke="#D8EDE8" stroke-width="1.5"/>
+                <circle cx="80" cy="112" r="5" fill="#229175" opacity=".4"/>
+                <rect x="8" y="18" width="48" height="28" rx="6" fill="#25D366" opacity=".15" stroke="#25D366" stroke-width="1.5"/>
+                <text x="32" y="30" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="#1a9e4e">WhatsApp</text>
+                <text x="32" y="41" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#1a9e4e">12.847 msgs</text>
+                <path d="M54 32 L65 42" stroke="#25D366" stroke-width="1.5" stroke-dasharray="3,2" opacity=".7"/>
+                <rect x="104" y="14" width="48" height="28" rx="6" fill="#229ED9" opacity=".15" stroke="#229ED9" stroke-width="1.5"/>
+                <text x="128" y="26" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="#1476a3">Telegram</text>
+                <text x="128" y="37" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#1476a3">3 grupos</text>
+                <path d="M106 28 L95 40" stroke="#229ED9" stroke-width="1.5" stroke-dasharray="3,2" opacity=".7"/>
+                <rect x="4" y="80" width="44" height="28" rx="6" fill="#D94F4F" opacity=".12" stroke="#D94F4F" stroke-width="1.5"/>
+                <text x="26" y="92" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="#a83232">Llamadas</text>
+                <text x="26" y="103" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#a83232">sin registro</text>
+                <path d="M47 90 L62 82" stroke="#D94F4F" stroke-width="1.5" stroke-dasharray="3,2" opacity=".7"/>
+                <rect x="108" y="76" width="44" height="28" rx="6" fill="#5E7A72" opacity=".12" stroke="#5E7A72" stroke-width="1.5"/>
+                <text x="130" y="88" text-anchor="middle" font-family="Inter,sans-serif" font-size="9" font-weight="700" fill="#3d5248">Email</text>
+                <text x="130" y="99" text-anchor="middle" font-family="Inter,sans-serif" font-size="8" fill="#3d5248">disperso</text>
+                <path d="M109 86 L97 80" stroke="#5E7A72" stroke-width="1.5" stroke-dasharray="3,2" opacity=".7"/>
+                <line x1="68" y1="50" x2="92" y2="74" stroke="#D94F4F" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="92" y1="50" x2="68" y2="74" stroke="#D94F4F" stroke-width="2.5" stroke-linecap="round"/>
+              </svg>
+              <div style="font-size:10.5px;font-weight:700;color:var(--text);text-align:center;line-height:1.4;">Herramientas no diseñadas para emergencias</div>
+            </div>
+
+            <!-- Pictograma 2 -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);">
+              <svg width="96" height="96" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="4" y1="148" x2="156" y2="148" stroke="#D8EDE8" stroke-width="2" stroke-linecap="round"/>
+                <g transform="rotate(-85 30 128)">
+                  <rect x="8" y="110" width="44" height="34" rx="4" fill="#E6F9F4" stroke="#229175" stroke-width="2"/>
+                  <line x1="8" y1="124" x2="52" y2="124" stroke="#229175" stroke-width="1.5"/>
+                  <line x1="30" y1="110" x2="30" y2="124" stroke="#229175" stroke-width="1.5"/>
+                </g>
+                <rect x="58" y="96" width="44" height="36" rx="4" fill="#E6F9F4" stroke="#229175" stroke-width="2"/>
+                <line x1="58" y1="110" x2="102" y2="110" stroke="#229175" stroke-width="1.5"/>
+                <line x1="80" y1="96" x2="80" y2="110" stroke="#229175" stroke-width="1.5"/>
+                <path d="M58 96 L50 82" stroke="#229175" stroke-width="2" stroke-linecap="round"/>
+                <path d="M102 96 L110 82" stroke="#229175" stroke-width="2" stroke-linecap="round"/>
+                <line x1="50" y1="82" x2="110" y2="82" stroke="#229175" stroke-width="2" stroke-linecap="round"/>
+                <g transform="rotate(75 134 134)">
+                  <rect x="116" y="120" width="30" height="24" rx="3" fill="#fff" stroke="#1faa84" stroke-width="2"/>
+                  <line x1="116" y1="130" x2="146" y2="130" stroke="#1faa84" stroke-width="1.5"/>
+                </g>
+                <ellipse cx="24" cy="144" rx="12" ry="6" fill="#D8EDE8" stroke="#5E7A72" stroke-width="1.5"/>
+                <rect x="12" y="128" width="24" height="16" fill="#D8EDE8" stroke="#5E7A72" stroke-width="1.5"/>
+                <ellipse cx="24" cy="128" rx="12" ry="6" fill="#E6F9F4" stroke="#5E7A72" stroke-width="1.5"/>
+                <rect x="44" y="124" width="14" height="26" rx="4" fill="#E6F9F4" stroke="#229175" stroke-width="1.5"/>
+                <rect x="47" y="118" width="8" height="8" rx="2" fill="#229175" opacity=".4"/>
+                <ellipse cx="116" cy="142" rx="16" ry="8" fill="#f5e9d0" stroke="#b8953a" stroke-width="1.5"/>
+                <path d="M100 142 Q108 132 116 134 Q124 132 132 142" stroke="#b8953a" stroke-width="1.5" fill="none"/>
+                <path d="M136 148 Q140 134 148 136 Q152 130 154 140 Q156 148 136 148Z" fill="#D8EDE8" stroke="#5E7A72" stroke-width="1.5"/>
+                <circle cx="96" cy="144" r="6" fill="#D94F4F" opacity=".6" stroke="#a83232" stroke-width="1.5"/>
+                <path d="M96 138 Q98 134 100 136" stroke="#a83232" stroke-width="1" stroke-linecap="round" fill="none"/>
+                <text x="138" y="52" font-family="Space Grotesk,sans-serif" font-size="28" font-weight="800" fill="#D94F4F" opacity=".55">?</text>
+              </svg>
+              <div style="font-size:10.5px;font-weight:700;color:var(--text);text-align:center;line-height:1.4;">Ayuda que llega donde no se necesita</div>
+            </div>
+
+            <!-- Pictograma 3 -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 10px;background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);">
+              <svg width="96" height="96" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M80 155 L80 118" stroke="#D8EDE8" stroke-width="10" stroke-linecap="round"/>
+                <path d="M80 118 Q60 100 24 72" stroke="#D8EDE8" stroke-width="7" stroke-linecap="round" fill="none"/>
+                <path d="M80 118 Q72 98 52 82" stroke="#D8EDE8" stroke-width="6" stroke-linecap="round" fill="none"/>
+                <path d="M80 118 L80 74" stroke="#D8EDE8" stroke-width="6" stroke-linecap="round"/>
+                <path d="M80 118 Q90 96 112 80" stroke="#D8EDE8" stroke-width="6" stroke-linecap="round" fill="none"/>
+                <path d="M80 118 Q102 98 138 68" stroke="#D8EDE8" stroke-width="7" stroke-linecap="round" fill="none"/>
+                <circle cx="22" cy="64" r="9" fill="#E6F9F4" stroke="#229175" stroke-width="2.2"/>
+                <path d="M13 86 Q22 74 31 86" stroke="#229175" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <path d="M14 56 L6 44" stroke="#229175" stroke-width="1.5" stroke-dasharray="2,2" opacity=".6" stroke-linecap="round"/>
+                <circle cx="50" cy="74" r="8" fill="#E6F9F4" stroke="#229175" stroke-width="2"/>
+                <path d="M42 94 Q50 84 58 94" stroke="#229175" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <path d="M46 66 L38 56" stroke="#229175" stroke-width="1.5" stroke-dasharray="2,2" opacity=".6" stroke-linecap="round"/>
+                <circle cx="140" cy="60" r="8" fill="#f0f6f4" stroke="#5E7A72" stroke-width="2"/>
+                <path d="M132 80 Q140 70 148 80" stroke="#5E7A72" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <path d="M146 52 L152 42" stroke="#5E7A72" stroke-width="1.5" stroke-dasharray="2,2" opacity=".6" stroke-linecap="round"/>
+                <circle cx="114" cy="72" r="8" fill="#f0f6f4" stroke="#5E7A72" stroke-width="2"/>
+                <path d="M106 92 Q114 82 122 92" stroke="#5E7A72" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <path d="M120 64 L128 54" stroke="#5E7A72" stroke-width="1.5" stroke-dasharray="2,2" opacity=".6" stroke-linecap="round"/>
+                <circle cx="80" cy="66" r="8" fill="#f0f6f4" stroke="#5E7A72" stroke-width="2"/>
+                <path d="M72 86 Q80 76 88 86" stroke="#5E7A72" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <path d="M80 58 L80 46" stroke="#5E7A72" stroke-width="1.5" stroke-dasharray="2,2" opacity=".6" stroke-linecap="round"/>
+                <circle cx="80" cy="30" r="14" fill="#fff" stroke="#D94F4F" stroke-width="2" stroke-dasharray="4,3" opacity=".7"/>
+                <line x1="74" y1="24" x2="86" y2="36" stroke="#D94F4F" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+                <line x1="86" y1="24" x2="74" y2="36" stroke="#D94F4F" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+              </svg>
+              <div style="font-size:10.5px;font-weight:700;color:var(--text);text-align:center;line-height:1.4;">Voluntarios y ciudadanía sin coordinación</div>
+            </div>
+
+          </div>
+        </div>
+        <div class="prob-right">
+          <div class="prob-stat">
+            <div class="prob-stat-num">8.000+</div>
+            <div class="prob-stat-label">municipios en España<br>sin plataforma operativa compartida</div>
+          </div>
+          <div class="prob-core">
+            <div class="prob-core-title">El fallo común</div>
+            <div class="prob-core-text">Los datos están <strong>dispersos</strong>. Cada actor trabaja con su propia información. Sin un punto central, la coordinación pierde coherencia — y la ayuda llega tarde, mal distribuida o duplicada.</div>
+          </div>
+          <div class="prob-core" style="background:#fff5f0;border-color:rgba(217,79,79,.2);">
+            <div class="prob-core-title" style="color:var(--red);">Kit2Help no sustituye protocolos</div>
+            <div class="prob-core-text">No reemplaza nada que ya funcione. Es el <strong>punto central que conecta</strong> a todos los organismos entre sí — y con la población.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-notes">
+    <div class="notes-header">
+      <span class="notes-label">🎙 Slide 2 · Problema</span>
+      <span class="notes-timing">⏱ ~1:00 min</span>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Apertura — nombre, coste real, patrón</div>
+      <div class="notes-text">"Soy <strong>Sandra González Fortea</strong>, fundadora de Kit2Help.<br><br>
+      Las catástrofes naturales costaron a España <strong>4.450 millones de euros solo en 2023</strong> — un 53% más que el año anterior. Y eso antes de la DANA de Valencia de octubre de 2024, con <strong>238 fallecidos</strong> y más de 31.000 millones solicitados en el primer paquete de ayudas. El volcán de La Palma en 2021: 85 días de erupción, más de 7.000 evacuados, 605 millones en ayudas. El accidente de tren de Adamuz en enero de 2026: 46 víctimas mortales. Emergencias distintas, causas distintas, geografías distintas."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">El fallo común — frase ancla</div>
+      <div class="notes-text">"Y en todas ellas, el mismo fallo: <strong>la información está dispersa.</strong> Cada actor trabaja con lo suyo — WhatsApp, Telegram, llamadas, hojas de papel. Las donaciones se acumulan donde no hacen falta. Los voluntarios actúan por iniciativa propia porque nadie tiene visión de conjunto. <strong>La voluntad nunca faltó. La coordinación, sí.</strong>"</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Aclaración institucional — imprescindible</div>
+      <div class="notes-text">"Y lo dejo claro desde el principio: Kit2Help <strong>no sustituye</strong> los protocolos de Protección Civil ni de ningún organismo. No venimos a reemplazar nada que funcione. Somos el <strong>punto central que los conecta</strong> — a todos los organismos entre sí, y con la ciudadanía, que en toda emergencia real es el primer recurso disponible."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Tu perspectiva — argumento de patrón, no de experiencia personal</div>
+      <div class="notes-text">"No viví ninguna de estas emergencias en primera persona. Y eso me permite algo importante: no estoy resolviendo un episodio concreto. Estoy resolviendo el patrón que se repite en todas ellas — y lo analizo con la cabeza fría de una ingeniera."</div>
+    </div>
+    <div class="notes-alert">⚠️ <strong>Datos verificados para defender en Q&A:</strong><br>
+    • 4.450M€ coste catástrofes 2023 (Fundación Aon, Barómetro de Catástrofes 2023)<br>
+    • First responders (Protección Civil, UME, Cruz Roja, Tragsa): 124-166M€/año solo en operaciones directas<br>
+    • DANA Valencia oct. 2024: 238 fallecidos oficiales · 31.400M€ primer paquete de ayudas · 100M€ anticipo UE (máximo FSUE)<br>
+    • Volcán La Palma sept.-dic. 2021: 85 días · 7.000+ evacuados · 605M€ en ayudas · 1.420 voluntarios registrados<br>
+    • Accidente tren Adamuz ene. 2026: 46 víctimas · víctimas denuncian "falta de coordinación" en la respuesta<br>
+    • NO uses el dato "267% aumento per cápita 2022-2023" — no está suficientemente documentado para defender en sala</div>
+    <div class="notes-tip">💡 "La información está dispersa" es tu frase ancla de este bloque. Dila despacio. Es el diagnóstico que justifica todo lo que viene después. No aceleres los datos de coste — son los números que un BA va a retener.</div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 3 · SOLUCIÓN ══ -->
+<div class="slide-wrap" id="slide-3">
+  <div class="slide" style="position:relative;">
+    <!-- OVERLAY DEMO MP4 — se activa desde el guion de orador -->
+    <div class="video-overlay" id="demo-overlay" style="border-radius:var(--r);">
+      <video id="demo-video" controls playsinline></video>
+      <button class="video-skip-btn" onclick="closeDemo()">Cerrar demo ✕</button>
+    </div>
+    <!-- BOTÓN DEMO — visible en hover sobre la slide -->
+    <button class="demo-hover-btn" onclick="document.getElementById('demo-file-input').click()">
+      ▶ Lanzar demo
+    </button>
+    <div class="slide-inner">
+      <div class="slide-num">03 / 07</div>
+      <div class="eyebrow">La solución · Demo en vivo</div>
+      <div class="sol-grid">
+        <div>
+          <div class="slide-title" style="font-size:30px;margin-bottom:10px;">El mapa que conecta<br>a <span>todos</span> en una emergencia</div>
+          <div class="sol-flow">
+            <div class="flow-step">Registro necesidad</div><div class="flow-arrow">→</div>
+            <div class="flow-step">Validación automática</div><div class="flow-arrow">→</div>
+            <div class="flow-step">Triaje coordinador</div><div class="flow-arrow">→</div>
+            <div class="flow-step">Mapa compartido</div><div class="flow-arrow">→</div>
+            <div class="flow-step">Asignación</div>
+          </div>
+          <div class="sol-img-wrap">
+            <img src="mapaglobal.png" alt="Mapa Operativo Kit2Help">
+          </div>
+        </div>
+        <div class="sol-benefits">
+          <div class="sol-benefit">
+            <div class="sol-icon">🗺</div>
+            <div>
+              <div class="sol-benefit-title">Visión unificada en tiempo real</div>
+              <div class="sol-benefit-desc">Todos los actores ven lo mismo: necesidades, recursos y zonas críticas en un único mapa compartido.</div>
+            </div>
+          </div>
+          <div class="sol-benefit">
+            <div class="sol-icon">⚡</div>
+            <div>
+              <div class="sol-benefit-title">Eliminación automática de duplicados</div>
+              <div class="sol-benefit-desc">El sistema agrupa reportes similares. El coordinador valida siempre — la tecnología asiste, la persona decide.</div>
+            </div>
+          </div>
+          <div class="sol-benefit">
+            <div class="sol-icon">📦</div>
+            <div>
+              <div class="sol-benefit-title">Kits con trazabilidad QR</div>
+              <div class="sol-benefit-desc">Qué se entregó, dónde, a quién. Transparencia total para AAPP y donantes.</div>
+            </div>
+          </div>
+          <div class="sol-benefit">
+            <div class="sol-icon">🔍</div>
+            <div>
+              <div class="sol-benefit-title">Seguimiento para cualquier persona</div>
+              <div class="sol-benefit-desc">Cualquier ciudadano puede consultar el estado de la emergencia, sus necesidades activas y la evolución de la respuesta — en tiempo real.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- input file oculto para la demo -->
+  <input type="file" id="demo-file-input" accept="video/*" onchange="openDemo(this)" style="display:none;">
+  <div class="speaker-notes">
+    <div class="notes-header">
+      <span class="notes-label">🎙 Slide 3 · Solución + Demo</span>
+      <span class="notes-timing">⏱ ~2:15 min</span>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">▶ Lanzar demo grabada</div>
+      <div class="notes-text">Pulsa el botón para cargar y reproducir el MP4 de la demo sobre esta slide.<br>
+      <button onclick="document.getElementById('demo-file-input').click()" style="margin-top:8px;font-family:Inter,sans-serif;font-size:11px;font-weight:700;padding:7px 16px;border-radius:6px;border:1.5px solid var(--mint);background:var(--mint-lt);color:var(--dark);cursor:pointer;">▶ Seleccionar demo MP4</button></div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Transición antes de lanzar la demo</div>
+      <div class="notes-text">"Kit2Help es el mapa que conecta a todos en una emergencia. Lo vais a ver llenarse en tiempo real — cada pin es una necesidad o una oferta validada."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Mientras corren los primeros pins</div>
+      <div class="notes-text">"Alguien registra una necesidad, el sistema valida y elimina duplicados automáticamente, y queda visible para todo el ecosistema en segundos. <strong>El sistema agrupa — el coordinador siempre decide.</strong>"</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">En la pausa de 1 segundo (bloque kits)</div>
+      <div class="notes-text">"Y aquí —" <em>(deja respirar el silencio)</em> "— la trazabilidad de kits: qué se ha entregado, dónde, y a quién."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Cierre de la demo</div>
+      <div class="notes-text">"Esto es lo que faltó en las catástrofes que acabáis de ver. No elimina el caos de una emergencia — lo hace gestionable."</div>
+    </div>
+    <div class="notes-alert">⚠️ <strong>Si preguntan por competidores:</strong> No nombres a ninguno proactivamente. Si insisten, usa esta frase:<br><br>
+    "Las soluciones que aparecen en cada emergencia son ad hoc — surgen para ese evento concreto y desaparecen cuando acaba. AjudaDana es el ejemplo más reciente: activa durante la DANA, inactiva hoy. Las plataformas de código abierto como Sahana Eden tienen curvas de implementación de meses y están orientadas a organizaciones, no a ciudadanos ni a ayuntamientos. Kit2Help es la primera solución diseñada para municipios españoles, con ciclo de adopción de semanas y sin licitación. <strong>No competimos con lo que hay — cubrimos lo que falta.</strong>"</div>
+    <div class="notes-tip">💡 La demo corre como MP4 grabado — sin dependencias de red ni WiFi. Cuando termina el vídeo el overlay se cierra solo. Si necesitas cerrarla antes: botón "Cerrar demo ✕" en esquina inferior derecha. Pasa el cursor sobre la slide para que aparezca el botón de lanzamiento.</div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 4 · MODELO ══ -->
+<div class="slide-wrap" id="slide-4">
+  <div class="slide">
+    <div class="slide-inner">
+      <div class="slide-num">04 / 07</div>
+      <div class="eyebrow">Modelo de negocio</div>
+      <div class="slide-title" style="font-size:28px;margin-bottom:16px;">B2G SaaS recurrente · <span>Moat regulatorio</span></div>
+      <div class="biz-grid">
+        <div class="biz-eco">
+          <div class="sec-label">Ecosistema Kit2Help</div>
+          <div style="font-size:10.5px;color:var(--muted);margin-bottom:10px;text-align:center;">Unimos necesidades reales con ayuda útil, en el momento y lugar adecuados.</div>
+          <svg width="88%" viewBox="0 0 340 260" xmlns="http://www.w3.org/2000/svg">
+            <line x1="170" y1="95" x2="170" y2="62" stroke="#b0c8c0" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="198" y1="103" x2="268" y2="68" stroke="#b0c8c0" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="210" y1="130" x2="288" y2="130" stroke="#b0c8c0" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="198" y1="157" x2="268" y2="192" stroke="#b0c8c0" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="170" y1="165" x2="170" y2="198" stroke="#b0c8c0" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="142" y1="157" x2="72" y2="192" stroke="#b0c8c0" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="130" y1="130" x2="52" y2="130" stroke="#b0c8c0" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <line x1="142" y1="103" x2="72" y2="68" stroke="#b0c8c0" stroke-width="1.2" stroke-dasharray="3,2"/>
+            <circle cx="170" cy="130" r="44" fill="#229175" stroke="#2CD3A6" stroke-width="2.5"/>
+            <image href="logo.png" x="136" y="96" width="68" height="68" clip-path="circle(34px at 34px 34px)"/>
+            <circle cx="170" cy="44" r="26" fill="#E6F9F4" stroke="#1faa84" stroke-width="1.5"/>
+            <text x="170" y="40" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#1faa84">👥</text>
+            <text x="170" y="53" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">Ciudadanos</text>
+            <circle cx="56" cy="54" r="26" fill="#E6F9F4" stroke="#1faa84" stroke-width="1.5"/>
+            <text x="56" y="50" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#1faa84">🏛️</text>
+            <text x="56" y="63" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">AAPP</text>
+            <circle cx="32" cy="130" r="26" fill="#FFF5F0" stroke="#1faa84" stroke-width="1.5"/>
+            <text x="32" y="126" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#d97050">🤝</text>
+            <text x="32" y="139" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">ONGs</text>
+            <circle cx="56" cy="206" r="26" fill="#FFF0F0" stroke="#1faa84" stroke-width="1.5"/>
+            <text x="56" y="202" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#D94F4F">🚒</text>
+            <text x="56" y="215" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">Servicios</text>
+            <circle cx="170" cy="216" r="26" fill="#FFF5F0" stroke="#1faa84" stroke-width="1.5"/>
+            <text x="170" y="212" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#d97050">📦</text>
+            <text x="170" y="225" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">Puntos</text>
+            <circle cx="284" cy="206" r="26" fill="#F0F4FF" stroke="#1faa84" stroke-width="1.5"/>
+            <text x="284" y="202" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#7B6FD8">📡</text>
+            <text x="284" y="215" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">Medios</text>
+            <circle cx="308" cy="130" r="26" fill="#F0F7FF" stroke="#1faa84" stroke-width="1.5"/>
+            <text x="308" y="126" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#3a8fc7">🚛</text>
+            <text x="308" y="139" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">Logística</text>
+            <circle cx="284" cy="54" r="26" fill="#F0F7FF" stroke="#1faa84" stroke-width="1.5"/>
+            <text x="284" y="50" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#3a8fc7">🏪</text>
+            <text x="284" y="63" text-anchor="middle" font-family="Inter,sans-serif" font-size="8.5" font-weight="700" fill="#1faa84">Empresas</text>
+          </svg>
+        </div>
+        <div class="biz-pricing">
+          <div class="price-card">
+            <div class="price-type">SaaS · Municipio pequeño</div>
+            <div class="price-val">1.250€<span>/mes</span></div>
+            <div class="price-desc">&lt;20.000 hab · Contrato Menor · Sin licitación</div>
+          </div>
+          <div class="price-card highlight">
+            <div class="price-type">SaaS + Setup · Municipio mediano</div>
+            <div class="price-val">2.500€<span>/mes</span></div>
+            <div class="price-desc">20k–100k hab · Setup único 10.000€</div>
+          </div>
+          <div class="price-card">
+            <div class="price-type">Ecosistema · ONGs + Logística</div>
+            <div class="price-val">Variable</div>
+            <div class="price-desc">Partners por suscripción · Desde Año 2</div>
+          </div>
+          <div class="moat-box">
+            <div class="moat-title">⚡ Moat regulatorio clave</div>
+            <div class="moat-text">Por debajo de <strong>15.000€/año</strong> entramos por <strong>Contrato Menor</strong>, sin licitación. Cubre el <strong>80% de los 8.000 municipios</strong>. No competimos contra un proceso de 4-6 meses — <strong>lo evitamos.</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-notes">
+    <div class="notes-header">
+      <span class="notes-label">🎙 Slide 4 · Modelo de negocio</span>
+      <span class="notes-timing">⏱ ~0:45 min</span>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">El ecosistema — frase más vendible</div>
+      <div class="notes-text">"Kit2Help no compite con las entidades que ya existen en una emergencia — <strong>las potencia conectándolas.</strong> Protección Civil, ONG, voluntarios, ciudadanía: todos en el mismo mapa, en tiempo real, sin que ninguno pierda su rol ni sus protocolos."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Pricing + moat — tu frase más fuerte</div>
+      <div class="notes-text">"Modelo B2G puro y recurrente: 1.250€ al mes municipio pequeño, 2.500€ mediano. Y el dato que de verdad nos diferencia: por debajo de 15.000€ al año entramos por <strong>Contrato Menor</strong> — sin licitación. Eso cubre el 80% de los 8.000 municipios de España. <strong>No competimos contra un proceso de 4 a 6 meses. Lo evitamos.</strong>"</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Ciclo de venta por tipo de cliente — para preguntas</div>
+      <div class="notes-text">Si preguntan cómo vendes: "El ciclo varía por perfil. Municipio pequeño por Contrato Menor: <strong>4-8 semanas</strong> desde primer contacto hasta firma. ONG coordinadora: <strong>semanas</strong>, sin licitación. Partner logístico: <strong>días</strong>, entra invitado por la ONG. Municipio mediano por Procedimiento Negociado: <strong>4-6 meses</strong>. La estrategia de entrada prioriza municipios pequeños y ONGs — ciclo rápido, cash rápido — y usa esos contratos como referencia para los medianos."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Early Adopter — cómo se cierra el primer cliente</div>
+      <div class="notes-text">Si preguntan por el primer cliente: "El MVP se valida con un piloto gratuito — convenio de colaboración, sin contrato de servicios, meses 5 a 7. El ayuntamiento piloto tiene coste cero y nosotros obtenemos validación en condiciones reales. Si el piloto funciona, firma el primer contrato en meses 8-12 con un <strong>50% de descuento</strong> durante ese primer año. Desde el Año 2 pasa a tarifa completa. Es la secuencia estándar de Early Adopter en B2G: primero confianza, luego contrato."</div>
+    </div>
+    <div class="notes-tip">💡 El Contrato Menor es la frase que un BA retiene. Dila despacio, con pausa antes y después. Es tu moat regulatorio — no lo enterres entre datos de pricing.</div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 5 · EQUIPO ══ -->
+<div class="slide-wrap" id="slide-5">
+  <div class="slide">
+    <div class="slide-inner">
+      <div class="slide-num">05 / 07</div>
+      <div class="eyebrow">El equipo</div>
+      <div class="slide-title" style="font-size:30px;margin-bottom:18px;">La persona detrás de <span>Kit2Help</span></div>
+      <div class="team-grid">
+        <div style="display:flex;flex-direction:column;align-items:center;">
+          <div class="founder-photo"><img src="fotopersonal.jpg" alt="Sandra González Fortea"></div>
+          <div class="founder-name-big">Sandra González Fortea</div>
+          <div class="founder-role-big">CTO &amp; Fundadora</div>
+        </div>
+        <div>
+          <div class="founder-quote-big">"He identificado un problema que se repite en todas las emergencias: <strong>nadie dispone de una visión unificada en tiempo real.</strong> Como Ingeniera Informática, puedo construir la solución. Como CTO y fundadora, estoy comprometida a convertir Kit2Help en el nuevo flujo operativo de las emergencias."</div>
+          <div class="validacion-chips">
+            <div class="val-chip"><div class="val-chip-dot"></div>Coordinador voluntariado DANA</div>
+            <div class="val-chip"><div class="val-chip-dot"></div>Presidenta Protección Civil</div>
+            <div class="val-chip"><div class="val-chip-dot"></div>Agente Mossos d'Esquadra</div>
+            <div class="val-chip"><div class="val-chip-dot"></div>Concejal municipal</div>
+          </div>
+          <div class="search-boxes">
+            <div class="search-box">
+              <div class="search-box-title">🔍 Socio Empresarial · Búsqueda activa</div>
+              <div class="search-box-desc" style="display:flex;flex-direction:column;gap:5px;margin-top:6px;">
+                <div style="display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--mint);font-weight:700;flex-shrink:0;">→</span><span><strong>Por qué ahora:</strong> abre contratos con AAPP sin ciclos de 6 meses de licitación</span></div>
+                <div style="display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--mint);font-weight:700;flex-shrink:0;">→</span><span><strong>Perfil:</strong> red contrastada en Protección Civil · ayuntamientos · diputaciones</span></div>
+                <div style="display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--mint);font-weight:700;flex-shrink:0;">→</span><span><strong>Condición:</strong> equity únicamente — quien entra cree en el proyecto, no en la nómina</span></div>
+                <div style="display:flex;gap:6px;align-items:flex-start;"><span style="color:var(--mint);font-weight:700;flex-shrink:0;">→</span><span><strong>Impacto en modelo:</strong> elimina ~45.000€/año de coste y acelera el hito del Tramo 3</span></div>
+              </div>
+            </div>
+            <div class="search-box">
+              <div class="search-box-title">🔍 Buscamos equipo comprometido</div>
+              <div class="search-box-desc" style="display:flex;flex-direction:column;gap:6px;margin-top:6px;">
+                <div style="font-size:11.5px;color:var(--text);line-height:1.6;">Kit2Help busca personas que entiendan que lo que construimos aquí <strong>marcará la diferencia en la próxima emergencia.</strong></div>
+                <div style="font-size:11px;color:var(--muted);line-height:1.5;">No buscamos solo perfiles técnicos. Buscamos personas comprometidas con la causa — que quieran formar parte de algo que importa de verdad.</div>
+                <div style="margin-top:4px;display:flex;gap:6px;align-items:center;">
+                  <span style="width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;display:inline-block;"></span>
+                  <span style="font-size:11px;color:var(--text);">Talento técnico · producto · operaciones · alianzas</span>
+                </div>
+                <div style="display:flex;gap:6px;align-items:center;">
+                  <span style="width:5px;height:5px;border-radius:50%;background:var(--mint);flex-shrink:0;display:inline-block;"></span>
+                  <span style="font-size:11px;color:var(--text);">Mentalidad de impacto real · no un puesto convencional</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-notes">
+    <div class="notes-header">
+      <span class="notes-label">🎙 Slide 5 · Equipo</span>
+      <span class="notes-timing">⏱ ~1:30 min</span>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Movimiento 1 — quién eres y estado real del proyecto</div>
+      <div class="notes-text">"Hoy Kit2Help tiene un único miembro de equipo: yo. Soy ingeniera informática, con experiencia en proyectos para sanidad, banca y tecnología de consumo. He diseñado la arquitectura completa de Kit2Help y he validado el problema con cuatro actores clave del ecosistema de emergencias antes de construir nada."<br><br>
+      "Estamos en fase pre-MVP. La primera fase de esta ronda financia precisamente la construcción — y para construirlo bien, necesito rodearme del equipo correcto."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Las 4 validaciones — qué dijeron, no solo quiénes son</div>
+      <div class="notes-text">Menciona UNO o DOS insights, no los cuatro nombres — el tiempo no da para más. Elige los más potentes según el perfil del inversor:<br><br>
+      • <strong>Manuel DeRonde</strong> (Coordinador voluntarios DANA): <em>"Todo lo que aprendimos durante la DANA nos sirve aquí. En otro lugar, empezaríamos de nuevo."</em> → Valida que el conocimiento no es transferible sin herramienta.<br><br>
+      • <strong>Miguel Calderón</strong> (Presidente Agrupación Voluntarios, Protección Civil Utebo): <em>"Sin coordinación, la ayuda espontánea se convierte en un obstáculo para los profesionales."</em> → El diagnóstico más duro — y el más útil para un BA.<br><br>
+      • <strong>Daniel</strong> (Mossos d'Esquadra, participó en DANA, incendios León y volcán La Palma): <em>"Puedes ser un gran profesional, pero cada terreno es diferente. Si no sabes cómo acceder, no puedes actuar."</em> → Valida el problema desde el lado operativo más técnico.<br><br>
+      • <strong>Marcos Soler Giménez</strong> (Regidor Castelldefels): <em>"La comunicación a la ciudadanía se realiza a través de redes sociales, mensajería y contactos manuales según la urgencia."</em> → El ayuntamiento confirma el problema desde dentro.</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Movimiento 2 — por qué tú, con fuerza</div>
+      <div class="notes-text">"No pido que confiéis en una idea sin dueño. Construir esto requiere software sofisticado — y por eso busco equipo comprometido. Como ingeniera he trabajado en proyectos de alta exigencia técnica: sanidad, banca, tecnología de consumo. Eso me da criterio para reconocer quién encaja en un equipo pre-seed y quién no. Sé liderar y remangarme a la vez."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Movimiento 3 — Socio Empresarial</div>
+      <div class="notes-text">"El Socio Empresarial entra en equity — porque quien abre puertas con Protección Civil y ayuntamientos tiene que creer en el proyecto, no cobrar por intentarlo. No busco un comercial de nómina. Busco un cofundador con red institucional real."</div>
+    </div>
+    <div class="notes-alert">⚠️ Si preguntan "¿qué has construido antes?" — prepara una frase de 10 segundos sobre un proyecto técnico anterior concreto: sector, escala, tu rol. No improvises. Si no tienes uno que puedas mencionar libremente, di: "Mi experiencia técnica cubre proyectos de alta exigencia en entornos regulados — el detalle lo comparto en el data room si lo necesitáis."</div>
+    <div class="notes-tip">💡 No leas los cuatro nombres seguidos — suena a lista. Elige los dos más relevantes para el perfil del inversor que tienes delante y deja que la cita haga el trabajo. Las frases de los entrevistados son tu mejor argumento de validación.</div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 6 · FINANCIERO ══ -->
+<div class="slide-wrap" id="slide-6">
+  <div class="slide">
+    <div class="slide-inner" style="padding:36px 48px;">
+      <div class="slide-num">06 / 07</div>
+      <div class="eyebrow">Oportunidad y modelo financiero</div>
+      <div class="slide-title" style="font-size:26px;margin-bottom:18px;">La oportunidad es grande. <span>El modelo, eficiente.</span></div>
+
+      <!-- FILA 1: TAM + MODELO EN 3 PALABRAS -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+
+        <!-- TAM -->
+        <div style="background:var(--mint-lt);border:1px solid rgba(44,211,166,.3);border-radius:var(--r);padding:18px 20px;">
+          <div class="sec-label" style="margin-bottom:10px;">Mercado · España</div>
+          <div style="display:flex;align-items:flex-end;gap:16px;margin-bottom:10px;">
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;color:var(--dark);line-height:1;">120M€</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px;">TAM — 8.000 municipios × 15.000€/año</div>
+            </div>
+            <div style="width:1px;height:40px;background:var(--border);"></div>
+            <div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:var(--dark);line-height:1;">15M€</div>
+              <div style="font-size:10px;color:var(--muted);margin-top:2px;">SAM — 1.000 municipios priorizados</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div style="font-size:10px;padding:3px 9px;background:#fff;border:1px solid var(--border);border-radius:100px;color:var(--dark);font-weight:600;">+ ONGs · 400€/mes</div>
+            <div style="font-size:10px;padding:3px 9px;background:#fff;border:1px solid var(--border);border-radius:100px;color:var(--dark);font-weight:600;">+ Partners logísticos · 500€/mes</div>
+            <div style="font-size:10px;padding:3px 9px;background:#fff;border:1px solid var(--border);border-radius:100px;color:var(--dark);font-weight:600;">Upside: ACCIÓ +74.000€</div>
+          </div>
+        </div>
+
+        <!-- LÓGICA DEL MODELO -->
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;">
+          <div class="sec-label" style="margin-bottom:10px;">Lógica del modelo</div>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:var(--mint-lt);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🔁</div>
+              <div><div style="font-size:11.5px;font-weight:700;color:var(--text);">SaaS 100% recurrente</div><div style="font-size:10.5px;color:var(--muted);">Sin CAPEX · desarrollo a OPEX · margen creciente</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:var(--mint-lt);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">⚡</div>
+              <div><div style="font-size:11.5px;font-weight:700;color:var(--text);">Contrato Menor · sin licitación</div><div style="font-size:10.5px;color:var(--muted);">80% del mercado accesible directo · ciclo 4-8 semanas</div></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:var(--mint-lt);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">💡</div>
+              <div><div style="font-size:11.5px;font-weight:700;color:var(--text);">Comercial a coste cero</div><div style="font-size:10.5px;color:var(--muted);">Socio Empresarial en equity · ahorra ~45.000€/año</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILA 2: PROGRESIÓN ARR + TRAMOS -->
+      <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:16px;">
+
+        <!-- PROGRESIÓN ARR + BURN + CLIENTES -->
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;">
+          <div class="sec-label" style="margin-bottom:12px;">Proyección · Escenario conservador</div>
+          <!-- Tabla limpia 3 años -->
+          <table style="width:100%;border-collapse:collapse;font-size:11px;">
+            <thead>
+              <tr>
+                <th style="text-align:left;padding:5px 8px;border-bottom:1px solid var(--border);font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;">Métrica</th>
+                <th style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border);font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;">Año 1</th>
+                <th style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border);font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;">Año 2</th>
+                <th style="text-align:right;padding:5px 8px;border-bottom:1px solid var(--border);font-size:9.5px;font-weight:700;color:var(--muted);text-transform:uppercase;">Año 3</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);font-size:11px;color:var(--text);">Clientes activos</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">1</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">7</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">15</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);font-size:11px;color:var(--text);">ARR recurrente</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">3.125€</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">70.500€</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">189.800€</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);font-size:11px;color:var(--text);">Ingresos totales</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">3.125€</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">80.500€</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">209.800€</td>
+              </tr>
+              <tr>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);font-size:11px;color:var(--text);">Burn rate mensual</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--red);">−3.226€</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--red);">−4.224€</td>
+                <td style="padding:6px 8px;border-bottom:1px solid rgba(216,237,232,.5);text-align:right;font-weight:600;color:var(--dark);">+73€</td>
+              </tr>
+              <tr style="background:var(--mint-lt);">
+                <td style="padding:7px 8px;font-size:11.5px;font-weight:800;color:var(--text);">EBITDA</td>
+                <td style="padding:7px 8px;text-align:right;font-weight:800;color:var(--red);">−38.715€</td>
+                <td style="padding:7px 8px;text-align:right;font-weight:800;color:var(--red);">−50.690€</td>
+                <td style="padding:7px 8px;text-align:right;font-weight:800;color:var(--dark);">+870€ ✓</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="font-size:9.5px;color:var(--muted);margin-top:7px;line-height:1.5;">Modelo conservador · sin ACCIÓ · sin partners upside · sin dependencia de catástrofes. P&L completo disponible en data room.</div>
+        </div>
+
+        <!-- TRAMOS -->
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:10px;">
+          <div class="sec-label" style="margin-bottom:4px;">115.000€ · 4 tramos por hito</div>
+          <div class="tramo-row" style="border-left:3px solid var(--mint);">
+            <div class="tramo-badge">T1</div>
+            <div class="tramo-amount">25.000€</div>
+            <div>
+              <div style="font-size:10.5px;font-weight:700;color:var(--text);">Constitución SL + arranque MVP</div>
+              <div class="tramo-desc">Año 1 · Mes 1 — Hito: SL activa</div>
+            </div>
+          </div>
+          <div class="tramo-row" style="border-left:3px solid var(--mint);">
+            <div class="tramo-badge">T2</div>
+            <div class="tramo-amount">25.000€</div>
+            <div>
+              <div style="font-size:10.5px;font-weight:700;color:var(--text);">MVP funcional y demostrable</div>
+              <div class="tramo-desc">Año 1 · Mes 4 — Hito: producto enseñable</div>
+            </div>
+          </div>
+          <div class="tramo-row" style="border-left:3px solid var(--dark);">
+            <div class="tramo-badge">T3</div>
+            <div class="tramo-amount">55.000€</div>
+            <div>
+              <div style="font-size:10.5px;font-weight:700;color:var(--text);">Escala comercial + equipo</div>
+              <div class="tramo-desc">Año 2 — Hito: primer piloto firmado</div>
+            </div>
+          </div>
+          <div class="tramo-row" style="border-left:3px solid rgba(44,211,166,.4);">
+            <div class="tramo-badge" style="background:rgba(34,145,117,.4);">T4</div>
+            <div class="tramo-amount">10.000€</div>
+            <div>
+              <div style="font-size:10.5px;font-weight:700;color:var(--text);">Colchón de escalado</div>
+              <div class="tramo-desc">Año 3 — Hito: 5+ clientes activos</div>
+            </div>
+          </div>
+          <div style="margin-top:4px;padding:10px 12px;background:rgba(44,211,166,.06);border:1px solid rgba(44,211,166,.2);border-radius:var(--r-sm);">
+            <div style="font-size:10.5px;color:var(--text);line-height:1.6;"><strong>Sin hito, sin capital.</strong> Si el MVP no funciona, solo arriesgáis el Tramo 1. Cada tramo se libera contra evidencia, no contra promesas.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-notes">
+    <div class="notes-header">
+      <span class="notes-label">🎙 Slide 6 · Financiero</span>
+      <span class="notes-timing">⏱ ~1:45 min</span>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Mercado — ancla con el número grande y el SAM real</div>
+      <div class="notes-text">"El mercado direccionable en España son 8.000 municipios. A 15.000€ anuales — exactamente el umbral del Contrato Menor — eso es un TAM de 120 millones. Nuestro foco de entrada son municipios con historial activo de emergencias: los que ya tienen presupuesto activado y motivación política real. Sin contar ONGs, partners logísticos ni el upside de ACCIÓ."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Lógica del modelo — tres frases</div>
+      <div class="notes-text">"SaaS puro, sin CAPEX. Los costes de estructura crecen más lento que los ingresos — eso es margen creciente. Y la palanca más importante: el rol comercial está cubierto en equity por el Socio Empresarial — son 45.000€ al año que no salen de caja."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Proyección — conservador y honesto</div>
+      <div class="notes-text">"Este es el escenario conservador: 1 cliente en Año 1, 7 en Año 2, 15 en Año 3. Ingresos de 209.800€ en Año 3 con EBITDA positivo. No es el número más emocionante — es el más defensible. Con el Socio activo y 2-3 clientes medianos adicionales, el EBITDA escala significativamente. Esos escenarios están en el data room."</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Tramos — riesgo acotado para el inversor</div>
+      <div class="notes-text">"115.000€ en cuatro tramos ligados a hitos. Sin hito, sin capital. El primer tramo financia la construcción del MVP y la constitución de la SL. Si el MVP no funciona, solo habéis comprometido el Tramo 1. <strong>Reduce vuestro riesgo, no el mío.</strong>"</div>
+    </div>
+    <div class="notes-alert">⚠️ <strong>Preguntas frecuentes de BA — respuestas preparadas:</strong><br><br>
+    <strong>"¿Por qué solo +870€ de EBITDA en Año 3?"</strong> → "Es el escenario más conservador — sin ningún upside. Con el Socio activo y 2 clientes medianos más, el EBITDA escala a 50.000-100.000€. Prefiero que la conversación parta del número más defensible."<br><br>
+    <strong>"Tenéis 0 clientes hoy — ¿es realista llegar a 15 en 3 años?"</strong> → "Con Contrato Menor el ciclo de venta es de 4-8 semanas. No necesitamos 15 milagros — necesitamos que 15 ayuntamientos aprueben una partida de 15.000€. Eso es presupuesto ordinario de cualquier ayuntamiento de 20.000 habitantes."<br><br>
+    <strong>"¿Qué pasa si el Socio Empresarial no se cierra?"</strong> → "Es la hipótesis central del modelo y uno de los usos explícitos de esta ronda: tiempo para cerrarlo bien, no con prisa. Sin ese perfil, el Tramo 3 no se libera."<br><br>
+    <strong>"¿Por qué vosotros y no plataformas existentes?"</strong> → "Las soluciones que aparecen son ad hoc — surgen para un evento y desaparecen. Las plataformas de código abierto requieren meses de implementación técnica. Kit2Help despliega en semanas, entra por Contrato Menor y está diseñado específicamente para municipios y ciudadanos españoles."</div>
+    <div class="notes-tip">💡 No menciones el P&L completo a menos que te lo pidan. Si lo piden: "Lo tenéis completo en el data room — ¿queréis que os lo enviemos esta tarde?" Eso es señal de interés, no debilidad tuya.</div>
+  </div>
+</div>
+
+<!-- ══ SLIDE 7 · CIERRE ══ -->
+<div class="slide-wrap" id="slide-7">
+  <div class="slide" style="background:none;border:none;box-shadow:none;">
+    <div class="s7-wrap">
+      <div class="slide-num" style="background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);">07 / 07</div>
+      <div class="s7-tagline">No sabemos cuándo será<br>la próxima emergencia.<br>Sí sabemos que <span>pasará.</span></div>
+      <div class="s7-sub">Y que sin esto, el caos de coordinación se repetirá.<br><br>Hoy soy la única persona detrás de Kit2Help.<br>Esta ronda no financia solo tecnología:<br><strong>financia el equipo que va a llevarla a la próxima emergencia.</strong></div>
+      <div class="s7-ask">
+        <div class="s7-ask-val"><span>115.000€</span></div>
+        <div class="s7-ask-label">Pre-Seed · 4 tramos por hito · Ronda abierta</div>
+      </div>
+      <div class="s7-chips">
+        <div class="s7-chip"><div class="s7-chip-dot"></div>Sandra González Fortea</div>
+        <div class="s7-chip"><div class="s7-chip-dot"></div>kit2help.info@gmail.com</div>
+        <div class="s7-chip"><div class="s7-chip-dot"></div>Barcelona · Cataluña</div>
+      </div>
+    </div>
+  </div>
+  <div class="speaker-notes">
+    <div class="notes-header">
+      <span class="notes-label">🎙 Slide 7 · Cierre</span>
+      <span class="notes-timing">⏱ ~0:30 seg</span>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">La frase final — literal, despacio</div>
+      <div class="notes-text">"No sabemos cuándo será la próxima emergencia. Sí sabemos que pasará — y que sin esto, el caos de coordinación se repetirá. Hoy soy la única persona detrás de Kit2Help. Y es exactamente por eso que esta ronda no financia solo tecnología: <strong>financia el equipo que va a llevarla a la próxima emergencia.</strong>"</div>
+    </div>
+    <div class="notes-section">
+      <div class="notes-section-title">Después de la frase</div>
+      <div class="notes-text"><strong>Silencio.</strong> No añadas nada. No digas "gracias por vuestra atención". Deja que la sala reaccione primero. La slide de contacto está proyectada — no la leas en voz alta.</div>
+    </div>
+    <div class="notes-alert">⚠️ <strong>Dato verificado para reforzar el cierre si el contexto lo pide:</strong><br>
+    "Solo en 2023, las catástrofes naturales costaron 4.450 millones de euros a España — un 53% más que el año anterior. Y eso antes de la DANA de 2024." (Fuente: Fundación Aon, Barómetro de Catástrofes 2023)<br><br>
+    <strong>NO uses</strong> el dato "267% aumento per cápita 2022-2023" — no está suficientemente documentado para defenderlo en sala si te preguntan la fuente.</div>
+    <div class="notes-tip">💡 Si el formato exige algo más, añade solo: "Quedo a vuestra disposición." Nada más. La frase ya lo dijo todo.</div>
+  </div>
+</div>
+
+</div><!-- /viewport -->
+
+<script>
+/* ── NAVEGACIÓN ── */
+let current = 1;
+const total  = 7;
+
+function goSlide(dir) {
+  const next = current + dir;
+  if (next < 1 || next > total) return;
+
+  const currEl = document.getElementById('slide-' + current);
+  const nextEl = document.getElementById('slide-' + next);
+
+  currEl.classList.add('animating');
+  setTimeout(() => {
+    currEl.classList.remove('active', 'animating');
+    nextEl.classList.add('active');
+    // reset scroll
+    document.getElementById('viewport').scrollTop = 0;
+    // forzar reflow para animación entrada
+    void nextEl.offsetWidth;
+    current = next;
+    document.getElementById('slide-counter').textContent = current + ' / ' + total;
+    document.getElementById('btn-prev').disabled = current === 1;
+    document.getElementById('btn-next').disabled = current === total;
+    // escala si estamos en modo proyector
+    if (document.body.classList.contains('pres-mode')) applyScale();
+  }, 200);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goSlide(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   goSlide(-1);
+  if (e.key === 'Escape' && document.body.classList.contains('pres-mode')) {
+    document.querySelector('.ctrl-btn.primary').click();
+  }
+  if (e.key === 'f' || e.key === 'F') {
+    document.querySelector('.ctrl-btn.primary').click();
+  }
+});
+
+/* ── NOTAS ── */
+let notesVisible = true;
+function toggleNotes(btn) {
+  notesVisible = !notesVisible;
+  document.querySelectorAll('.speaker-notes').forEach(n => {
+    n.style.display = notesVisible ? '' : 'none';
+  });
+  btn.textContent = notesVisible ? '📋 Ocultar guion' : '📋 Ver guion';
+}
+
+/* ── MODO PROYECTOR + SCALE ── */
+function applyScale() {
+  const slideEls = document.querySelectorAll('.slide');
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  const slideW = 1100;
+  const slideH = 620;
+  const scaleX = W / slideW;
+  const scaleY = H / slideH;
+  const scale  = Math.min(scaleX, scaleY);
+  slideEls.forEach(el => {
+    el.style.transform = 'scale(' + scale + ')';
+    el.style.width     = slideW + 'px';
+    el.style.minHeight = slideH + 'px';
+  });
+}
+
+function resetScale() {
+  document.querySelectorAll('.slide').forEach(el => {
+    el.style.transform = '';
+    el.style.width     = '';
+    el.style.minHeight = '';
+  });
+}
+
+let presMode = false;
+function togglePresMode(btn) {
+  presMode = !presMode;
+  document.body.classList.toggle('pres-mode', presMode);
+  btn.textContent = presMode ? '📝 Modo edición' : '🖥 Modo proyector';
+  if (presMode) {
+    btn.classList.remove('primary');
+    // ocultar notas
+    document.querySelectorAll('.speaker-notes').forEach(n => n.style.display = 'none');
+    document.getElementById('btn-notes').textContent = '📋 Ver guion';
+    notesVisible = false;
+    applyScale();
+    // intentar pantalla completa
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
+  } else {
+    btn.classList.add('primary');
+    resetScale();
+    // salir de pantalla completa
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+}
+
+window.addEventListener('resize', () => {
+  if (presMode) applyScale();
+});
+
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement && presMode) {
+    // usuario salió con ESC del fullscreen del navegador
+    presMode = false;
+    document.body.classList.remove('pres-mode');
+    resetScale();
+    const btn = document.querySelector('.ctrl-btn.primary') ||
+                [...document.querySelectorAll('.ctrl-btn')].find(b => b.textContent.includes('edición'));
+    if (btn) { btn.textContent = '🖥 Modo proyector'; btn.classList.add('primary'); }
+  }
+});
+
+/* ── VÍDEO INCRUSTADO EN SLIDE 1 ── */
+function openVideo(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const video   = document.getElementById('slide-video');
+  const overlay = document.getElementById('video-overlay');
+  video.src = url;
+  overlay.classList.add('active');
+  video.play().catch(() => {});
+  // cuando termina el vídeo, cierra el overlay automáticamente
+  video.onended = closeVideo;
+  input.value = '';
+}
+
+function closeVideo() {
+  const video   = document.getElementById('slide-video');
+  const overlay = document.getElementById('video-overlay');
+  video.pause();
+  video.src = '';
+  overlay.classList.remove('active');
+}
+
+/* ── DEMO MP4 (slide 3) ── */
+function openDemo(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const url   = URL.createObjectURL(file);
+  const video   = document.getElementById('demo-video');
+  const overlay = document.getElementById('demo-overlay');
+  video.src = url;
+  overlay.classList.add('active');
+  video.play().catch(() => {});
+  video.onended = closeDemo;
+  input.value = '';
+}
+
+function closeDemo() {
+  const video   = document.getElementById('demo-video');
+  const overlay = document.getElementById('demo-overlay');
+  video.pause();
+  video.src = '';
+  overlay.classList.remove('active');
+}
+</script>
+</body>
+</html>
